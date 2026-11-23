@@ -1,164 +1,506 @@
-﻿body {
-    /* =========================================================
-       MINHA MARCA
-       ========================================================= */
+﻿/* =========================================
+   GYMFLOW | MINHA MARCA
+   Integração com o Design System Global
+   ========================================= */
 
-    .minha-marca-page {
-        padding: 40px 38px 60px;
-        background: #f5f9fc;
-        min-height: calc(100vh - 52px);
-        box-sizing: border-box;
+/* ESTRUTURA DA PÁGINA */
+
+.minha-marca-page {
+    min-height: calc(100vh - var(--layout-header-altura));
+    background: var(--ui-fundo-pagina);
+    color: var(--ui-texto);
+}
+
+.minha-marca-page *,
+.minha-marca-page *::before,
+.minha-marca-page *::after {
+    box-sizing: border-box;
+}
+
+.minha-marca-page .mm-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.minha-marca-page .mm-kicker {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--cor-texto-secundario);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.minha-marca-page .mm-topo h2 {
+    margin: 0 0 6px;
+    color: var(--ui-texto);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.minha-marca-page .mm-topo p {
+    margin: 0;
+    color: var(--ui-texto-suave);
+}
+
+.minha-marca-page .mm-tag {
+    padding: 8px 12px;
+    border-radius: var(--ui-raio-md);
+    background: var(--cor-primaria-suave);
+    color: var(--ui-texto);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* GRID */
+
+.minha-marca-page .mm-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.minha-marca-page .mm-form,
+.minha-marca-page .mm-lateral {
+    min-width: 0;
+}
+
+/* CARDS */
+
+.minha-marca-page .mm-card {
+    padding: 24px;
+    margin-bottom: 18px;
+    background: var(--ui-fundo-card);
+    color: var(--ui-texto);
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-xl);
+    box-shadow: var(--ui-sombra-card);
+    transition: box-shadow var(--ui-transicao);
+}
+
+.minha-marca-page .mm-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 22px;
+}
+
+.minha-marca-page .mm-numero {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    background: var(--cor-primaria-suave);
+    color: var(--ui-texto);
+    border-radius: var(--ui-raio-md);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.minha-marca-page .mm-card h3 {
+    margin: 0 0 5px;
+    padding: 0;
+    border: 0;
+    color: var(--ui-texto);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.minha-marca-page .mm-card p {
+    margin: 0;
+    color: var(--ui-texto-suave);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+/* FORMULÁRIOS */
+
+.minha-marca-page .mm-card label:not(.mm-opcao) {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--ui-texto);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.minha-marca-page input[type="text"],
+.minha-marca-page select {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 13px;
+    background: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+    border: 1px solid var(--ui-input-borda);
+    border-radius: var(--ui-raio-md);
+    font: inherit;
+    font-size: 14px;
+    transition: border-color var(--ui-transicao);
+}
+
+.minha-marca-page input:focus-visible,
+.minha-marca-page select:focus-visible,
+.minha-marca-page button:focus-visible {
+    outline: 2px solid var(--ui-input-foco);
+    outline-offset: 3px;
+}
+
+.minha-marca-page .mm-ajuda {
+    display: block;
+    margin-top: 9px;
+    color: var(--ui-texto-suave);
+    font-size: 12px;
+}
+
+/* SELEÇÃO DE APARÊNCIA */
+
+.minha-marca-page .mm-temas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.minha-marca-page .mm-opcao {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    position: relative;
+    padding: 13px;
+    background: var(--ui-fundo-card);
+    color: var(--ui-texto);
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-md);
+    cursor: pointer;
+    transition: border-color var(--ui-transicao);
+}
+
+.minha-marca-page .mm-opcao:has(input:checked) {
+    border-color: var(--cor-primaria);
+    box-shadow: inset 0 0 0 1px var(--cor-primaria);
+}
+
+.minha-marca-page .mm-opcao input {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    accent-color: var(--cor-primaria);
+}
+
+.minha-marca-page .mm-opcao-cor {
+    width: 100%;
+    height: 48px;
+    border-radius: var(--ui-raio-sm);
+    border: 1px solid var(--ui-borda);
+}
+
+/* Amostras visuais dos dois temas */
+
+.minha-marca-page .mm-claro {
+    background: linear-gradient(135deg,
+            #f8fafc 50%,
+            #e2e8f0 50%);
+}
+
+.minha-marca-page .mm-escuro {
+    background: linear-gradient(135deg,
+            #111827 50%,
+            #293241 50%);
+}
+
+.minha-marca-page .mm-opcao strong {
+    font-size: 13px;
+}
+
+.minha-marca-page .mm-opcao small {
+    color: var(--ui-texto-suave);
+    font-size: 11px;
+}
+
+/* SELETORES DE COR */
+
+.minha-marca-page .mm-cores {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.minha-marca-page .mm-cor-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 7px;
+    border: 1px solid var(--ui-input-borda);
+    border-radius: var(--ui-raio-md);
+    background: var(--ui-input-fundo);
+}
+
+.minha-marca-page input[type="color"] {
+    width: 40px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.minha-marca-page .mm-cor-input output {
+    color: var(--ui-texto-suave);
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* AVISOS E AÇÕES */
+
+.minha-marca-page .mm-aviso {
+    padding: 16px;
+    background: var(--cor-superficie-secundaria);
+    color: var(--ui-texto-suave);
+    border: 1px dashed var(--ui-borda);
+    border-radius: var(--ui-raio-md);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.minha-marca-page .mm-salvar {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px;
+    background: var(--ui-botao-fundo);
+    color: var(--ui-botao-texto);
+    border: 0;
+    border-radius: var(--ui-raio-md);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--ui-transicao);
+}
+
+.minha-marca-page .mm-salvar:hover {
+    background: var(--ui-botao-fundo-hover);
+}
+
+.minha-marca-page .mm-alert {
+    margin-bottom: 20px;
+    padding: 14px 17px;
+    background: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+    border: 1px solid var(--cor-sucesso);
+    border-radius: var(--ui-raio-md);
+    font-size: 13px;
+}
+
+/* PRÉ-VISUALIZAÇÃO */
+
+.minha-marca-page .mm-lateral {
+    position: sticky;
+    top: 20px;
+}
+
+.minha-marca-page .mm-preview-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.minha-marca-page .mm-ao-vivo {
+    padding: 7px 9px;
+    background: var(--cor-superficie-secundaria);
+    color: var(--ui-texto-suave);
+    border-radius: var(--ui-raio-md);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/*
+ * Apenas a prévia utiliza variáveis próprias.
+ * Elas simulam as escolhas antes do salvamento.
+ */
+
+.minha-marca-page .mm-preview {
+    --mm-cor1: var(--cor-primaria);
+    --mm-cor2: var(--cor-secundaria);
+    --mm-texto1: var(--cor-sobre-primaria);
+    --mm-texto2: var(--cor-sobre-secundaria);
+
+    display: flex;
+    min-height: 330px;
+    overflow: hidden;
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-lg);
+    font-size: 12px;
+}
+
+.minha-marca-page .mm-preview-menu {
+    width: 38%;
+    flex-shrink: 0;
+    padding: 17px 10px;
+    background: var(--mm-cor2);
+    color: var(--mm-texto2);
+}
+
+.minha-marca-page .mm-preview-logo {
+    padding: 5px 7px 22px;
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.minha-marca-page .mm-preview-item {
+    padding: 10px 8px;
+    margin-bottom: 5px;
+    border-radius: var(--ui-raio-sm);
+    opacity: .8;
+}
+
+.minha-marca-page .mm-preview-item.ativo {
+    background: var(--mm-cor1);
+    color: var(--mm-texto1);
+    font-weight: 700;
+    opacity: 1;
+}
+
+.minha-marca-page .mm-preview-painel {
+    flex: 1;
+    min-width: 0;
+    background: var(--ui-fundo-pagina);
+    color: var(--ui-texto);
+}
+
+.minha-marca-page .mm-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--ui-fundo-card);
+    border-bottom: 1px solid var(--ui-borda);
+    font-weight: 700;
+}
+
+.minha-marca-page .mm-preview-user {
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    background: var(--mm-cor1);
+    color: var(--mm-texto1);
+    border-radius: 50%;
+    font-size: 10px;
+}
+
+.minha-marca-page .mm-preview-body {
+    padding: 15px;
+}
+
+.minha-marca-page .mm-preview-body h4 {
+    margin: 0 0 5px;
+    color: inherit;
+    font-size: 14px;
+}
+
+.minha-marca-page .mm-preview-body p {
+    margin-bottom: 15px;
+    color: var(--ui-texto-suave);
+    font-size: 12px;
+}
+
+.minha-marca-page .mm-preview-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 16px;
+    margin-bottom: 15px;
+    background: var(--ui-fundo-card);
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-md);
+}
+
+.minha-marca-page .mm-preview-stat strong {
+    color: inherit;
+    font-size: 26px;
+}
+
+.minha-marca-page .mm-preview-stat span {
+    color: var(--ui-texto-suave);
+    font-size: 10px;
+}
+
+.minha-marca-page .mm-preview-botao {
+    padding: 11px 8px;
+    background: var(--mm-cor1);
+    color: var(--mm-texto1);
+    border-radius: var(--ui-raio-sm);
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Tema escuro somente dentro da prévia */
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-painel {
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-header,
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-body p,
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat span {
+    color: #94a3b8;
+}
+
+.minha-marca-page .mm-nota {
+    margin: 14px 0 0;
+    color: var(--ui-texto-suave);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1100px) {
+    .minha-marca-page .mm-grid {
+        grid-template-columns: 1fr;
     }
 
-    .minha-marca-topo {
-        margin-bottom: 32px;
+    .minha-marca-page .mm-lateral {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .minha-marca-page .mm-topo {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .minha-marca-titulo h1 {
-        margin: 0 0 4px;
-        font-size: 38px;
-        font-weight: 700;
-        color: #071c30;
+    .minha-marca-page .mm-topo h2 {
+        font-size: 25px;
     }
 
-    .minha-marca-titulo p {
-        margin: 0;
-        font-size: 18px;
-        color: #55708d;
+    .minha-marca-page .mm-card {
+        padding: 17px;
     }
 
-    .marca-card {
-        background: #ffffff;
-        border: 1px solid #d7e1e8;
-        border-radius: 17px;
-        padding: 30px;
-        margin-bottom: 25px;
-        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+    .minha-marca-page .mm-cores {
+        grid-template-columns: 1fr;
     }
 
-    .marca-card h3 {
-        margin: 0 0 20px;
-        color: #071c30;
-        font-size: 20px;
-        font-weight: 600;
-        border-bottom: 1px solid #eef2f5;
-        padding-bottom: 10px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        font-size: 15px;
-        font-weight: 600;
-        color: #1a2f42;
-        margin-bottom: 8px;
-    }
-
-    .form-group input[type="text"],
-    .form-group select {
-        width: 100%;
-        height: 48px;
-        padding: 0 16px;
-        border: 1px solid #d4e0e8;
-        border-radius: 11px;
-        background: #f9fbfc;
-        color: #102437;
-        font-size: 16px;
-        outline: none;
-        box-sizing: border-box;
-        transition: border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .form-group input[type="text"]:focus,
-    .form-group select:focus {
-        border-color: var(--cor-primaria);
-        background: #ffffff;
-    }
-
-    .radio-group {
-        display: flex;
-        gap: 20px;
-    }
-
-    .radio-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 16px;
-        color: #102437;
-        cursor: pointer;
-    }
-
-    .radio-item input {
-        width: 20px;
-        height: 20px;
-        accent-color: var(--cor-primaria);
-        cursor: pointer;
-    }
-
-    .color-picker-group {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .color-picker-group input[type="color"] {
-        width: 50px;
-        height: 50px;
-        padding: 0;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        background: none;
-    }
-
-    .color-picker-group span {
-        font-family: monospace;
-        font-size: 16px;
-        color: #55708d;
-        background: #f1f5f9;
-        padding: 6px 12px;
-        border-radius: 6px;
-    }
-
-    .btn-salvar-marca {
-        height: 50px;
-        width: 100%;
-        border: none;
-        border-radius: 11px;
-        background: var(--cor-primaria);
-        color: #ffffff;
-        font-size: 18px;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 3px 8px rgba(16, 185, 129, 0.2);
-        transition: background 0.2s ease, transform 0.2s ease;
-    }
-
-    .btn-salvar-marca:hover {
-        background: #0da874;
-        transform: translateY(-2px);
-    }
-
-    .alert-success {
-        background: #d1fae5;
-        color: #065f46;
-        padding: 15px 20px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-        .minha-marca-page {
-            padding: 20px 15px;
-        }
-        .radio-group {
-            flex-direction: column;
-            gap: 10px;
-        }
+    .minha-marca-page .mm-tag {
+        display: none;
     }
 }

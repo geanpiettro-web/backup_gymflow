@@ -1,396 +1,616 @@
 <?php
-
 if (!isset($tituloPagina)) {
-    header("Location: " . BASE_URL . "/app/controllers/MinhaMarcaController.php");
+    header('Location: ' . BASE_URL . '/app/controllers/MinhaMarcaController.php');
     exit;
 }
 
-$preferencias = $preferencias ?? [
-    'nome_painel' => 'Gymflow',
-    'tema' => 'dark',
-    'cor_primaria' => '#ffb000',
-    'cor_secundaria' => '#000000',
-    'tema_predefinido' => 'padrao',
-    'logo_url' => null
-];
+$preferencias = $preferencias ?? [];
+
+$nome = $preferencias['nome_painel'] ?? 'Gymflow';
+$tema = $preferencias['tema'] ?? 'dark';
+$primaria = $preferencias['cor_primaria'] ?? '#ffb000';
+$secundaria = $preferencias['cor_secundaria'] ?? '#000000';
+$preset = $preferencias['tema_predefinido'] ?? 'padrao';
+$logo = $preferencias['logo_url'] ?? '';
+
+$esc = static function ($valor) {
+    return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
+};
+
+if (!preg_match('/^#[0-9a-fA-F]{6}$/', $primaria)) {
+    $primaria = '#ffb000';
+}
+
+if (!preg_match('/^#[0-9a-fA-F]{6}$/', $secundaria)) {
+    $secundaria = '#000000';
+}
+
+$temLogo = !empty($logo);
+
+$cssEspecifico = BASE_URL . '/assets/css/minha-marca.css?v=3';
 
 include __DIR__ . '/../shared/header.php';
 include __DIR__ . '/../shared/sidebar.php';
-
 ?>
-
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/minha-marca.css">
 
 <main class="conteudo minha-marca-page">
 
-    <div class="minha-marca-topo">
-        <div class="minha-marca-titulo">
+    <div class="mm-topo">
+        <div>
+            <span class="mm-kicker">PERSONALIZAÇÃO</span>
             <h2>Minha Marca</h2>
-            <p>Personalize a aparência do seu painel.</p>
+            <p>Deixe o painel com a sua identidade.</p>
         </div>
+        <span class="mm-tag">Preferências pessoais</span>
     </div>
 
     <?php if (($_GET['msg'] ?? '') === 'salvo'): ?>
-        <div class="alert-success">
-            Preferências salvas com sucesso.
+        <div class="mm-alert" role="status">
+            Suas preferências foram salvas com sucesso.
         </div>
     <?php endif; ?>
 
-    <form action="<?= BASE_URL ?>/app/controllers/MinhaMarcaController.php?acao=salvar" method="POST">
+    <div class="mm-grid">
 
-        <!-- NOME DO PAINEL -->
-        <div class="marca-card">
-            <h3>Nome do painel</h3>
-            <div class="form-group">
-                <label for="nome_painel">Nome exibido no sistema</label>
-                <input type="text" name="nome_painel" id="nome_painel" maxlength="100" value="<?= htmlspecialchars($preferencias['nome_painel'] ?? 'Gymflow'); ?>">
-            </div>
-        </div>
+        <!-- FORMULÁRIO -->
+        <form
+            class="mm-form"
+            id="formMinhaMarca"
+            method="POST"
+            enctype="multipart/form-data"
+            action="<?= BASE_URL ?>/app/controllers/MinhaMarcaController.php?acao=salvar">
 
-        <!-- TEMA CLARO / ESCURO -->
-        <div class="marca-card">
-            <h3>Aparência</h3>
-            <div class="radio-group">
-                <label class="radio-item">
-                    <input type="radio" name="tema" value="dark" id="tema_dark" <?= ($preferencias['tema'] ?? 'dark') === 'dark' ? 'checked' : ''; ?>>
-                    Tema escuro
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= $esc($_SESSION['minha_marca_csrf'] ?? '') ?>">
+
+            <!-- 01 - IDENTIDADE -->
+            <section class="mm-card">
+                <div class="mm-card-top">
+                    <span class="mm-numero">01</span>
+                    <div>
+                        <h3>Identidade do painel</h3>
+                        <p>Defina como o ambiente será identificado.</p>
+                    </div>
+                </div>
+
+                <label for="nome_painel">Nome do painel</label>
+
+                <input
+                    type="text"
+                    id="nome_painel"
+                    name="nome_painel"
+                    maxlength="100"
+                    required
+                    value="<?= $esc($nome) ?>"
+                    placeholder="Ex.: Minha Academia">
+
+                <span class="mm-ajuda">
+                    Este nome será associado à sua conta.
+                </span>
+            </section>
+
+            <!-- 02 - APARÊNCIA -->
+            <section class="mm-card">
+                <div class="mm-card-top">
+                    <span class="mm-numero">02</span>
+                    <div>
+                        <h3>Aparência</h3>
+                        <p>Escolha o estilo visual do painel.</p>
+                    </div>
+                </div>
+
+                <div class="mm-temas">
+
+                    <label class="mm-opcao">
+                        <input
+                            type="radio"
+                            name="tema"
+                            value="light"
+                            <?= $tema === 'light' ? 'checked' : '' ?>>
+                        <span class="mm-opcao-cor mm-claro"></span>
+                        <strong>Tema claro</strong>
+                        <small>Leve e minimalista</small>
+                    </label>
+
+                    <label class="mm-opcao">
+                        <input
+                            type="radio"
+                            name="tema"
+                            value="dark"
+                            <?= $tema !== 'light' ? 'checked' : '' ?>>
+                        <span class="mm-opcao-cor mm-escuro"></span>
+                        <strong>Tema escuro</strong>
+                        <small>Elegante e moderno</small>
+                    </label>
+
+                </div>
+            </section>
+
+            <!-- 03 - PALETA -->
+            <section class="mm-card">
+                <div class="mm-card-top">
+                    <span class="mm-numero">03</span>
+                    <div>
+                        <h3>Paleta de cores</h3>
+                        <p>Escolha uma combinação ou personalize.</p>
+                    </div>
+                </div>
+
+                <label for="tema_predefinido">
+                    Combinação predefinida
                 </label>
-                <label class="radio-item">
-                    <input type="radio" name="tema" value="light" id="tema_light" <?= ($preferencias['tema'] ?? 'dark') === 'light' ? 'checked' : ''; ?>>
-                    Tema claro
-                </label>
-            </div>
-        </div>
 
-        <!-- TEMAS PREDEFINIDOS -->
-        <div class="marca-card">
-            <h3>Temas predefinidos</h3>
-            <div class="form-group">
-                <label for="tema_predefinido">Escolha um tema</label>
-                <select name="tema_predefinido" id="tema_predefinido">
-                    <option value="padrao" <?= ($preferencias['tema_predefinido'] ?? '') === 'padrao' ? 'selected' : ''; ?>>Gymflow Padrão</option>
-                    <option value="dark" <?= ($preferencias['tema_predefinido'] ?? '') === 'dark' ? 'selected' : ''; ?>>Dark</option>
-                    <option value="forest" <?= ($preferencias['tema_predefinido'] ?? '') === 'forest' ? 'selected' : ''; ?>>Forest</option>
-                    <option value="sunset" <?= ($preferencias['tema_predefinido'] ?? '') === 'sunset' ? 'selected' : ''; ?>>Sunset</option>
-                    <option value="ocean" <?= ($preferencias['tema_predefinido'] ?? '') === 'ocean' ? 'selected' : ''; ?>>Ocean</option>
+                <select
+                    id="tema_predefinido"
+                    name="tema_predefinido">
+                    <?php
+                    $opcoes = [
+                        'padrao' => 'GymFlow padrão',
+                        'dark' => 'Violeta',
+                        'forest' => 'Forest',
+                        'sunset' => 'Sunset',
+                        'ocean' => 'Ocean',
+                        'personalizado' => 'Personalizado'
+                    ];
+
+                    foreach ($opcoes as $valor => $rotulo):
+                    ?>
+                        <option
+                            value="<?= $esc($valor) ?>"
+                            <?= $preset === $valor ? 'selected' : '' ?>>
+                            <?= $esc($rotulo) ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
-            </div>
-        </div>
 
-        <!-- CORES PERSONALIZADAS -->
-        <div class="marca-card">
-            <h3>Paleta personalizada</h3>
-            
-            <div class="form-group">
-                <label for="cor_primaria">Cor primária</label>
-                <div class="color-picker-group">
-                    <input type="color" name="cor_primaria" id="cor_primaria" value="<?= htmlspecialchars($preferencias['cor_primaria'] ?? '#ffb000'); ?>">
-                    <span id="valor_cor_primaria"><?= htmlspecialchars($preferencias['cor_primaria'] ?? '#ffb000'); ?></span>
+                <div class="mm-cores">
+
+                    <div>
+                        <label for="cor_primaria">
+                            Cor primária
+                        </label>
+
+                        <div class="mm-cor-input">
+                            <input
+                                type="color"
+                                id="cor_primaria"
+                                name="cor_primaria"
+                                value="<?= $esc($primaria) ?>">
+
+                            <output id="codigoPrimaria">
+                                <?= $esc($primaria) ?>
+                            </output>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="cor_secundaria">
+                            Cor secundária
+                        </label>
+
+                        <div class="mm-cor-input">
+                            <input
+                                type="color"
+                                id="cor_secundaria"
+                                name="cor_secundaria"
+                                value="<?= $esc($secundaria) ?>">
+
+                            <output id="codigoSecundaria">
+                                <?= $esc($secundaria) ?>
+                            </output>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </section>
 
-            <div class="form-group">
-                <label for="cor_secundaria">Cor secundária</label>
-                <div class="color-picker-group">
-                    <input type="color" name="cor_secundaria" id="cor_secundaria" value="<?= htmlspecialchars($preferencias['cor_secundaria'] ?? '#000000'); ?>">
-                    <span id="valor_cor_secundaria"><?= htmlspecialchars($preferencias['cor_secundaria'] ?? '#000000'); ?></span>
+            <!-- 04 - LOGOTIPO -->
+            <section class="mm-card">
+                <div class="mm-card-top">
+                    <span class="mm-numero">04</span>
+                    <div>
+                        <h3>Logotipo</h3>
+                        <p>Personalize a identidade do seu painel.</p>
+                    </div>
                 </div>
+
+                <div class="mm-logo-area">
+
+                    <div class="mm-logo-imagem">
+
+                        <img
+                            id="mmLogoImagem"
+                            src="<?= $temLogo ? $esc($logo) : '' ?>"
+                            alt="Prévia do logotipo"
+                            <?= $temLogo ? '' : 'hidden' ?>>
+
+                        <span
+                            id="mmLogoPlaceholder"
+                            <?= $temLogo ? 'hidden' : '' ?>>
+                            <svg
+                                width="28"
+                                height="28"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                aria-hidden="true">
+                                <rect
+                                    x="3" y="3"
+                                    width="18" height="18"
+                                    rx="3" />
+                                <circle
+                                    cx="8.5" cy="8.5" r="1.5" />
+                                <path
+                                    d="m4 17 5-5 4 4 3-3 4 4" />
+                            </svg>
+                        </span>
+
+                    </div>
+
+                    <div class="mm-logo-detalhes">
+
+                        <label
+                            class="mm-logo-upload"
+                            for="logotipo">
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                aria-hidden="true">
+                                <path
+                                    d="M12 16V3m0 0L7 8m5-5 5 5" />
+                                <path d="M4 16v4h16v-4" />
+                            </svg>
+
+                            Escolher imagem
+                        </label>
+
+                        <input
+                            type="file"
+                            name="logotipo"
+                            id="logotipo"
+                            accept="image/png,image/jpeg,image/webp"
+                            class="mm-logo-file">
+
+                        <p id="mmLogoNome">
+                            <?= $temLogo
+                                ? 'Logotipo atual'
+                                : 'Nenhuma imagem selecionada' ?>
+                        </p>
+
+                        <small>
+                            PNG, JPG ou WEBP · Até 2 MB
+                        </small>
+                    </div>
+
+                </div>
+
+                <label class="mm-logo-remover">
+                    <input
+                        type="checkbox"
+                        name="remover_logo"
+                        id="remover_logo"
+                        value="1"
+                        <?= $temLogo ? '' : 'disabled' ?>>
+
+                    Remover logotipo atual
+                </label>
+            </section>
+
+            <button
+                class="mm-salvar"
+                type="submit">
+                Salvar alterações
+            </button>
+
+        </form>
+
+        <!-- PRÉ-VISUALIZAÇÃO -->
+        <aside class="mm-lateral">
+
+            <div class="mm-card mm-preview-card">
+
+                <div class="mm-preview-topo">
+                    <div>
+                        <h3>Pré-visualização</h3>
+                        <p>Veja suas escolhas em tempo real.</p>
+                    </div>
+
+                    <span class="mm-ao-vivo">PRÉVIA</span>
+                </div>
+
+                <div id="mmPreview" class="mm-preview">
+
+                    <div class="mm-preview-menu">
+
+                        <div
+                            class="mm-preview-logo"
+                            id="mmNomePreview">
+                            <?= $esc($nome) ?>
+                        </div>
+
+                        <div class="mm-preview-item ativo">
+                            Visão geral
+                        </div>
+                        <div class="mm-preview-item">
+                            Alunos
+                        </div>
+                        <div class="mm-preview-item">
+                            Treinos
+                        </div>
+                        <div class="mm-preview-item">
+                            Financeiro
+                        </div>
+
+                    </div>
+
+                    <div class="mm-preview-painel">
+
+                        <div class="mm-preview-header">
+                            <span>Dashboard</span>
+                            <span class="mm-preview-user">GF</span>
+                        </div>
+
+                        <div class="mm-preview-body">
+
+                            <h4>Visão geral</h4>
+                            <p>Seu painel personalizado.</p>
+
+                            <div class="mm-preview-stat">
+                                <small>Alunos ativos</small>
+                                <strong>128</strong>
+                                <span>Exemplo de indicador</span>
+                            </div>
+
+                            <div class="mm-preview-botao">
+                                Nova matrícula
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <p class="mm-nota">
+                    Esta é uma demonstração. As alterações serão
+                    persistidas quando você salvar.
+                </p>
+
             </div>
-        </div>
 
-        <!-- LOGOTIPO -->
-        <div class="marca-card">
-            <h3>Logotipo</h3>
-            <p style="color: #55708d; font-size: 15px; margin: 0;">O upload e as opções de logotipo serão adicionados na próxima etapa.</p>
-            <input type="hidden" name="logo_url" value="<?= htmlspecialchars($preferencias['logo_url'] ?? ''); ?>">
-        </div>
-
-        <button type="submit" class="btn-salvar-marca">Salvar alterações</button>
-
-    </form>
-
+        </aside>
+    </div>
 </main>
 
-
+<!-- JAVASCRIPT COMPLETO -->
 <script>
-    // CAMPOS DA TELA
+    (() => {
+        'use strict';
 
-    const nomePainel =
-        document.getElementById('nome_painel');
+        // ELEMENTOS DO FORMULÁRIO
+        const nome = document.getElementById('nome_painel');
+        const primaria = document.getElementById('cor_primaria');
+        const secundaria = document.getElementById('cor_secundaria');
+        const preset = document.getElementById('tema_predefinido');
+        const preview = document.getElementById('mmPreview');
 
-    const corPrimaria =
-        document.getElementById('cor_primaria');
+        // ELEMENTOS DO LOGOTIPO
+        const inputLogo = document.getElementById('logotipo');
+        const imagemLogo = document.getElementById('mmLogoImagem');
+        const placeholder = document.getElementById('mmLogoPlaceholder');
+        const nomeArquivo = document.getElementById('mmLogoNome');
+        const removerLogo = document.getElementById('remover_logo');
 
-    const corSecundaria =
-        document.getElementById('cor_secundaria');
+        const logoOriginal = imagemLogo.getAttribute('src') || '';
+        let urlTemporaria = null;
 
-    const temaPredefinido =
-        document.getElementById('tema_predefinido');
+        const temas = {
+            padrao: ['#ffb000', '#000000', 'dark'],
+            dark: ['#8b5cf6', '#111827', 'dark'],
+            forest: ['#22c55e', '#14532d', 'dark'],
+            sunset: ['#f97316', '#7c2d12', 'dark'],
+            ocean: ['#0ea5e9', '#0c4a6e', 'dark']
+        };
 
-    const temaDark =
-        document.getElementById('tema_dark');
+        // CONTRASTE DAS CORES
+        function textoContrastante(hex) {
+            const rgb = [1, 3, 5].map(i =>
+                parseInt(hex.substring(i, i + 2), 16) / 255
+            );
 
-    const temaLight =
-        document.getElementById('tema_light');
+            const linear = rgb.map(v =>
+                v <= 0.04045 ?
+                v / 12.92 :
+                Math.pow((v + 0.055) / 1.055, 2.4)
+            );
 
-    const valorCorPrimaria =
-        document.getElementById('valor_cor_primaria');
+            const lum =
+                linear[0] * 0.2126 +
+                linear[1] * 0.7152 +
+                linear[2] * 0.0722;
 
-    const valorCorSecundaria =
-        document.getElementById('valor_cor_secundaria');
-
-
-    // ELEMENTOS DO SISTEMA
-
-    const header =
-        document.querySelector('header');
-
-    const tituloPainel =
-        document.querySelector('header h1');
-
-
-    // TEMAS PRONTOS
-
-    const temas = {
-
-        padrao: {
-            primaria: '#ffb000',
-            secundaria: '#000000',
-            modo: 'dark'
-        },
-
-        dark: {
-            primaria: '#8b5cf6',
-            secundaria: '#111827',
-            modo: 'dark'
-        },
-
-        forest: {
-            primaria: '#22c55e',
-            secundaria: '#14532d',
-            modo: 'dark'
-        },
-
-        sunset: {
-            primaria: '#f97316',
-            secundaria: '#7c2d12',
-            modo: 'dark'
-        },
-
-        ocean: {
-            primaria: '#0ea5e9',
-            secundaria: '#0c4a6e',
-            modo: 'dark'
+            return lum > 0.179 ? '#111827' : '#ffffff';
         }
 
-    };
+        // ATUALIZAÇÃO DA PRÉVIA
+        function atualizarPreview() {
+            const modo = document.querySelector(
+                'input[name="tema"]:checked'
+            )?.value || 'dark';
 
+            preview.dataset.theme = modo;
 
-    // ATUALIZA A APARÊNCIA DA PÁGINA
+            preview.style.setProperty(
+                '--mm-cor1',
+                primaria.value
+            );
 
-    function atualizarAparencia() {
+            preview.style.setProperty(
+                '--mm-cor2',
+                secundaria.value
+            );
 
-        const primaria =
-            corPrimaria.value;
+            preview.style.setProperty(
+                '--mm-texto1',
+                textoContrastante(primaria.value)
+            );
 
-        const secundaria =
-            corSecundaria.value;
+            preview.style.setProperty(
+                '--mm-texto2',
+                textoContrastante(secundaria.value)
+            );
 
-        const modo =
-            temaLight.checked ? 'light' : 'dark';
+            document.getElementById('mmNomePreview').textContent =
+                nome.value.trim() || 'Gymflow';
 
+            document.getElementById('codigoPrimaria').textContent =
+                primaria.value.toUpperCase();
 
-        // MOSTRA CÓDIGO DA COR
-
-        valorCorPrimaria.textContent =
-            primaria;
-
-        valorCorSecundaria.textContent =
-            secundaria;
-
-
-        // NOME DO PAINEL
-
-        if (tituloPainel) {
-
-            tituloPainel.textContent =
-                nomePainel.value || 'Gymflow';
-
-            tituloPainel.style.color =
-                primaria;
+            document.getElementById('codigoSecundaria').textContent =
+                secundaria.value.toUpperCase();
         }
 
+        // TEMAS PREDEFINIDOS
+        preset.addEventListener('change', () => {
+            const escolhido = temas[preset.value];
 
-        // TEMA CLARO
+            if (escolhido) {
+                primaria.value = escolhido[0];
+                secundaria.value = escolhido[1];
 
-        if (modo === 'light') {
-
-            document.body.style.backgroundColor =
-                '#ffffff';
-
-            document.body.style.color =
-                '#000000';
-
-            if (header) {
-
-                header.style.backgroundColor =
-                    '#ffffff';
-
-                header.style.color =
-                    '#000000';
+                document.querySelector(
+                    'input[name="tema"][value="' +
+                    escolhido[2] + '"]'
+                ).checked = true;
             }
 
-        }
+            atualizarPreview();
+        });
 
-        // TEMA ESCURO
-        else {
-
-            document.body.style.backgroundColor =
-                '#f8fafc';
-
-            document.body.style.color =
-                '#111827';
-
-            if (header) {
-
-                header.style.backgroundColor =
-                    secundaria;
-
-                header.style.color =
-                    '#ffffff';
-            }
-            
-            if (tituloPainel) {
-                tituloPainel.style.color =
-                    '#ffffff';
-            }
-        }
-
-
-        // LINKS
-
-        document
-            .querySelectorAll('a')
-            .forEach(function(link) {
-
-                link.style.color =
-                    primaria;
-
+        // CORES PERSONALIZADAS
+        [primaria, secundaria].forEach(campo => {
+            campo.addEventListener('input', () => {
+                preset.value = 'personalizado';
+                atualizarPreview();
             });
+        });
 
+        nome.addEventListener('input', atualizarPreview);
 
-        // BOTÕES
+        document.querySelectorAll(
+            'input[name="tema"]'
+        ).forEach(campo => {
+            campo.addEventListener('change', atualizarPreview);
+        });
 
-        document
-            .querySelectorAll('button')
-            .forEach(function(botao) {
+        // FUNÇÕES DO LOGOTIPO
+        function liberarUrl() {
+            if (urlTemporaria) {
+                URL.revokeObjectURL(urlTemporaria);
+                urlTemporaria = null;
+            }
+        }
 
-                botao.style.backgroundColor =
-                    primaria;
+        function mostrarLogo(src) {
+            imagemLogo.src = src;
+            imagemLogo.hidden = false;
+            placeholder.hidden = true;
+        }
 
-            });
+        function ocultarLogo() {
+            imagemLogo.removeAttribute('src');
+            imagemLogo.hidden = true;
+            placeholder.hidden = false;
+        }
 
-    }
+        // SELECIONAR IMAGEM
+        inputLogo.addEventListener('change', () => {
+            liberarUrl();
 
+            const arquivo = inputLogo.files[0];
 
-    // SELECIONAR UM TEMA PREDEFINIDO
-
-    temaPredefinido.addEventListener(
-        'change',
-        function() {
-
-            const tema =
-                temas[this.value];
-
-            if (!tema) {
+            if (!arquivo) {
+                if (logoOriginal) {
+                    mostrarLogo(logoOriginal);
+                    nomeArquivo.textContent = 'Logotipo atual';
+                } else {
+                    ocultarLogo();
+                    nomeArquivo.textContent =
+                        'Nenhuma imagem selecionada';
+                }
                 return;
             }
 
+            const formatos = [
+                'image/png',
+                'image/jpeg',
+                'image/webp'
+            ];
 
-            corPrimaria.value =
-                tema.primaria;
+            if (
+                !formatos.includes(arquivo.type) ||
+                arquivo.size === 0 ||
+                arquivo.size > 2 * 1024 * 1024
+            ) {
+                inputLogo.value = '';
 
-            corSecundaria.value =
-                tema.secundaria;
+                if (logoOriginal) {
+                    mostrarLogo(logoOriginal);
+                } else {
+                    ocultarLogo();
+                }
 
-
-            if (tema.modo === 'light') {
-
-                temaLight.checked =
-                    true;
-
-            } else {
-
-                temaDark.checked =
-                    true;
+                alert(
+                    'Escolha uma imagem PNG, JPG ou WEBP ' +
+                    'de até 2 MB.'
+                );
+                return;
             }
 
+            removerLogo.checked = false;
+            removerLogo.disabled = false;
 
-            atualizarAparencia();
+            urlTemporaria = URL.createObjectURL(arquivo);
 
-        }
-    );
+            mostrarLogo(urlTemporaria);
 
+            nomeArquivo.textContent = arquivo.name;
+        });
 
-    // ALTERAÇÃO MANUAL DA COR PRIMÁRIA
+        // REMOVER LOGOTIPO
+        removerLogo.addEventListener('change', () => {
+            if (removerLogo.checked) {
+                inputLogo.value = '';
+                liberarUrl();
+                ocultarLogo();
 
-    corPrimaria.addEventListener(
-        'input',
-        function() {
+                nomeArquivo.textContent =
+                    'Logotipo será removido ao salvar';
 
-            /*
-             * Ao alterar manualmente a cor,
-             * continuamos permitindo que
-             * o usuário personalize o tema.
-             */
+            } else if (logoOriginal) {
+                mostrarLogo(logoOriginal);
+                nomeArquivo.textContent = 'Logotipo atual';
 
-            atualizarAparencia();
+            } else {
+                ocultarLogo();
+                nomeArquivo.textContent =
+                    'Nenhuma imagem selecionada';
+            }
+        });
 
-        }
-    );
+        // LIBERA MEMÓRIA UTILIZADA PELA PRÉVIA
+        window.addEventListener('pagehide', liberarUrl);
 
+        // INICIALIZAÇÃO
+        atualizarPreview();
 
-    // ALTERAÇÃO MANUAL DA COR SECUNDÁRIA
-
-    corSecundaria.addEventListener(
-        'input',
-        function() {
-
-            atualizarAparencia();
-
-        }
-    );
-
-
-    // TROCA CLARO / ESCURO
-
-    temaDark.addEventListener(
-        'change',
-        atualizarAparencia
-    );
-
-    temaLight.addEventListener(
-        'change',
-        atualizarAparencia
-    );
-
-
-    // ALTERAÇÃO DO NOME EM TEMPO REAL
-
-    nomePainel.addEventListener(
-        'input',
-        atualizarAparencia
-    );
-
-
-    // CARREGA A APARÊNCIA INICIAL
-
-    atualizarAparencia();
+    })();
 </script>
 
-
-<?php
-
-include __DIR__ . '/../shared/footer.php';
-
-?>
+<?php include __DIR__ . '/../shared/footer.php'; ?>

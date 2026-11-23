@@ -3,6 +3,23 @@
 
 $nomePainel = $_SESSION['nome_painel'] ?? 'Gymflow';
 $role = $_SESSION['usuario_role'] ?? '';
+
+// Logotipo personalizado do usuário, salvo pelo Minha Marca.
+$logoPainel = $_SESSION['logo_url'] ?? '';
+$usuarioId = (int) ($_SESSION['usuario_id'] ?? 0);
+$prefixoLogo = BASE_URL . '/assets/uploads/minha-marca/' . $usuarioId . '/';
+
+// Exibe somente arquivos associados à conta logada.
+if (
+    !is_string($logoPainel) ||
+    $usuarioId <= 0 ||
+    !preg_match(
+        '~^' . preg_quote($prefixoLogo, '~') . '[a-f0-9]{32}\.(png|jpg|webp)$~',
+        $logoPainel
+    )
+) {
+    $logoPainel = '';
+}
 ?>
 
 <aside class="sidebar" id="appSidebar">
@@ -11,6 +28,15 @@ $role = $_SESSION['usuario_role'] ?? '';
     <div class="sidebar-header">
 
         <h1 class="sidebar-logo">
+            <?php if ($logoPainel !== ''): ?>
+                <img
+                    src="<?= htmlspecialchars($logoPainel, ENT_QUOTES, 'UTF-8') ?>"
+                    class="sidebar-logo-imagem"
+                    alt=""
+                    width="36"
+                    height="36"
+                    decoding="async">
+            <?php endif; ?>
             <span>
                 <?= htmlspecialchars(
                     $nomePainel,
@@ -325,7 +351,7 @@ $role = $_SESSION['usuario_role'] ?? '';
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         lucide.createIcons({
             attrs: {
                 width: 20,
