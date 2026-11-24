@@ -179,7 +179,141 @@ if ($acao === 'login') {
         }
     }
 
+
+    /*
+     * IDENTIDADE VISUAL DO LOGIN
+     *
+     * Busca as configurações públicas da empresa
+     * no Portfólio, sem utilizar o Minha Marca.
+     */
+
+    $loginCorPrimaria = '#ffb000';
+    $loginCorSecundaria = '#0b0b0b';
+    $loginNomeAcademia = '';
+    $siteUrl = BASE_URL . '/index.php';
+
+    // Identifica a empresa informada pelo Portfólio
+    // ou preservada pelo redirecionamento do logout.
+    $empresaInformada = $_GET['empresa']
+        ?? $_POST['empresa']
+        ?? null;
+
+    $loginEmpresaId = filter_var(
+        $empresaInformada,
+        FILTER_VALIDATE_INT,
+        [
+            'options' => [
+                'min_range' => 1
+            ]
+        ]
+    );
+
+    // Enquanto houver sessão autenticada, o ID
+    // da empresa também pode vir dela.
+    if (
+        $loginEmpresaId === false ||
+        $loginEmpresaId === null
+    ) {
+        $loginEmpresaId = filter_var(
+            $_SESSION['company_id'] ?? null,
+            FILTER_VALIDATE_INT,
+            [
+                'options' => [
+                    'min_range' => 1
+                ]
+            ]
+        );
+    }
+
+    // Consulta apenas as informações públicas
+    // da empresa identificada.
+    if (
+        $loginEmpresaId !== false &&
+        $loginEmpresaId !== null
+    ) {
+        try {
+            require_once __DIR__ .
+                '/../../config/conexao.php';
+
+            $stmtMarca = $pdo->prepare("
+                SELECT
+                    c.id,
+                    pc.app_name,
+                    pc.primary_color,
+                    pc.secondary_color
+                FROM companies c
+                LEFT JOIN portfolio_config pc
+                    ON pc.company_id = c.id
+                WHERE c.id = ?
+                LIMIT 1
+            ");
+
+            $stmtMarca->execute([
+                (int) $loginEmpresaId
+            ]);
+
+            $marca = $stmtMarca->fetch(
+                PDO::FETCH_ASSOC
+            );
+
+            if ($marca) {
+
+                $loginEmpresaId = (int) $marca['id'];
+
+                // Voltar ao Portfólio correto.
+                $siteUrl = BASE_URL .
+                    '/index.php?id=' .
+                    $loginEmpresaId;
+
+                $loginNomeAcademia = trim(
+                    (string) ($marca['app_name'] ?? '')
+                );
+
+                // Cor primária configurada no Portfólio.
+                $corPrimaria = $marca['primary_color']
+                    ?? null;
+
+                if (
+                    is_string($corPrimaria) &&
+                    preg_match(
+                        '/^#[0-9a-fA-F]{6}$/',
+                        $corPrimaria
+                    )
+                ) {
+                    $loginCorPrimaria = $corPrimaria;
+                }
+
+                // Cor secundária configurada no Portfólio.
+                $corSecundaria = $marca['secondary_color']
+                    ?? null;
+
+                if (
+                    is_string($corSecundaria) &&
+                    preg_match(
+                        '/^#[0-9a-fA-F]{6}$/',
+                        $corSecundaria
+                    )
+                ) {
+                    $loginCorSecundaria = $corSecundaria;
+                }
+            } else {
+                // Empresa inexistente: não assume outra.
+                $loginEmpresaId = null;
+            }
+        } catch (Throwable $e) {
+
+            error_log(
+                'GymFlow: erro ao carregar identidade do login: ' .
+                    $e->getMessage()
+            );
+
+            // Fallback visual seguro.
+            $loginEmpresaId = null;
+        }
+    }
+
     require __DIR__ . '/../views/login/index.php';
+
 
     /* 2. LOGOUT */
 } elseif ($acao === 'logout') {

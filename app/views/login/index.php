@@ -15,17 +15,11 @@ if (!isset($erro)) {
 $erro = $erro ?? '';
 $email = $email ?? '';
 
-// Identidade visual padrão do login.
-//
-// Futuramente, o controller poderá fornecer
-// as cores da academia identificada pela URL.
-// A view não deve escolher uma empresa por conta própria.
-
+// Configurações visuais existentes.
 $loginCorPrimaria = $loginCorPrimaria ?? '#ffb000';
 $loginCorSecundaria = $loginCorSecundaria ?? '#0b0b0b';
 $loginNomeAcademia = $loginNomeAcademia ?? '';
 
-// Validação das cores recebidas.
 $validarCorLogin = static function ($cor, $padrao) {
     return is_string($cor)
         && preg_match('/^#[0-9a-fA-F]{6}$/', $cor)
@@ -43,7 +37,6 @@ $loginCorSecundaria = $validarCorLogin(
     '#0b0b0b'
 );
 
-// Contraste entre a cor da marca e o texto.
 $contrasteLogin = static function ($hex) {
     $hex = ltrim($hex, '#');
 
@@ -70,17 +63,87 @@ $contrasteLogin = static function ($hex) {
         : '#ffffff';
 };
 
-$loginTextoPrimaria = $contrasteLogin(
-    $loginCorPrimaria
+$loginTextoPrimaria = $contrasteLogin($loginCorPrimaria);
+
+// =============================================
+// IDENTIFICAÇÃO DO PORTFÓLIO DE ORIGEM
+// =============================================
+
+// A URL do site será construída somente com
+// um ID numérico válido. Nunca usamos uma
+// URL arbitrária enviada pelo visitante.
+
+$empresaInformada =
+    $_GET['empresa']
+    ?? $_POST['empresa']
+    ?? null;
+
+$empresaId = filter_var(
+    $empresaInformada,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
 );
 
-// Evita escolher automaticamente um tenant.
-//
-// O endereço público padrão continua disponível,
-// mas o vínculo real com uma academia será tratado
-// no controller posteriormente.
+// Se o usuário não informou a academia,
+// tentamos recuperar o ID da sessão.
+if ($empresaId === false || $empresaId === null) {
+    $empresaId = filter_var(
+        $_SESSION['company_id'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+}
 
+// Recupera a academia de um link vindo
+// diretamente do site público, quando possível.
+if ($empresaId === false || $empresaId === null) {
+
+    $referencia = $_SERVER['HTTP_REFERER'] ?? '';
+
+    if ($referencia !== '') {
+
+        $partes = parse_url($referencia);
+
+        $hostAtual = $_SERVER['HTTP_HOST'] ?? '';
+        $hostReferencia = $partes['host'] ?? '';
+
+        $hostAtual = strtolower(
+            explode(':', $hostAtual)[0]
+        );
+
+        $hostReferencia = strtolower($hostReferencia);
+
+        $caminhoReferencia = $partes['path'] ?? '';
+
+        $caminhoEsperado = BASE_URL . '/index.php';
+
+        if (
+            $hostAtual !== '' &&
+            $hostReferencia === $hostAtual &&
+            $caminhoReferencia === $caminhoEsperado
+        ) {
+            parse_str(
+                $partes['query'] ?? '',
+                $parametrosReferencia
+            );
+
+            $empresaId = filter_var(
+                $parametrosReferencia['id'] ?? null,
+                FILTER_VALIDATE_INT,
+                ['options' => ['min_range' => 1]]
+            );
+        }
+    }
+}
+
+// Endereço original quando não há empresa.
 $siteUrl = BASE_URL . '/index.php';
+
+// Endereço específico quando a academia
+// está identificada.
+if ($empresaId !== false && $empresaId !== null) {
+    $siteUrl .= '?id=' . (int) $empresaId;
+}
 
 $escaparLogin = static function ($valor) {
     return htmlspecialchars(
@@ -91,6 +154,7 @@ $escaparLogin = static function ($valor) {
 };
 
 $loginCssPath = __DIR__ . '/../../../assets/css/login.css';
+
 $loginCssVersao = is_file($loginCssPath)
     ? filemtime($loginCssPath)
     : '1';
@@ -117,28 +181,15 @@ $loginCssVersao = is_file($loginCssPath)
         href="<?= BASE_URL ?>/assets/css/login.css?v=<?= $loginCssVersao ?>">
 
     <style>
-        /*
-         * Identidade visual do login.
-         * Preparada para receber os dados da
-         * academia antes da autenticação.
-         */
-
         .login-page {
             --portfolio-primary: <?= $loginCorPrimaria ?>;
             --portfolio-secondary: <?= $loginCorSecundaria ?>;
             --portfolio-on-primary: <?= $loginTextoPrimaria ?>;
         }
 
-        /*
-         * Corrige o conflito com global.css.
-         * Os inputs do login precisam permanecer
-         * escuros e não devem conter ícones.
-         */
-
         .login-page .login-form input.form-input {
             width: 100%;
             min-height: 48px;
-
             padding: 12px 15px;
 
             color: #ffffff;
@@ -149,7 +200,6 @@ $loginCssVersao = is_file($loginCssPath)
 
             font-family: inherit;
             font-size: 14px;
-
             box-shadow: none;
         }
 
@@ -161,26 +211,16 @@ $loginCssVersao = is_file($loginCssPath)
         .login-page .login-form input.form-input:focus,
         .login-page .login-form input.form-input:focus-visible {
             outline: none;
-
             background-color: #101010;
             border-color: var(--login-primaria);
 
-            box-shadow: 0 0 0 3px var(--login-primaria-suave);
+            box-shadow:
+                0 0 0 3px var(--login-primaria-suave);
         }
-
-        /*
-         * Somente o campo de senha reserva
-         * espaço para o botão de visualização.
-         */
 
         .login-page .login-form input.password-input {
             padding-right: 48px;
         }
-
-        /*
-         * Remove definitivamente a imagem
-         * fixa da academia.
-         */
 
         .login-page .login-first-column {
             background-color: var(--login-secundaria);
@@ -193,15 +233,9 @@ $loginCssVersao = is_file($loginCssPath)
                     transparent 55%);
         }
 
-        /*
-         * Mantém o botão de visualizar senha
-         * sem herdar o estilo de botão global.
-         */
-
         .login-page .password-toggle {
             background-color: transparent;
             color: #a3a3a3;
-
             border: 0;
             padding: 0;
         }
@@ -220,13 +254,8 @@ $loginCssVersao = is_file($loginCssPath)
 
         <div class="login-container">
 
-            <!-- =====================================
-             COLUNA ESQUERDA
-             ===================================== -->
-
+            <!-- COLUNA ESQUERDA -->
             <section class="login-first-column">
-
-                <!-- Marca do sistema -->
 
                 <div class="login-brand">
                     GYM<span>FLOW</span>
@@ -234,8 +263,7 @@ $loginCssVersao = is_file($loginCssPath)
 
                 <div class="login-left-content">
 
-                    <!-- Voltar ao site -->
-
+                    <!-- VOLTAR PARA O PORTFÓLIO -->
                     <a
                         href="<?= $escaparLogin($siteUrl) ?>"
                         class="login-back-link">
@@ -244,8 +272,6 @@ $loginCssVersao = is_file($loginCssPath)
                     </a>
 
                     <div class="login-title-line"></div>
-
-                    <!-- Apresentação -->
 
                     <div class="login-introduction">
 
@@ -281,59 +307,47 @@ $loginCssVersao = is_file($loginCssPath)
 
                     </div>
 
-                    <!-- Benefícios -->
-
                     <div class="login-features">
 
                         <div class="login-feature">
-
-                            <div class="feature-icon">
-                                ◈
-                            </div>
+                            <div class="feature-icon">◈</div>
 
                             <div>
                                 <strong>Organização</strong>
-                                <span>Informações centralizadas</span>
+                                <span>
+                                    Informações centralizadas
+                                </span>
                             </div>
-
                         </div>
 
                         <div class="login-feature">
-
-                            <div class="feature-icon">
-                                ◇
-                            </div>
+                            <div class="feature-icon">◇</div>
 
                             <div>
                                 <strong>Segurança</strong>
-                                <span>Acesso individual</span>
+                                <span>
+                                    Acesso individual
+                                </span>
                             </div>
-
                         </div>
 
                         <div class="login-feature">
-
-                            <div class="feature-icon">
-                                ✓
-                            </div>
+                            <div class="feature-icon">✓</div>
 
                             <div>
                                 <strong>Praticidade</strong>
-                                <span>Tudo em um só lugar</span>
+                                <span>
+                                    Tudo em um só lugar
+                                </span>
                             </div>
-
                         </div>
 
                     </div>
-
                 </div>
 
             </section>
 
-            <!-- =====================================
-             COLUNA DIREITA
-             ===================================== -->
-
+            <!-- COLUNA DIREITA -->
             <section class="login-second-column">
 
                 <div
@@ -346,13 +360,9 @@ $loginCssVersao = is_file($loginCssPath)
                         class="login-card-glow"
                         aria-hidden="true"></div>
 
-                    <!-- Marca -->
-
                     <div class="form-brand">
                         GYM<span>FLOW</span>
                     </div>
-
-                    <!-- Cabeçalho -->
 
                     <header class="login-header">
 
@@ -367,8 +377,6 @@ $loginCssVersao = is_file($loginCssPath)
 
                     </header>
 
-                    <!-- Erro de autenticação -->
-
                     <?php if (!empty($erro)): ?>
 
                         <div
@@ -379,17 +387,23 @@ $loginCssVersao = is_file($loginCssPath)
 
                     <?php endif; ?>
 
-                    <!-- =================================
-                     FORMULÁRIO
-                     ================================= -->
-
+                    <!-- FORMULÁRIO DE LOGIN -->
                     <form
                         action=""
                         method="POST"
                         class="login-form">
 
-                        <!-- E-MAIL -->
+                        <?php if (
+                            $empresaId !== false &&
+                            $empresaId !== null
+                        ): ?>
+                            <input
+                                type="hidden"
+                                name="empresa"
+                                value="<?= (int) $empresaId ?>">
+                        <?php endif; ?>
 
+                        <!-- E-MAIL -->
                         <div class="form-group">
 
                             <label
@@ -412,11 +426,9 @@ $loginCssVersao = is_file($loginCssPath)
                                     required>
 
                             </div>
-
                         </div>
 
                         <!-- SENHA -->
-
                         <div class="form-group">
 
                             <label
@@ -450,11 +462,9 @@ $loginCssVersao = is_file($loginCssPath)
                                 </button>
 
                             </div>
-
                         </div>
 
                         <!-- OPÇÕES -->
-
                         <div class="login-options">
 
                             <label class="remember-me">
@@ -464,10 +474,7 @@ $loginCssVersao = is_file($loginCssPath)
                                     name="lembrar"
                                     value="1">
 
-                                <span>
-                                    Lembrar de mim
-                                </span>
-
+                                <span>Lembrar de mim</span>
                             </label>
 
                             <a
@@ -478,12 +485,12 @@ $loginCssVersao = is_file($loginCssPath)
 
                         </div>
 
-                        <!-- BOTÃO ENTRAR -->
-
+                        <!-- ENTRAR -->
                         <button
                             type="submit"
                             class="login-submit-button">
                             <span>Entrar</span>
+
                             <span
                                 class="button-arrow"
                                 aria-hidden="true">
@@ -492,8 +499,6 @@ $loginCssVersao = is_file($loginCssPath)
                         </button>
 
                     </form>
-
-                    <!-- RODAPÉ -->
 
                     <div class="login-footer">
 

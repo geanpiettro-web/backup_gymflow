@@ -45,7 +45,6 @@ function iniciarSessao(array $usuario): void
         );
     }
 
-    // Evita reutilizar o ID de uma sessão anterior.
     session_regenerate_id(true);
 
     $_SESSION['usuario_id'] = (int) $usuario['id'];
@@ -100,8 +99,8 @@ function carregarPreferenciasSessao(
 // =====================================================
 
 // Mantém a estrutura atual do banco.
-// O armazenamento de hash e expiração dos tokens
-// será implementado em uma etapa posterior.
+// A evolução da proteção dos tokens poderá ser
+// feita separadamente, sem afetar esta correção.
 
 if (
     !isset($_SESSION['usuario_id']) &&
@@ -192,11 +191,6 @@ function verificarRole(array $rolesPermitidas): void
 // 7. OBTENÇÃO DO CONTEXTO DA EMPRESA
 // =====================================================
 
-// Deve ser usado apenas após verificarLogado().
-// O ID identifica o tenant autenticado.
-// Controllers e models ainda precisam validar
-// a propriedade dos recursos consultados.
-
 function obterEmpresaLogada(): int
 {
     verificarLogado();
@@ -210,6 +204,15 @@ function obterEmpresaLogada(): int
 
 function efetuarLogout(): void
 {
+    /*
+     * CORREÇÃO:
+     * Guardar a empresa antes de destruir a sessão.
+     *
+     * Assim, o login exibido após sair continua
+     * vinculado à academia do usuário.
+     */
+    $empresaId = (int) ($_SESSION['company_id'] ?? 0);
+
     if (!empty($_COOKIE['gymflow_remember'])) {
 
         require_once __DIR__ . '/conexao.php';
@@ -228,7 +231,7 @@ function efetuarLogout(): void
     $https = !empty($_SERVER['HTTPS'])
         && $_SERVER['HTTPS'] !== 'off';
 
-    // Apaga o cookie de login automático.
+    // Apagar o cookie de login automático.
     setcookie('gymflow_remember', '', [
         'expires' => time() - 3600,
         'path' => '/',
@@ -237,9 +240,10 @@ function efetuarLogout(): void
         'samesite' => 'Lax'
     ]);
 
+    // Apagar todos os dados autenticados.
     $_SESSION = [];
 
-    // Apaga o cookie de sessão PHP.
+    // Apagar o cookie da sessão PHP.
     if (ini_get('session.use_cookies')) {
 
         $params = session_get_cookie_params();
@@ -256,10 +260,18 @@ function efetuarLogout(): void
 
     session_destroy();
 
-    header(
-        "Location: " . BASE_URL .
-            "/app/controllers/LoginController.php?acao=login"
-    );
+    /*
+     * Redirecionamento com contexto da empresa.
+     * Não recuperamos dados pessoais da sessão
+     * depois de destruí-la.
+     */
+    $loginUrl = BASE_URL .
+        '/app/controllers/LoginController.php?acao=login';
 
+    if ($empresaId > 0) {
+        $loginUrl .= '&empresa=' . $empresaId;
+    }
+
+    header('Location: ' . $loginUrl);
     exit;
 }
