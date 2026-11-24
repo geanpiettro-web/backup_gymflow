@@ -1,16 +1,76 @@
+<?php
+// ============================================
+// GYMFLOW - CABEÇALHO DO PORTFÓLIO PÚBLICO
+// app/views/shared/portfolio_header.php
+// ============================================
+
+// Empresa do portfólio atualmente acessado.
+$portfolioEmpresaId = (int) ($company_id ?? 0);
+
+// Endereço do portfólio da academia.
+$portfolioUrl = BASE_URL . '/index.php';
+
+if ($portfolioEmpresaId > 0) {
+    $portfolioUrl .= '?id=' . $portfolioEmpresaId;
+}
+
+// Endereço do login.
+$loginUrl = BASE_URL .
+    '/app/controllers/LoginController.php?acao=login';
+
+if ($portfolioEmpresaId > 0) {
+    $loginUrl .= '&empresa=' . $portfolioEmpresaId;
+}
+
+// Endereço correto da matrícula pública.
+$matriculaUrl = BASE_URL .
+    '/app/controllers/MatriculaController.php?acao=identificacao';
+
+if ($portfolioEmpresaId > 0) {
+    $matriculaUrl .= '&company_id=' . $portfolioEmpresaId;
+}
+
+// Escapar valores utilizados no HTML.
+$portfolioEsc = static function ($valor): string {
+    return htmlspecialchars(
+        (string) $valor,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+};
+
+// Configurações visuais do Portfólio.
+$portfolioPrimaria = $config['primary_color'] ?? '#C9A227';
+$portfolioSecundaria = $config['secondary_color'] ?? '#000000';
+
+// Validar cores antes de incluir no CSS.
+if (
+    !is_string($portfolioPrimaria) ||
+    !preg_match('/^#[0-9a-fA-F]{6}$/', $portfolioPrimaria)
+) {
+    $portfolioPrimaria = '#C9A227';
+}
+
+if (
+    !is_string($portfolioSecundaria) ||
+    !preg_match('/^#[0-9a-fA-F]{6}$/', $portfolioSecundaria)
+) {
+    $portfolioSecundaria = '#000000';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>
-        <?= htmlspecialchars(
-            $tituloPagina ?? 'GymCore',
-            ENT_QUOTES,
-            'UTF-8'
-        ) ?>
+        <?= $portfolioEsc(!empty($tituloPagina) ? $tituloPagina . ' — ' . ($config['app_name'] ?? 'GymFlow') : ($config['app_name'] ?? 'GymFlow')) ?>
     </title>
 
     <link
@@ -29,43 +89,6 @@
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         defer></script>
 
-    <?php
-    // Identificação do site público atualmente carregado.
-    $portfolioEmpresaId = (int) ($company_id ?? 0);
-
-    $portfolioQuery = $portfolioEmpresaId > 0
-        ? '?id=' . $portfolioEmpresaId
-        : '';
-
-    $portfolioUrl = BASE_URL . '/index.php' . $portfolioQuery;
-
-    $loginUrl = BASE_URL .
-        '/app/controllers/LoginController.php?acao=login';
-
-    if ($portfolioEmpresaId > 0) {
-        $loginUrl .= '&empresa=' . $portfolioEmpresaId;
-    }
-
-    $portfolioEsc = static function ($valor): string {
-        return htmlspecialchars(
-            (string) $valor,
-            ENT_QUOTES,
-            'UTF-8'
-        );
-    };
-
-    $portfolioPrimaria = $config['primary_color'] ?? '#C9A227';
-    $portfolioSecundaria = $config['secondary_color'] ?? '#000000';
-
-    if (!preg_match('/^#[0-9a-fA-F]{6}$/', $portfolioPrimaria)) {
-        $portfolioPrimaria = '#C9A227';
-    }
-
-    if (!preg_match('/^#[0-9a-fA-F]{6}$/', $portfolioSecundaria)) {
-        $portfolioSecundaria = '#000000';
-    }
-    ?>
-
     <style>
         :root {
             --portfolio-primary: <?= $portfolioPrimaria ?>;
@@ -76,20 +99,29 @@
     <link
         rel="stylesheet"
         href="<?= BASE_URL ?>/assets/css/portfolio-mapa.css">
+
+    <?php if (!empty($cssEspecifico)): ?>
+        <link
+            rel="stylesheet"
+            href="<?= $portfolioEsc($cssEspecifico) ?>">
+    <?php endif; ?>
 </head>
 
 <body>
 
     <header class="portfolio-header">
 
+        <!-- IDENTIDADE -->
         <div class="portfolio-logo">
             <h1>
-                <?= $portfolioEsc($tituloPagina ?? 'GymCore') ?>
+                <?= $portfolioEsc($config['app_name'] ?? $tituloPagina ?? 'GymFlow') ?>
             </h1>
         </div>
 
+        <!-- NAVEGAÇÃO -->
         <nav class="portfolio-nav">
             <ul>
+
                 <li>
                     <a href="<?= $portfolioEsc($portfolioUrl) ?>#inicio">
                         Início
@@ -125,9 +157,11 @@
                         Contato
                     </a>
                 </li>
+
             </ul>
         </nav>
 
+        <!-- AÇÕES -->
         <div class="portfolio-acoes">
 
             <?php if ($usuarioLogado ?? false): ?>
@@ -156,12 +190,13 @@
 
             <?php else: ?>
 
+                <!-- LOGIN DA ACADEMIA -->
                 <a href="<?= $portfolioEsc($loginUrl) ?>">
                     Entrar
                 </a>
 
-                <a
-                    href="<?= BASE_URL ?>/app/controllers/MatriculaController.php">
+                <!-- MATRÍCULA DA ACADEMIA -->
+                <a href="<?= $portfolioEsc($matriculaUrl) ?>">
                     Matricule-se
                 </a>
 

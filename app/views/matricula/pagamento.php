@@ -7,115 +7,227 @@
 /** @var string $publicKeyMP */
 /** @var bool $isConfiguredMP */
 /** @var string $erro */
+/** @var array $config */
+/** @var int $company_id */
 
-$tituloPagina = "Matrícula Online - Pagamento";
+$tituloPagina = "Forma de Pagamento";
+$cssEspecifico = BASE_URL . '/assets/css/matricula.css';
 include __DIR__ . '/../shared/portfolio_header.php';
 ?>
 
-<main>
-    <section class="portfolio-modalidades">
-        <div class="modalidades-cabecalho">
-            <span class="secao-destaque">Etapa 3 de 3</span>
-            <h2>Forma de Pagamento</h2>
-            <p>Revise os detalhes da sua matrícula e escolha como deseja realizar o pagamento seguro.</p>
-        </div>
+<main class="matricula-wrapper">
+    <div class="matricula-container">
+
+        <!-- STEPPER DE PROGRESSO (ETAPA 3 ATIVA) -->
+        <nav class="matricula-stepper-container" aria-label="Progresso da matrícula">
+            <ol class="matricula-stepper">
+                <li class="matricula-step completed">
+                    <div class="step-circle" aria-hidden="true">✓</div>
+                    <div class="step-info">
+                        <span class="step-number">Etapa 1</span>
+                        <span class="step-name">Identificação</span>
+                    </div>
+                    <div class="step-line" aria-hidden="true"></div>
+                </li>
+                <li class="matricula-step completed">
+                    <div class="step-circle" aria-hidden="true">✓</div>
+                    <div class="step-info">
+                        <span class="step-number">Etapa 2</span>
+                        <span class="step-name">Unidade</span>
+                    </div>
+                    <div class="step-line" aria-hidden="true"></div>
+                </li>
+                <li class="matricula-step active" aria-current="step">
+                    <div class="step-circle" aria-hidden="true">3</div>
+                    <div class="step-info">
+                        <span class="step-number">Etapa 3</span>
+                        <span class="step-name">Pagamento</span>
+                    </div>
+                    <div class="step-line" aria-hidden="true"></div>
+                </li>
+                <li class="matricula-step">
+                    <div class="step-circle" aria-hidden="true">4</div>
+                    <div class="step-info">
+                        <span class="step-number">Etapa 4</span>
+                        <span class="step-name">Conclusão</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- CABEÇALHO DA SEÇÃO -->
+        <header class="matricula-header-secao">
+            <span class="matricula-tag-etapa">Finalização da Matrícula</span>
+            <h2>Como Deseja Pagar?</h2>
+            <p>Escolha o método de pagamento seguro para ativar sua matrícula na <?= htmlspecialchars($config['app_name'] ?? 'GymFlow') ?>.</p>
+        </header>
 
         <?php if (!empty($erro)): ?>
-            <div class="mensagem-vazia">
-                <p><strong>Atenção:</strong> <?= htmlspecialchars($erro) ?></p>
+            <div class="matricula-alerta-erro" role="alert">
+                <span aria-hidden="true">⚠️</span>
+                <div>
+                    <strong>Atenção:</strong> <?= htmlspecialchars($erro) ?>
+                </div>
             </div>
-            <br>
         <?php endif; ?>
 
-        <div class="modalidades-grid">
-            <!-- Coluna 1 e 2: Opções de Pagamento -->
-            <article class="modalidade-card">
-                <div class="modalidade-conteudo">
-                    <h3>Escolha o Método de Pagamento</h3>
-                    <p>Processamento protegido e seguro via <strong>Mercado Pago</strong>.</p>
-                    <br>
+        <div class="matricula-grid-layout">
+            
+            <!-- COLUNA PRINCIPAL: MÉTODO DE PAGAMENTO -->
+            <section class="matricula-card">
+                <h3 class="matricula-card-titulo">Método de Pagamento</h3>
+                <p class="matricula-card-subtitulo">Processamento direto e seguro via Mercado Pago.</p>
 
-                    <form action="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=pagamento" method="POST" id="form-pagamento">
-                        <label>Método de Pagamento *:</label>
-                        <select name="metodo" id="metodo_pagamento" required>
-                            <option value="pix" selected>PIX (Aprovação Instantânea)</option>
-                            <option value="cartao">Cartão de Crédito (Até 12x)</option>
-                        </select>
-                        <br><br>
+                <form action="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=pagamento" method="POST" id="form-pagamento">
+                    
+                    <div class="metodo-pagamento-selector" role="radiogroup" aria-label="Selecione o método de pagamento">
+                        <label class="metodo-opcao is-selected" id="label-pix">
+                            <input 
+                                type="radio" 
+                                name="metodo" 
+                                value="pix" 
+                                id="radio-pix" 
+                                checked 
+                                onchange="alternarMetodo('pix')"
+                            >
+                            <div class="metodo-opcao-info">
+                                <strong>PIX</strong>
+                                <small>Aprovação instantânea</small>
+                            </div>
+                        </label>
 
-                        <!-- Painel Informativo PIX -->
-                        <div id="painel-pix" class="mensagem-vazia">
-                            <h4>Pagamento via PIX</h4>
-                            <p>Ao confirmar, o QR Code e o código Pix Copia e Cola serão gerados para você efetuar o pagamento diretamente no app do seu banco.</p>
-                            <small>A liberação da matrícula ocorre automaticamente após a confirmação bancária.</small>
+                        <label class="metodo-opcao" id="label-cartao">
+                            <input 
+                                type="radio" 
+                                name="metodo" 
+                                value="cartao" 
+                                id="radio-cartao" 
+                                onchange="alternarMetodo('cartao')"
+                            >
+                            <div class="metodo-opcao-info">
+                                <strong>Cartão de Crédito</strong>
+                                <small>Até 12x no cartão</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- PAINEL PIX -->
+                    <div id="painel-pix" class="painel-metodo-conteudo">
+                        <h4 class="painel-metodo-titulo">
+                            <span>⚡ Pagamento Instantâneo via PIX</span>
+                        </h4>
+                        <p class="painel-metodo-descricao">
+                            Ao clicar no botão de confirmação abaixo, o sistema gerará o <strong>QR Code</strong> e o código <strong>Pix Copia e Cola</strong> para você pagar pelo aplicativo do seu banco.
+                        </p>
+                        <p class="form-help">
+                            ✓ Confirmação em poucos segundos pelo Banco Central.<br>
+                            ✓ Seu acesso ao Portal do Aluno é liberado assim que o pagamento for registrado.
+                        </p>
+                    </div>
+
+                    <!-- PAINEL CARTÃO -->
+                    <div id="painel-cartao" class="painel-metodo-conteudo" style="display: none;">
+                        <h4 class="painel-metodo-titulo">
+                            <span>💳 Cartão de Crédito</span>
+                        </h4>
+                        <p class="painel-metodo-descricao">
+                            Ambiente protegido para processamento seguro via Mercado Pago. Nenhum dado do seu cartão é gravado em nossos servidores.
+                        </p>
+
+                        <div id="paymentBrick_container" style="margin-bottom: 20px;">
+                            <p class="form-help">🔒 Transação protegida por criptografia de ponta a ponta.</p>
                         </div>
 
-                        <!-- Painel Informativo / Container Mercado Pago Cartão -->
-                        <div id="painel-cartao" class="mensagem-vazia" style="display: none;">
-                            <h4>Pagamento com Cartão de Crédito</h4>
-                            <p>Área preparada para o <strong>Mercado Pago Payment Brick</strong>.</p>
-                            <small>Nenhum dado sensível do cartão é processado ou armazenado pela Gymflow.</small>
-                            <br><br>
-
-                            <div id="paymentBrick_container">
-                                <p>🔒 Ambiente de pagamento criptografado pelo Mercado Pago.</p>
-                            </div>
-
-                            <label for="parcelas">Número de Parcelas:</label>
-                            <select name="parcelas" id="parcelas">
-                                <option value="1">1x de R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?> (sem juros)</option>
+                        <div class="form-group">
+                            <label for="parcelas" class="form-label">
+                                <span>Número de Parcelas</span>
+                            </label>
+                            <select name="parcelas" id="parcelas" class="form-control">
+                                <option value="1">1x de R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?> (à vista)</option>
                                 <option value="2">2x de R$ <?= number_format((float) ($plano['valor'] / 2), 2, ',', '.') ?></option>
                                 <option value="3">3x de R$ <?= number_format((float) ($plano['valor'] / 3), 2, ',', '.') ?></option>
                             </select>
                         </div>
-                        <br><br>
+                    </div>
 
-                        <div class="hero-acoes">
-                            <a href="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=filial" class="hero-btn hero-btn-secundario">← Voltar para Filial</a>
-                            <button type="submit" class="hero-btn hero-btn-principal">Confirmar e Pagar R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?></button>
-                        </div>
-                    </form>
-                </div>
-            </article>
+                    <div class="matricula-acoes">
+                        <a href="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=filial" class="btn-matricula-secundario">
+                            ← Voltar para Filiais
+                        </a>
+                        <button type="submit" class="btn-matricula-principal" id="btn-submit-pagamento">
+                            Confirmar e Pagar R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?> →
+                        </button>
+                    </div>
+                </form>
+            </section>
 
-            <!-- Coluna 3: Resumo Completo da Matrícula -->
-            <article class="modalidade-card">
-                <div class="modalidade-conteudo">
-                    <span class="secao-destaque">Resumo da Contratação</span>
-                    <h3><?= htmlspecialchars($plano['nome']) ?></h3>
-                    <p><strong>Valor:</strong> R$ <?= number_format((float) $plano['valor'], 2, ',', '.') ?></p>
-                    <p><strong>Duração:</strong> <?= htmlspecialchars($plano['duracao']) ?></p>
-                    <p><strong>Categoria:</strong> <?= htmlspecialchars($plano['categoria']) ?></p>
-                    <hr>
-                    <p><strong>Aluno:</strong> <?= htmlspecialchars($matriculaTemp['nome']) ?></p>
-                    <p><strong>CPF:</strong> <?= htmlspecialchars($matriculaTemp['cpf']) ?></p>
-                    <p><strong>E-mail:</strong> <?= htmlspecialchars($matriculaTemp['email']) ?></p>
-                    <p><strong>Unidade:</strong> <?= htmlspecialchars($filial['nome']) ?></p>
-                    <p><strong>Telefone da Unidade:</strong> <?= htmlspecialchars($filial['telefone'] ?? '') ?></p>
+            <!-- COLUNA LATERAL: RESUMO COMPLETO -->
+            <aside class="matricula-resumo-card" aria-label="Resumo detalhado da matrícula">
+                <div class="resumo-cabecalho">
+                    <span class="resumo-badge">Resumo da Contratação</span>
+                    <h3 class="resumo-plano-nome"><?= htmlspecialchars($plano['nome'] ?? 'Plano') ?></h3>
+                    <div class="resumo-preco-box">
+                        <span class="resumo-preco-cifrao">R$</span>
+                        <span class="resumo-preco-valor"><?= number_format((float) ($plano['valor'] ?? 0), 2, ',', '.') ?></span>
+                        <span class="resumo-preco-periodo">/ <?= htmlspecialchars($plano['duracao'] ?? 'mês') ?></span>
+                    </div>
                 </div>
-            </article>
+
+                <ul class="resumo-detalhes-lista">
+                    <li class="resumo-item">
+                        <span>Aluno:</span>
+                        <strong><?= htmlspecialchars($matriculaTemp['nome'] ?? '') ?></strong>
+                    </li>
+                    <li class="resumo-item">
+                        <span>CPF:</span>
+                        <strong><?= htmlspecialchars($matriculaTemp['cpf'] ?? '') ?></strong>
+                    </li>
+                    <li class="resumo-item">
+                        <span>Unidade:</span>
+                        <strong><?= htmlspecialchars($filial['nome'] ?? '') ?></strong>
+                    </li>
+                    <?php if (!empty($filial['telefone'])): ?>
+                        <li class="resumo-item">
+                            <span>Telefone:</span>
+                            <strong><?= htmlspecialchars($filial['telefone']) ?></strong>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+
+                <div class="resumo-beneficios">
+                    <p class="resumo-beneficios-titulo">Segurança Garantida</p>
+                    <ul>
+                        <li><span>✓</span> Matrícula imediata no sistema</li>
+                        <li><span>✓</span> Acesso ao Portal do Aluno</li>
+                        <li><span>✓</span> Pagamento criptografado</li>
+                    </ul>
+                </div>
+            </aside>
+
         </div>
-    </section>
+
+    </div>
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const selectMetodo = document.getElementById('metodo_pagamento');
-    const painelPix    = document.getElementById('painel-pix');
+function alternarMetodo(metodo) {
+    const painelPix = document.getElementById('painel-pix');
     const painelCartao = document.getElementById('painel-cartao');
+    const labelPix = document.getElementById('label-pix');
+    const labelCartao = document.getElementById('label-cartao');
 
-    if (selectMetodo && painelPix && painelCartao) {
-        selectMetodo.addEventListener('change', function () {
-            if (this.value === 'cartao') {
-                painelPix.style.display = 'none';
-                painelCartao.style.display = 'block';
-            } else {
-                painelPix.style.display = 'block';
-                painelCartao.style.display = 'none';
-            }
-        });
+    if (metodo === 'pix') {
+        painelPix.style.display = 'block';
+        painelCartao.style.display = 'none';
+        labelPix.classList.add('is-selected');
+        labelCartao.classList.remove('is-selected');
+    } else {
+        painelPix.style.display = 'none';
+        painelCartao.style.display = 'block';
+        labelPix.classList.remove('is-selected');
+        labelCartao.classList.add('is-selected');
     }
-});
+}
 </script>
 
-<?php include __DIR__ . '/../shared/footer.php'; ?>
+<?php include __DIR__ . '/../shared/portfolio_footer.php'; ?>

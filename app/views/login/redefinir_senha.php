@@ -1,39 +1,47 @@
 <?php
-// ==========================================
-// GYMFLOW - REDEFINIR SENHA
 // app/views/login/redefinir_senha.php
-// ==========================================
 
 if (!defined('BASE_URL')) {
     http_response_code(403);
     exit('Acesso não permitido.');
 }
 
+require_once __DIR__ .
+    '/../../models/IdentidadeAutenticacao.php';
+
 $erro = $erro ?? '';
 $sucesso = $sucesso ?? '';
-$token = $token ?? '';
+$token = (string) ($token ?? '');
 
-$loginUrl = BASE_URL .
-    '/app/controllers/LoginController.php?acao=login';
+$identidade = gymflowIdentidadeRecuperacao($token);
 
-$actionUrl = BASE_URL .
-    '/app/controllers/LoginController.php?acao=redefinir_senha'
-    . '&token=' . rawurlencode((string) $token);
-
-$cssPath = __DIR__ .
-    '/../../../assets/css/auth-recovery.css';
-
-$cssVersion = is_file($cssPath)
-    ? filemtime($cssPath)
-    : '1';
-
-$escapar = static function ($valor) {
+$esc = static function ($valor): string {
     return htmlspecialchars(
         (string) $valor,
         ENT_QUOTES,
         'UTF-8'
     );
 };
+
+$loginUrl = $identidade['login_url'];
+
+$actionUrl = BASE_URL .
+    '/app/controllers/LoginController.php?acao=redefinir_senha' .
+    '&token=' . rawurlencode($token);
+
+$cssLogin = __DIR__ .
+    '/../../../assets/css/login.css';
+
+$cssRecuperacao = __DIR__ .
+    '/../../../assets/css/auth-recovery.css';
+
+$vLogin = is_file($cssLogin)
+    ? filemtime($cssLogin)
+    : 1;
+
+$vRecuperacao = is_file($cssRecuperacao)
+    ? filemtime($cssRecuperacao)
+    : 1;
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +54,7 @@ $escapar = static function ($valor) {
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Redefinir senha | GymFlow</title>
+    <title>Redefinir senha | <?= $esc($identidade['nome']) ?></title>
 
     <link
         rel="stylesheet"
@@ -54,112 +62,189 @@ $escapar = static function ($valor) {
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/auth-recovery.css?v=<?= $cssVersion ?>">
+        href="<?= BASE_URL ?>/assets/css/login.css?v=<?= $vLogin ?>">
 
+    <link
+        rel="stylesheet"
+        href="<?= BASE_URL ?>/assets/css/auth-recovery.css?v=<?= $vRecuperacao ?>">
 </head>
 
 <body>
 
-    <main class="auth-recovery">
+    <main
+        class="login-page auth-recovery-page"
+        style="
+        --portfolio-primary: <?= $esc($identidade['primaria']) ?>;
+        --portfolio-secondary: <?= $esc($identidade['secundaria']) ?>;
+        --portfolio-on-primary: <?= $esc($identidade['texto_primaria']) ?>;
+    ">
+        <div class="login-container">
 
-        <section
-            class="auth-card"
-            aria-labelledby="auth-title">
+            <!-- IDENTIDADE VISUAL -->
+            <section class="login-first-column">
 
-            <div class="auth-brand">
-                GYM<span>FLOW</span>
-            </div>
-
-            <header class="auth-header">
-
-                <h1 id="auth-title">
-                    Criar nova senha
-                </h1>
-
-                <p>
-                    Escolha uma nova senha para acessar
-                    sua conta com segurança.
-                </p>
-
-            </header>
-
-            <!-- MENSAGEM DE SUCESSO -->
-
-            <?php if ($sucesso !== ''): ?>
-
-                <div
-                    class="auth-message auth-message-success"
-                    role="status">
-                    <p>
-                        Sua senha foi redefinida com sucesso!
-                        Você já pode entrar na sua conta.
-                    </p>
+                <div class="login-brand">
+                    GYM<span>FLOW</span>
                 </div>
 
-            <?php else: ?>
+                <div class="login-left-content">
 
-                <!-- ERRO -->
+                    <a
+                        href="<?= $esc($loginUrl) ?>"
+                        class="login-back-link">
+                        <span class="back-arrow">←</span>
+                        Voltar para o login
+                    </a>
 
-                <?php if ($erro !== ''): ?>
+                    <div class="login-title-line"></div>
+
+                    <h1 class="login-title">
+                        Um novo começo
+                        <span>para seu acesso.</span>
+                    </h1>
+
+                    <p class="login-description">
+                        Defina uma nova senha para continuar
+                        utilizando os serviços da sua academia.
+                    </p>
+
+                    <div class="login-features">
+
+                        <div class="login-feature">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Proteção</strong>
+                                <span>
+                                    Redefinição por link temporário
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="login-feature">
+                            <div class="feature-icon">◇</div>
+                            <div>
+                                <strong>Acesso</strong>
+                                <span>
+                                    Continue de onde parou
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- FORMULÁRIO -->
+            <section class="login-second-column">
+
+                <div
+                    class="login-background-glow"
+                    aria-hidden="true"></div>
+
+                <div class="login-form-container">
 
                     <div
-                        class="auth-message auth-message-error"
-                        role="alert">
-                        <p>
-                            <?= $escapar($erro) ?>
-                        </p>
+                        class="login-card-glow"
+                        aria-hidden="true"></div>
+
+                    <div class="form-brand">
+                        <?= $esc($identidade['nome']) ?>
                     </div>
 
-                <?php endif; ?>
+                    <header class="login-header">
 
-                <!-- FORMULÁRIO -->
+                        <h2 class="login-form-title">
+                            Criar nova senha
+                        </h2>
 
-                <form
-                    action="<?= $escapar($actionUrl) ?>"
-                    method="POST"
-                    class="auth-form">
-
-                    <div class="auth-field">
-
-                        <label for="nova_senha">
-                            Nova senha
-                        </label>
-
-                        <input
-                            type="password"
-                            id="nova_senha"
-                            name="nova_senha"
-                            placeholder="Digite sua nova senha"
-                            autocomplete="new-password"
-                            minlength="6"
-                            required>
-
-                        <p class="auth-hint">
-                            Utilize pelo menos 6 caracteres.
+                        <p class="login-form-description">
+                            Escolha uma nova senha para acessar
+                            sua conta com segurança.
                         </p>
 
+                    </header>
+
+                    <?php if ($sucesso !== ''): ?>
+
+                        <div
+                            class="auth-message auth-message-success"
+                            role="status">
+                            Sua senha foi redefinida com sucesso!
+                            Você já pode entrar na sua conta.
+                        </div>
+
+                        <div class="auth-success-action">
+                            <a
+                                href="<?= $esc($loginUrl) ?>"
+                                class="login-submit-button">
+                                <span>Ir para o login</span>
+                                <span class="button-arrow">→</span>
+                            </a>
+                        </div>
+
+                    <?php else: ?>
+
+                        <?php if ($erro !== ''): ?>
+                            <div
+                                class="auth-message auth-message-error"
+                                role="alert">
+                                <?= $esc($erro) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <form
+                            method="POST"
+                            action="<?= $esc($actionUrl) ?>"
+                            class="login-form">
+                            <div class="form-group">
+
+                                <label
+                                    for="nova_senha"
+                                    class="form-label">
+                                    Nova senha
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <input
+                                        type="password"
+                                        id="nova_senha"
+                                        name="nova_senha"
+                                        class="form-input auth-input"
+                                        placeholder="Digite sua nova senha"
+                                        autocomplete="new-password"
+                                        minlength="6"
+                                        required>
+
+                                </div>
+
+                                <p class="auth-hint">
+                                    Utilize pelo menos 6 caracteres.
+                                </p>
+
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="login-submit-button">
+                                <span>Salvar nova senha</span>
+                                <span class="button-arrow">→</span>
+                            </button>
+
+                        </form>
+
+                    <?php endif; ?>
+
+                    <div class="login-footer">
+                        <a href="<?= $esc($loginUrl) ?>">
+                            Voltar para o login
+                        </a>
                     </div>
 
-                    <button
-                        type="submit"
-                        class="auth-action">
-                        Salvar nova senha
-                    </button>
+                </div>
+            </section>
 
-                </form>
-
-            <?php endif; ?>
-
-            <footer class="auth-footer">
-
-                <a href="<?= $escapar($loginUrl) ?>">
-                    ← Voltar para o login
-                </a>
-
-            </footer>
-
-        </section>
-
+        </div>
     </main>
 
 </body>

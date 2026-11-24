@@ -1,8 +1,8 @@
-
 <?php
 // app/controllers/MatriculaController.php
 
 require_once __DIR__ . '/../../config/sessao.php';
+require_once __DIR__ . '/../../config/conexao.php';
 require_once __DIR__ . '/../services/MercadoPagoService.php';
 
 $baseUrl = BASE_URL . '/app/controllers/MatriculaController.php';
@@ -21,10 +21,70 @@ if (!in_array($acao, $acoesPermitidas, true)) {
 }
 
 // ==================================================
+// FUNÇÃO AUXILIAR: CONFIGURAÇÃO PÚBLICA DA ACADEMIA
+// ==================================================
+
+/**
+ * Carrega as informações públicas e a identidade visual
+ * da academia configuradas em portfolio_config.
+ */
+function carregarConfiguracaoMatricula(PDO $pdo, int $companyId): array
+{
+    $configPadrao = [
+        'app_name' => 'GymFlow',
+        'primary_color' => '#C9A227',
+        'secondary_color' => '#000000',
+        'logo_url' => '',
+        'contact_email' => '',
+        'contact_phone' => '',
+        'contact_hours' => '',
+        'instagram_url' => '',
+        'facebook_url' => '',
+        'tiktok_url' => '',
+        'whatsapp_url' => '',
+    ];
+
+    if ($companyId <= 0) {
+        return $configPadrao;
+    }
+
+    try {
+        $stmt = $pdo->prepare('SELECT * FROM portfolio_config WHERE company_id = ? LIMIT 1');
+        $stmt->execute([$companyId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && is_array($row)) {
+            if (empty($row['app_name'])) {
+                $stmtComp = $pdo->prepare('SELECT nome FROM companies WHERE id = ? LIMIT 1');
+                $stmtComp->execute([$companyId]);
+                $compNome = $stmtComp->fetchColumn();
+                if (!empty($compNome)) {
+                    $row['app_name'] = $compNome;
+                }
+            }
+            return array_merge($configPadrao, $row);
+        }
+
+        // Caso portfolio_config ainda não tenha sido salvo, utiliza o nome da empresa
+        $stmtComp = $pdo->prepare('SELECT nome FROM companies WHERE id = ? LIMIT 1');
+        $stmtComp->execute([$companyId]);
+        $compNome = $stmtComp->fetchColumn();
+        if (!empty($compNome)) {
+            $configPadrao['app_name'] = $compNome;
+        }
+
+        return $configPadrao;
+    } catch (\Throwable $e) {
+        error_log('[GymFlow][MatriculaController] Erro ao carregar config da empresa: ' . $e->getMessage());
+        return $configPadrao;
+    }
+}
+
+// ==================================================
 // CONTEXTO MULTI-TENANT DA MATRÍCULA
 // ==================================================
 //
-// O company_id chega pelo link do site público.
+// O company_id chega pelo link do site público (?company_id=... ou ?id=...).
 // Depois, permanece em $_SESSION['matricula'].
 //
 // Este contexto é independente da sessão do
@@ -33,46 +93,52 @@ if (!in_array($acao, $acoesPermitidas, true)) {
 //
 // O model verifica empresa, plano e filial no banco.
 
-if ($acao === 'identificacao' && isset($_GET['company_id'])) {
+$paramEmpresa = $_GET['company_id'] ?? $_GET['id'] ?? null;
 
+if ($paramEmpresa !== null) {
     $empresaRecebida = filter_var(
-        $_GET['company_id'],
+        $paramEmpresa,
         FILTER_VALIDATE_INT,
         ['options' => ['min_range' => 1]]
     );
 
-    if ($empresaRecebida === false) {
-        http_response_code(400);
-        exit('Academia inválida.');
+    if ($empresaRecebida !== false && $empresaRecebida > 0) {
+        $empresaRecebida = (int) $empresaRecebida;
+        $empresaAnterior = (int) ($_SESSION['matricula']['company_id'] ?? 0);
+
+        // Impede reutilizar dados residuais de outra academia.
+        if ($empresaAnterior > 0 && $empresaAnterior !== $empresaRecebida) {
+            unset($_SESSION['matricula']);
+        }
+
+        $_SESSION['matricula']['company_id'] = $empresaRecebida;
     }
-
-    $empresaRecebida = (int) $empresaRecebida;
-
-    $empresaAnterior = (int) (
-        $_SESSION['matricula']['company_id'] ?? 0
-    );
-
-    // Impede reutilizar dados de outra academia.
-    if (
-        $empresaAnterior > 0 &&
-        $empresaAnterior !== $empresaRecebida
-    ) {
-        unset($_SESSION['matricula']);
-    }
-
-    $_SESSION['matricula']['company_id'] = $empresaRecebida;
 }
 
-$company_id = (int) (
-    $_SESSION['matricula']['company_id'] ?? 0
-);
+$company_id = (int) ($_SESSION['matricula']['company_id'] ?? 0);
 
-// A tela de sucesso utiliza um resultado separado,
-// já gravado após a concretização da matrícula.
-if ($acao !== 'sucesso' && $company_id <= 0) {
-    header('Location: ' . BASE_URL . '/index.php');
-    exit;
+// A tela de sucesso utiliza um resultado gravado após a concretização.
+if ($acao === 'sucesso') {
+    $resultado = $_SESSION['matricula_sucesso'] ?? null;
+
+    if (empty($resultado)) {
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
+    }
+
+    $company_id = (int) ($resultado['company_id'] ?? $company_id);
+    if ($company_id <= 0) {
+        $company_id = 1;
+    }
+} else {
+    if ($company_id <= 0) {
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
+    }
 }
+
+// Carrega as configurações públicas da academia (cores, logotipo, dados de contato)
+$config = carregarConfiguracaoMatricula($pdo, $company_id);
 
 // ==================================================
 // ETAPA 1 - IDENTIFICAÇÃO E PLANO
@@ -134,7 +200,7 @@ if ($acao === 'identificacao') {
             $dados['telefone'] === '' ||
             $dados['senha'] === ''
         ) {
-            $erro = 'Preencha todos os campos obrigatórios.';
+            $erro = 'Preencha todos os campos obrigatórios marcados com asterisco (*).';
         } elseif (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
             $erro = 'Informe um endereço de e-mail válido.';
         } elseif (strlen($dados['senha']) < 6) {
@@ -147,7 +213,6 @@ if ($acao === 'identificacao') {
             require __DIR__ . '/../models/Matricula.php';
 
             if (empty($plano)) {
-
                 $erro = 'O plano selecionado não está disponível.';
             } else {
 
@@ -158,10 +223,8 @@ if ($acao === 'identificacao') {
                 require __DIR__ . '/../models/Matricula.php';
 
                 if (!empty($erroModel)) {
-
                     $erro = $erroModel;
                 } else {
-
                     $_SESSION['matricula'] = $dados;
 
                     header("Location: $baseUrl?acao=filial");
@@ -212,7 +275,6 @@ elseif ($acao === 'filial') {
     }
 
     $operacao = 'listar_filiais';
-
     require __DIR__ . '/../models/Matricula.php';
 
     if (!empty($erroModel)) {
@@ -224,8 +286,7 @@ elseif ($acao === 'filial') {
         $filialId = (int) ($_POST['filial_id'] ?? 0);
 
         if ($filialId <= 0) {
-
-            $erro = 'Selecione uma filial para treinar.';
+            $erro = 'Selecione uma unidade/filial para treinar.';
         } else {
 
             // Verifica empresa e situação da filial.
@@ -235,10 +296,8 @@ elseif ($acao === 'filial') {
             require __DIR__ . '/../models/Matricula.php';
 
             if (empty($filial)) {
-
                 $erro = 'Filial inválida ou indisponível.';
             } else {
-
                 $_SESSION['matricula']['filial_id'] = $filialId;
 
                 header("Location: $baseUrl?acao=pagamento");
@@ -298,23 +357,13 @@ elseif ($acao === 'pagamento') {
 
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
-        $metodo = strtolower(
-            trim($_POST['metodo'] ?? 'pix')
-        );
+        $metodo = strtolower(trim($_POST['metodo'] ?? 'pix'));
 
         if (!in_array($metodo, ['pix', 'cartao'], true)) {
             $metodo = 'pix';
         }
 
-        // Atenção:
-        // A integração financeira ainda precisará
-        // de uma auditoria própria para garantir
-        // confirmação confiável e idempotência.
-        //
-        // Este código mantém a chamada existente.
-
         try {
-
             $respPagamento = $mpService->processarPagamento([
                 'matricula_id' => time(),
                 'metodo' => $metodo,
@@ -329,19 +378,12 @@ elseif ($acao === 'pagamento') {
             ]);
 
             if (!is_array($respPagamento)) {
-                throw new RuntimeException(
-                    'Resposta de pagamento inválida.'
-                );
+                throw new RuntimeException('Resposta de pagamento inválida.');
             }
 
-            // Nunca presumir aprovação por ausência
-            // de status na resposta do serviço.
-            $statusPagamento =
-                $respPagamento['status'] ?? 'pendente';
+            $statusPagamento = $respPagamento['status'] ?? 'pendente';
 
-            // Concretização: o model volta a validar
-            // a propriedade da filial e do plano.
-
+            // Concretização: o model valida a propriedade da filial e do plano.
             $operacao = 'concretizar_matricula';
 
             $dados = [
@@ -367,24 +409,21 @@ elseif ($acao === 'pagamento') {
                 'pagamento' => [
                     'metodo' => $metodo,
                     'status' => $statusPagamento,
-                    'mercado_pago_id' =>
-                    $respPagamento['mercado_pago_id'] ?? null
+                    'mercado_pago_id' => $respPagamento['mercado_pago_id'] ?? null
                 ]
             ];
 
             require __DIR__ . '/../models/Matricula.php';
 
             if (!empty($erroModel)) {
-
-                $erro = 'Falha ao concretizar a matrícula: ' .
-                    $erroModel;
+                $erro = 'Falha ao concretizar a matrícula: ' . $erroModel;
             } elseif (!empty($matriculaConcretizada)) {
 
                 $_SESSION['matricula_sucesso'] = array_merge(
                     $matriculaConcretizada,
                     [
-                        'pix_copia_cola' =>
-                        $respPagamento['pix_copia_cola'] ?? null
+                        'pix_copia_cola' => $respPagamento['pix_copia_cola'] ?? null,
+                        'company_id' => $company_id
                     ]
                 );
 
@@ -393,18 +432,11 @@ elseif ($acao === 'pagamento') {
                 header("Location: $baseUrl?acao=sucesso");
                 exit;
             } else {
-
                 $erro = 'Não foi possível concluir a matrícula.';
             }
         } catch (Throwable $e) {
-
-            error_log(
-                '[GymFlow][MatriculaController] ' .
-                    $e->getMessage()
-            );
-
-            $erro = 'Não foi possível processar sua solicitação. ' .
-                'Tente novamente mais tarde.';
+            error_log('[GymFlow][MatriculaController] ' . $e->getMessage());
+            $erro = 'Não foi possível processar sua solicitação. Tente novamente mais tarde.';
         }
     }
 
@@ -412,17 +444,9 @@ elseif ($acao === 'pagamento') {
 }
 
 // ==================================================
-// ETAPA 4 - RESULTADO
+// ETAPA 4 - RESULTADO / CONCLUSÃO
 // ==================================================
 
 elseif ($acao === 'sucesso') {
-
-    $resultado = $_SESSION['matricula_sucesso'] ?? null;
-
-    if (empty($resultado)) {
-        header('Location: ' . BASE_URL . '/index.php');
-        exit;
-    }
-
     require __DIR__ . '/../views/matricula/sucesso.php';
 }

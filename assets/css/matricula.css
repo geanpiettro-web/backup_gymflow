@@ -1,0 +1,824 @@
+/* ==========================================================================
+   GYMFLOW - ESTILOS DO FLUXO DE MATRÍCULA PÚBLICA
+   Arquivo: assets/css/matricula.css
+   Objetivo: Padronização visual do checkout com a identidade multi-tenant
+   ========================================================================== */
+
+:root {
+    --mat-primary: var(--portfolio-primary, #C9A227);
+    --mat-secondary: var(--portfolio-secondary, #0c1017);
+    --mat-primary-hover: color-mix(in srgb, var(--mat-primary) 85%, #000);
+    --mat-primary-soft: color-mix(in srgb, var(--mat-primary) 15%, transparent);
+    --mat-bg-page: var(--mat-secondary, #0c1017);
+    --mat-bg-card: #151c28;
+    --mat-bg-card-subtle: #1c2536;
+    --mat-bg-input: #111722;
+    --mat-border: rgba(255, 255, 255, 0.1);
+    --mat-border-focus: var(--mat-primary);
+    --mat-text: #f8fafc;
+    --mat-text-muted: #94a3b8;
+    --mat-text-subtle: #64748b;
+    --mat-success: #10b981;
+    --mat-success-bg: rgba(16, 185, 129, 0.12);
+    --mat-danger: #ef4444;
+    --mat-danger-bg: rgba(239, 68, 68, 0.12);
+    --mat-radius-sm: 6px;
+    --mat-radius-md: 10px;
+    --mat-radius-lg: 14px;
+    --mat-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   1. ESTRUTURA GERAL DA PÁGINA
+   ========================================================================== */
+
+.matricula-wrapper {
+    background-color: var(--mat-bg-page);
+    color: var(--mat-text);
+    min-height: calc(100vh - 160px);
+    padding: 40px 20px 80px;
+    box-sizing: border-box;
+}
+
+.matricula-container {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   2. STEPPER DE PROGRESSO (INDICADOR VISUAL DAS 4 ETAPAS)
+   ========================================================================== */
+
+.matricula-stepper-container {
+    margin-bottom: 36px;
+}
+
+.matricula-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.matricula-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    position: relative;
+}
+
+.matricula-step:last-child {
+    flex: 0 0 auto;
+}
+
+.step-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: var(--mat-bg-card-subtle);
+    border: 2px solid var(--mat-border);
+    color: var(--mat-text-muted);
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+}
+
+.step-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.step-number {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mat-text-subtle);
+    font-weight: 600;
+}
+
+.step-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mat-text-muted);
+    transition: color 0.25s ease;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background-color: var(--mat-border);
+    margin: 0 16px;
+    transition: background-color 0.25s ease;
+}
+
+/* Estados do Stepper */
+.matricula-step.active .step-circle {
+    background-color: var(--mat-primary);
+    border-color: var(--mat-primary);
+    color: #000000;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--mat-primary) 40%, transparent);
+}
+
+.matricula-step.active .step-name {
+    color: var(--mat-text);
+    font-weight: 700;
+}
+
+.matricula-step.active .step-number {
+    color: var(--mat-primary);
+}
+
+.matricula-step.completed .step-circle {
+    background-color: var(--mat-success);
+    border-color: var(--mat-success);
+    color: #ffffff;
+}
+
+.matricula-step.completed .step-name {
+    color: var(--mat-text);
+}
+
+.matricula-step.completed .step-line {
+    background-color: var(--mat-success);
+}
+
+/* ==========================================================================
+   3. CABEÇALHO DA SEÇÃO
+   ========================================================================== */
+
+.matricula-header-secao {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.matricula-tag-etapa {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: var(--mat-primary-soft);
+    color: var(--mat-primary);
+    border: 1px solid color-mix(in srgb, var(--mat-primary) 30%, transparent);
+    margin-bottom: 10px;
+}
+
+.matricula-header-secao h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--mat-text);
+    margin: 0 0 8px;
+}
+
+.matricula-header-secao p {
+    font-size: 15px;
+    color: var(--mat-text-muted);
+    margin: 0;
+}
+
+/* ==========================================================================
+   4. LAYOUT EM 2 COLUNAS (FORMULÁRIO + RESUMO)
+   ========================================================================== */
+
+.matricula-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* Modo tela única (sucesso) */
+.matricula-grid-layout.is-single {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   5. CARDS E PAINÉIS
+   ========================================================================== */
+
+.matricula-card {
+    background-color: var(--mat-bg-card);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-lg);
+    padding: 30px;
+    box-shadow: var(--mat-shadow);
+    box-sizing: border-box;
+}
+
+.matricula-card-titulo {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--mat-text);
+    margin: 0 0 6px;
+}
+
+.matricula-card-subtitulo {
+    font-size: 14px;
+    color: var(--mat-text-muted);
+    margin: 0 0 24px;
+    line-height: 1.5;
+}
+
+/* Resumo Lateral */
+.matricula-resumo-card {
+    position: sticky;
+    top: 90px;
+    background-color: var(--mat-bg-card);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-lg);
+    padding: 26px;
+    box-shadow: var(--mat-shadow);
+    box-sizing: border-box;
+}
+
+.resumo-cabecalho {
+    border-bottom: 1px solid var(--mat-border);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.resumo-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mat-primary);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.resumo-plano-nome {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--mat-text);
+    margin: 0 0 10px;
+}
+
+.resumo-preco-box {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.resumo-preco-cifrao {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--mat-text);
+}
+
+.resumo-preco-valor {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--mat-primary);
+}
+
+.resumo-preco-periodo {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+}
+
+.resumo-detalhes-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.resumo-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--mat-text-muted);
+}
+
+.resumo-item strong {
+    color: var(--mat-text);
+    font-weight: 600;
+}
+
+.resumo-beneficios {
+    background-color: var(--mat-bg-card-subtle);
+    border-radius: var(--mat-radius-md);
+    padding: 16px;
+    border: 1px solid var(--mat-border);
+}
+
+.resumo-beneficios-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mat-text);
+    margin: 0 0 10px;
+}
+
+.resumo-beneficios ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.resumo-beneficios li {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.resumo-beneficios li span {
+    color: var(--mat-success);
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   6. FORMULÁRIOS, INPUTS E SELECTS
+   ========================================================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mat-text);
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-label-required {
+    color: var(--mat-primary);
+}
+
+.form-control,
+.matricula-input,
+select.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    background-color: var(--mat-bg-input);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    color: var(--mat-text);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.form-control::placeholder {
+    color: var(--mat-text-subtle);
+}
+
+.form-control:focus,
+select.form-control:focus {
+    border-color: var(--mat-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mat-primary) 25%, transparent);
+    outline: none;
+    background-color: #151d2a;
+}
+
+/* Select estilizado */
+select.form-control {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+select.form-control option {
+    background-color: #171d28;
+    color: #ffffff;
+    padding: 8px;
+}
+
+.form-help {
+    font-size: 12px;
+    color: var(--mat-text-muted);
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   7. SELEÇÃO DE FILIAIS (ETAPA 2)
+   ========================================================================== */
+
+.filiais-grid-selecao {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.filial-card-opcao {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background-color: var(--mat-bg-card-subtle);
+    border: 2px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.filial-card-opcao:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background-color: #202b3d;
+}
+
+.filial-card-opcao.is-selected,
+.filial-card-opcao:has(input[type="radio"]:checked) {
+    border-color: var(--mat-primary);
+    background-color: color-mix(in srgb, var(--mat-primary) 7%, var(--mat-bg-card-subtle));
+    box-shadow: 0 0 14px color-mix(in srgb, var(--mat-primary) 18%, transparent);
+}
+
+.filial-radio-circle {
+    margin-top: 2px;
+}
+
+.filial-radio-input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--mat-primary);
+    cursor: pointer;
+}
+
+.filial-card-info {
+    flex: 1;
+}
+
+.filial-card-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.filial-nome {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--mat-text);
+    margin: 0;
+}
+
+.filial-badge-ativa {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mat-success);
+    background-color: var(--mat-success-bg);
+    padding: 3px 8px;
+    border-radius: 9999px;
+}
+
+.filial-detalhe {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+    margin: 3px 0;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   8. FORMAS DE PAGAMENTO (ETAPA 3)
+   ========================================================================== */
+
+.metodo-pagamento-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.metodo-opcao {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    background-color: var(--mat-bg-card-subtle);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.metodo-opcao:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.metodo-opcao.is-selected,
+.metodo-opcao:has(input[type="radio"]:checked) {
+    border-color: var(--mat-primary);
+    background-color: color-mix(in srgb, var(--mat-primary) 8%, var(--mat-bg-card-subtle));
+}
+
+.metodo-opcao input[type="radio"] {
+    accent-color: var(--mat-primary);
+    width: 18px;
+    height: 18px;
+}
+
+.metodo-opcao-info strong {
+    display: block;
+    font-size: 14px;
+    color: var(--mat-text);
+}
+
+.metodo-opcao-info small {
+    font-size: 12px;
+    color: var(--mat-text-muted);
+}
+
+.painel-metodo-conteudo {
+    background-color: var(--mat-bg-card-subtle);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.painel-metodo-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mat-text);
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.painel-metodo-descricao {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+/* ==========================================================================
+   9. TELA DE SUCESSO / CONFIRMAÇÃO (ETAPA 4)
+   ========================================================================== */
+
+.sucesso-badge-topo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--mat-success-bg);
+    border: 2px solid var(--mat-success);
+    color: var(--mat-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+.sucesso-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    background-color: var(--mat-bg-card-subtle);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.sucesso-item {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+}
+
+.sucesso-item strong {
+    display: block;
+    font-size: 14px;
+    color: var(--mat-text);
+    margin-top: 3px;
+}
+
+.pix-copia-box {
+    background-color: var(--mat-bg-card-subtle);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-md);
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.pix-copia-box h4 {
+    font-size: 14px;
+    color: var(--mat-text);
+    margin: 0 0 6px;
+}
+
+.pix-copia-box p {
+    font-size: 13px;
+    color: var(--mat-text-muted);
+    margin: 0 0 12px;
+}
+
+.pix-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--mat-bg-input);
+    border: 1px solid var(--mat-border);
+    border-radius: var(--mat-radius-sm);
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 10px;
+    resize: none;
+}
+
+.proximo-passo-box {
+    background-color: color-mix(in srgb, var(--mat-primary) 8%, var(--mat-bg-card-subtle));
+    border: 1px solid color-mix(in srgb, var(--mat-primary) 25%, transparent);
+    border-radius: var(--mat-radius-md);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+}
+
+.proximo-passo-box p {
+    font-size: 14px;
+    color: #e2e8f0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   10. BOTÕES E AÇÕES
+   ========================================================================== */
+
+.matricula-acoes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--mat-border);
+}
+
+.matricula-acoes.is-centered {
+    justify-content: center;
+}
+
+.btn-matricula-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: var(--mat-radius-md);
+    font-size: 15px;
+    font-weight: 700;
+    color: #000000;
+    background-color: var(--mat-primary);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--mat-primary) 30%, transparent);
+}
+
+.btn-matricula-principal:hover {
+    background-color: var(--mat-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--mat-primary) 40%, transparent);
+}
+
+.btn-matricula-principal:active {
+    transform: translateY(0);
+}
+
+.btn-matricula-secundario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 22px;
+    border-radius: var(--mat-radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--mat-text-muted);
+    background-color: transparent;
+    border: 1px solid var(--mat-border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-matricula-secundario:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--mat-text);
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* ==========================================================================
+   11. MENSAGENS E ALERTAS
+   ========================================================================== */
+
+.matricula-alerta-erro {
+    background-color: var(--mat-danger-bg);
+    border: 1px solid var(--mat-danger);
+    color: #fca5a5;
+    padding: 14px 18px;
+    border-radius: var(--mat-radius-md);
+    font-size: 14px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.matricula-alerta-erro strong {
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   12. RESPONSIVIDADE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .matricula-grid-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .matricula-resumo-card {
+        position: static;
+        order: -1;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .metodo-pagamento-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .sucesso-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .matricula-wrapper {
+        padding: 24px 14px 60px;
+    }
+
+    .matricula-card {
+        padding: 20px;
+    }
+
+    .step-info {
+        display: none;
+    }
+
+    .matricula-acoes {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .btn-matricula-principal,
+    .btn-matricula-secundario {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

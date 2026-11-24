@@ -9,6 +9,10 @@ $instagramRodape = trim($config['instagram_url'] ?? '');
 $facebookRodape = trim($config['facebook_url'] ?? '');
 $tiktokRodape = trim($config['tiktok_url'] ?? '');
 $whatsappRodape = trim($config['whatsapp_url'] ?? '');
+
+$urlSiteBase = !empty($portfolioUrl)
+    ? $portfolioUrl
+    : (BASE_URL . '/index.php' . (!empty($company_id) ? '?id=' . (int) $company_id : ''));
 ?>
 
 <footer class="portfolio-footer">
@@ -17,7 +21,7 @@ $whatsappRodape = trim($config['whatsapp_url'] ?? '');
     <div class="footer-conteudo">
         <div class="footer-marca">
             <?php if ($logoMarca !== ''): ?>
-                <a href="#inicio" class="footer-logo-link" aria-label="Voltar ao início">
+                <a href="<?= htmlspecialchars($urlSiteBase) ?>#inicio" class="footer-logo-link" aria-label="Voltar ao início">
                     <img
                         src="<?= htmlspecialchars($logoMarca) ?>"
                         alt=""
@@ -33,11 +37,11 @@ $whatsappRodape = trim($config['whatsapp_url'] ?? '');
                 <h3>Navegue</h3>
 
                 <nav class="footer-links" aria-label="Navegação do rodapé">
-                    <a href="#inicio">Home</a>
-                    <a href="#unidades">Unidades</a>
-                    <a href="#modalidades">Modalidades</a>
-                    <a href="#sobre">Sobre nós</a>
-                    <a href="#contato">Contato</a>
+                    <a href="<?= htmlspecialchars($urlSiteBase) ?>#inicio">Home</a>
+                    <a href="<?= htmlspecialchars($urlSiteBase) ?>#unidades">Unidades</a>
+                    <a href="<?= htmlspecialchars($urlSiteBase) ?>#modalidades">Modalidades</a>
+                    <a href="<?= htmlspecialchars($urlSiteBase) ?>#sobre">Sobre nós</a>
+                    <a href="<?= htmlspecialchars($urlSiteBase) ?>#contato">Contato</a>
                 </nav>
             </div>
 
