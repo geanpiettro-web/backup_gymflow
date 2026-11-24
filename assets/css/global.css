@@ -1,47 +1,31 @@
 /* ==========================================
    GYMFLOW - DESIGN SYSTEM GLOBAL
-   White Label / Multi-Tenant
 ========================================== */
 
-/* ==========================================
-   1. IDENTIDADE VISUAL PADRÃO
-========================================== */
+/* 1. VARIÁVEIS GLOBAIS */
 
 :root {
 
-    /* Cores da marca */
+    /* Identidade visual */
 
     --cor-primaria: #ffb000;
     --cor-secundaria: #111827;
 
-    /* Contraste sobre as cores da marca */
-
     --cor-sobre-primaria: #111827;
     --cor-sobre-secundaria: #ffffff;
 
-    /* Variações automáticas */
-
     --cor-primaria-hover:
-        color-mix(in srgb,
-            var(--cor-primaria) 85%,
-            #000000);
+        color-mix(in srgb, var(--cor-primaria) 85%, #000000);
 
     --cor-primaria-suave:
-        color-mix(in srgb,
-            var(--cor-primaria) 12%,
-            #ffffff);
+        color-mix(in srgb, var(--cor-primaria) 12%, var(--cor-superficie));
 
     --cor-primaria-borda:
-        color-mix(in srgb,
-            var(--cor-primaria) 35%,
-            #ffffff);
+        color-mix(in srgb, var(--cor-primaria) 35%, var(--cor-superficie));
 
-    /* ======================================
-       2. CORES NEUTRAS - TEMA CLARO
-    ====================================== */
+    /* Cores neutras */
 
     --cor-branca: #ffffff;
-
     --cor-fundo: #ffffff;
     --cor-fundo-pagina: #f8fafc;
 
@@ -55,9 +39,7 @@
     --cor-borda: #e2e8f0;
     --cor-borda-forte: #cbd5e1;
 
-    /* ======================================
-       3. ESTADOS DO SISTEMA
-    ====================================== */
+    /* Estados do sistema */
 
     --cor-sucesso: #16a34a;
     --cor-sucesso-fundo: #f0fdf4;
@@ -71,9 +53,7 @@
     --cor-info: #2563eb;
     --cor-info-fundo: #eff6ff;
 
-    /* ======================================
-       4. COMPONENTES
-    ====================================== */
+    /* Componentes */
 
     --ui-fundo-pagina: var(--cor-fundo-pagina);
     --ui-fundo-card: var(--cor-superficie);
@@ -82,10 +62,16 @@
     --ui-texto-suave: var(--cor-texto-secundario);
     --ui-borda: var(--cor-borda);
 
+    /* Bordas e transições */
+
     --ui-raio-sm: 6px;
     --ui-raio-md: 10px;
     --ui-raio-lg: 12px;
     --ui-raio-xl: 16px;
+
+    --ui-transicao: 0.2s ease;
+
+    /* Sombras */
 
     --ui-sombra-card:
         0 1px 2px rgba(15, 23, 42, 0.03),
@@ -95,52 +81,33 @@
         0 3px 6px rgba(15, 23, 42, 0.04),
         0 10px 20px rgba(15, 23, 42, 0.045);
 
-    --ui-transicao: 0.2s ease;
-
-    /* ======================================
-       5. BOTÕES E FORMULÁRIOS
-    ====================================== */
+    /* Botões */
 
     --ui-botao-fundo: var(--cor-primaria);
+    --ui-botao-fundo-hover: var(--cor-primaria-hover);
+    --ui-botao-texto: var(--cor-sobre-primaria);
 
-    --ui-botao-fundo-hover:
-        var(--cor-primaria-hover);
+    /* Formulários */
 
-    --ui-botao-texto:
-        var(--cor-sobre-primaria);
-
-    --ui-input-fundo: var(--cor-superficie);
-    --ui-input-texto: var(--cor-texto);
-    --ui-input-borda: var(--cor-borda);
+    --ui-input-fundo: var(--ui-fundo-card);
+    --ui-input-texto: var(--ui-texto);
+    --ui-input-borda: var(--ui-borda);
     --ui-input-foco: var(--cor-primaria);
 
-    /* ======================================
-       6. COMPATIBILIDADE
-    ====================================== */
+    /* Compatibilidade com outros módulos */
 
     --fin-primary: var(--cor-primaria);
     --fin-primary-dark: var(--cor-primaria-hover);
 }
 
-
-/* ==========================================
-   7. APARÊNCIA - TEMA CLARO
-========================================== */
+/* 2. TEMAS */
 
 :root[data-theme="light"] {
     color-scheme: light;
 }
 
-
-/* ==========================================
-   8. APARÊNCIA - TEMA ESCURO
-========================================== */
-
 :root[data-theme="dark"] {
-
     color-scheme: dark;
-
-    /* Fundos */
 
     --cor-fundo: #0f172a;
     --cor-fundo-pagina: #0f172a;
@@ -148,30 +115,12 @@
     --cor-superficie: #1e293b;
     --cor-superficie-secundaria: #273449;
 
-    /* Textos */
-
     --cor-texto: #f8fafc;
     --cor-texto-secundario: #a5b4c6;
     --cor-texto-discreto: #94a3b8;
 
-    /* Bordas */
-
     --cor-borda: #334155;
     --cor-borda-forte: #475569;
-
-    /* Variações da identidade visual */
-
-    --cor-primaria-suave:
-        color-mix(in srgb,
-            var(--cor-primaria) 12%,
-            var(--cor-superficie));
-
-    --cor-primaria-borda:
-        color-mix(in srgb,
-            var(--cor-primaria) 35%,
-            var(--cor-superficie));
-
-    /* Sombras */
 
     --ui-sombra-card:
         0 2px 6px rgba(0, 0, 0, 0.12);
@@ -180,10 +129,7 @@
         0 5px 14px rgba(0, 0, 0, 0.20);
 }
 
-
-/* ==========================================
-   9. CONFIGURAÇÕES GERAIS
-========================================== */
+/* 3. CONFIGURAÇÕES GERAIS */
 
 *,
 *::before,
@@ -198,13 +144,11 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     line-height: 1.5;
-
     background-color: var(--cor-fundo);
-    color: var(--cor-texto);
+    color: var(--ui-texto);
 }
 
 button,
@@ -218,17 +162,14 @@ img {
     max-width: 100%;
 }
 
-
-/* ==========================================
-   10. TIPOGRAFIA
-========================================== */
+/* 4. TIPOGRAFIA */
 
 h1,
 h2,
 h3,
 h4 {
     margin-top: 0;
-    color: var(--cor-texto);
+    color: var(--ui-texto);
 }
 
 h1 {
@@ -252,13 +193,10 @@ p {
 }
 
 small {
-    color: var(--cor-texto-secundario);
+    color: var(--ui-texto-suave);
 }
 
-
-/* ==========================================
-   11. LINKS
-========================================== */
+/* 5. LINKS */
 
 a {
     color: var(--cor-primaria);
@@ -270,29 +208,34 @@ a:hover {
     color: var(--cor-primaria-hover);
 }
 
+/* 6. FORMULÁRIOS */
 
-/* ==========================================
-   12. FORMULÁRIOS
-========================================== */
+/* Exclui os inputs que possuem estilos próprios. */
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
-select,
-textarea {
+:where(
+    input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="color"],
+        [type="hidden"],
+        [type="submit"],
+        [type="button"],
+        [type="reset"],
+        [type="image"]
+    ),
+    select,
+    textarea
+) {
     width: 100%;
     padding: 10px;
-
     font-family: inherit;
     font-size: 14px;
-
-    color: var(--ui-input-texto);
     background-color: var(--ui-input-fundo);
-
+    color: var(--ui-input-texto);
     border: 1px solid var(--ui-input-borda);
     border-radius: var(--ui-raio-sm);
-
-    transition:
-        border-color var(--ui-transicao),
-        box-shadow var(--ui-transicao);
+    transition: border-color var(--ui-transicao),
+                box-shadow var(--ui-transicao);
 }
 
 label {
@@ -313,107 +256,106 @@ input[type="color"] {
     cursor: pointer;
 }
 
+:where(input, textarea)::placeholder {
+    color: var(--ui-texto-suave);
+}
+
+:where(select) option {
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+}
+
 textarea {
     min-height: 80px;
     resize: vertical;
 }
 
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
+:where(input, select, textarea):focus-visible {
     outline: 2px solid var(--ui-input-foco);
     outline-offset: 1px;
 }
 
-input:disabled,
-select:disabled,
-textarea:disabled {
+:where(input, select, textarea):disabled {
     opacity: 0.65;
     cursor: not-allowed;
 }
 
+/* 7. BOTÕES */
 
-/* ==========================================
-   13. BOTÕES
-========================================== */
-
-button,
-input[type="submit"],
-input[type="button"],
-.btn {
+:where(
+    button,
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    .btn
+) {
     padding: 10px 18px;
-
     border: none;
     border-radius: var(--ui-raio-sm);
-
     background-color: var(--ui-botao-fundo);
     color: var(--ui-botao-texto);
-
     font-family: inherit;
     font-size: 14px;
-
     cursor: pointer;
-
-    transition:
-        background-color var(--ui-transicao),
-        border-color var(--ui-transicao),
-        box-shadow var(--ui-transicao),
-        transform var(--ui-transicao);
+    transition: background-color var(--ui-transicao),
+                border-color var(--ui-transicao),
+                box-shadow var(--ui-transicao),
+                transform var(--ui-transicao);
 }
 
-button:hover:not(:disabled),
-input[type="submit"]:hover:not(:disabled),
-input[type="button"]:hover:not(:disabled),
-.btn:hover {
+:where(
+    button:hover:not(:disabled),
+    input[type="submit"]:hover:not(:disabled),
+    input[type="button"]:hover:not(:disabled),
+    input[type="reset"]:hover:not(:disabled),
+    .btn:hover
+) {
     background-color: var(--ui-botao-fundo-hover);
+    color: var(--ui-botao-texto);
 }
 
-button:focus-visible,
-input[type="submit"]:focus-visible,
-input[type="button"]:focus-visible,
-.btn:focus-visible {
+:where(
+    button,
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    .btn
+):focus-visible {
     outline: 2px solid var(--cor-primaria);
     outline-offset: 3px;
 }
 
-button:disabled,
-input[type="submit"]:disabled,
-input[type="button"]:disabled {
+:where(
+    button,
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"]
+):disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-
-/* ==========================================
-   14. TABELAS
-========================================== */
+/* 8. TABELAS */
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--cor-superficie);
+    background-color: var(--ui-fundo-card);
 }
 
 th,
 td {
     padding: 10px;
     text-align: left;
+    color: var(--ui-texto);
     border-bottom: 1px solid var(--ui-borda);
 }
 
 th {
     background-color: var(--cor-superficie-secundaria);
-    color: var(--ui-texto);
 }
 
-td {
-    color: var(--ui-texto);
-}
-
-
-/* ==========================================
-   15. ELEMENTOS UTILITÁRIOS
-========================================== */
+/* 9. CLASSES UTILITÁRIAS */
 
 .ui-texto-suave {
     color: var(--ui-texto-suave);
@@ -434,13 +376,9 @@ td {
     color: var(--cor-sobre-primaria);
 }
 
-
-/* ==========================================
-   16. ACESSIBILIDADE
-========================================== */
+/* 10. ACESSIBILIDADE */
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {

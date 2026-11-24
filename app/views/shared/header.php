@@ -1,10 +1,9 @@
 <?php
 // =============================================
 // GYMFLOW - HEADER GLOBAL
-// app/views/shared/header.php
 // =============================================
 
-// INFORMAÇÕES DO SISTEMA
+// 1. INFORMAÇÕES DO SISTEMA
 
 $nomePainel = $_SESSION['nome_painel'] ?? 'Gymflow';
 $titulo = $tituloPagina ?? 'Dashboard';
@@ -12,13 +11,11 @@ $titulo = $tituloPagina ?? 'Dashboard';
 $usuario = $_SESSION['usuario_nome'] ?? 'Usuário';
 $role = $_SESSION['usuario_role'] ?? 'Admin';
 
-// =============================================
-// 1. IDENTIDADE VISUAL
-// =============================================
+// 2. IDENTIDADE VISUAL
 
 $corPrimaria = $_SESSION['cor_primaria'] ?? '#ffb000';
 $corSecundaria = $_SESSION['cor_secundaria'] ?? '#111827';
-$temaPainel = $_SESSION['tema'] ?? 'light';
+$temaPainel = $_SESSION['tema'] ?? 'dark';
 
 function validarCorGymflow($cor, $padrao)
 {
@@ -43,9 +40,7 @@ $corSecundaria = validarCorGymflow(
     '#111827'
 );
 
-// =============================================
-// 2. CONTRASTE AUTOMÁTICO
-// =============================================
+// 3. CONTRASTE AUTOMÁTICO
 
 function corTextoContrasteGymflow($hex)
 {
@@ -82,9 +77,7 @@ $textoSobreSecundaria = corTextoContrasteGymflow(
     $corSecundaria
 );
 
-// =============================================
-// 3. APARÊNCIA DO PAINEL
-// =============================================
+// 4. APARÊNCIA DO PAINEL
 
 $temaPainel = $temaPainel === 'dark'
     ? 'dark'
@@ -104,11 +97,7 @@ if ($temaPainel === 'dark') {
 
 }
 
-// =============================================
-// 4. CSS ESPECÍFICO
-// =============================================
-
-$cssEspecifico = $cssEspecifico ?? null;
+// 5. FUNÇÕES AUXILIARES
 
 $escapar = static function ($valor) {
     return htmlspecialchars(
@@ -117,6 +106,91 @@ $escapar = static function ($valor) {
         'UTF-8'
     );
 };
+
+// 6. VERSIONAMENTO DOS ARQUIVOS CSS
+// Aplicado aos CSS compartilhados e específicos.
+
+$versionarCss = static function ($url) {
+
+    $prefixo = BASE_URL . '/assets/css/';
+
+    // Mantém URLs que não pertencem à pasta local.
+    if (!str_starts_with($url, $prefixo)) {
+        return $url;
+    }
+
+    $partes = parse_url($url);
+
+    if ($partes === false) {
+        return $url;
+    }
+
+    $caminhoUrl = $partes['path'] ?? '';
+
+    $arquivo = substr(
+        $caminhoUrl,
+        strlen($prefixo)
+    );
+
+    // Aceita somente arquivos CSS da pasta.
+    if (!preg_match('/^[a-zA-Z0-9_-]+\.css$/', $arquivo)) {
+        return $url;
+    }
+
+    $caminho = dirname(__DIR__, 3)
+        . '/assets/css/'
+        . $arquivo;
+
+    if (!is_file($caminho)) {
+        return $url;
+    }
+
+    $versao = filemtime($caminho);
+
+    if ($versao === false) {
+        return $url;
+    }
+
+    // Preserva outros parâmetros da URL.
+    $parametros = [];
+
+    parse_str(
+        $partes['query'] ?? '',
+        $parametros
+    );
+
+    // Atualiza a versão sem duplicar parâmetros.
+    $parametros['v'] = $versao;
+
+    $urlVersionada = $caminhoUrl
+        . '?'
+        . http_build_query($parametros);
+
+    if (isset($partes['fragment'])) {
+        $urlVersionada .= '#' . $partes['fragment'];
+    }
+
+    return $urlVersionada;
+};
+
+// Carregamento dos CSS compartilhados.
+
+$carregarCss = static function ($arquivo) use ($versionarCss) {
+
+    return $versionarCss(
+        BASE_URL . '/assets/css/' . $arquivo
+    );
+};
+
+// Carregamento do CSS específico da página.
+
+$cssEspecifico = $cssEspecifico ?? null;
+
+if (!empty($cssEspecifico)) {
+
+    $cssEspecifico = $versionarCss($cssEspecifico);
+
+}
 
 ?>
 
@@ -140,35 +214,35 @@ $escapar = static function ($valor) {
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/global.css?v=tema1">
+        href="<?= $escapar($carregarCss('global.css')) ?>">
 
-    <!-- LAYOUT COMPARTILHADO -->
+    <!-- LAYOUT -->
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/layout.css">
+        href="<?= $escapar($carregarCss('layout.css')) ?>">
 
-    <!-- CSS DO PORTAL DO ALUNO -->
+    <!-- PORTAL DO ALUNO -->
 
     <?php if ($role === 'Aluno'): ?>
 
         <link
             rel="stylesheet"
-            href="<?= BASE_URL ?>/assets/css/portal.css">
+            href="<?= $escapar($carregarCss('portal.css')) ?>">
 
         <link
             rel="stylesheet"
-            href="<?= BASE_URL ?>/assets/css/treinos.css">
+            href="<?= $escapar($carregarCss('treinos.css')) ?>">
 
     <?php endif; ?>
 
-    <!-- CSS DOS CADASTROS -->
+    <!-- CADASTROS -->
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/cadastros.css?v=tema1">
+        href="<?= $escapar($carregarCss('cadastros.css')) ?>">
 
-    <!-- CSS ESPECÍFICO DA PÁGINA -->
+    <!-- CSS ESPECÍFICO -->
 
     <?php if (!empty($cssEspecifico)): ?>
 
@@ -178,23 +252,23 @@ $escapar = static function ($valor) {
 
     <?php endif; ?>
 
-    <!-- VARIÁVEIS DA IDENTIDADE VISUAL -->
+    <!-- IDENTIDADE VISUAL DINÂMICA -->
 
     <style>
-        :root {
 
+        :root {
             --cor-primaria: <?= $corPrimaria ?>;
             --cor-secundaria: <?= $corSecundaria ?>;
 
             --cor-sobre-primaria: <?= $textoSobrePrimaria ?>;
             --cor-sobre-secundaria: <?= $textoSobreSecundaria ?>;
 
-            --fin-primary: var(--cor-primaria);
-            --fin-primary-dark: var(--cor-primaria-hover);
-
             --header-fundo: <?= $corFundoHeader ?>;
             --header-texto: <?= $corTextoHeader ?>;
             --header-borda: <?= $corBordaHeader ?>;
+
+            --fin-primary: var(--cor-primaria);
+            --fin-primary-dark: var(--cor-primaria-hover);
         }
 
         body {
@@ -210,13 +284,16 @@ $escapar = static function ($valor) {
 
         body > .header h1,
         body > .header .header-direita,
-        body > .header .header-direita span {
-            color: var(--header-texto);
-        }
-
+        body > .header .header-direita span,
         body > .header .mobile-toggle {
             color: var(--header-texto);
         }
+
+        body > #appSidebar {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-sobre-secundaria);
+        }
+
     </style>
 
 </head>

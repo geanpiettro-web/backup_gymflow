@@ -22,7 +22,7 @@ include __DIR__ . '/../shared/sidebar.php';
         </div>
         <div class="fin-header-actions">
             <a href="<?= BASE_URL ?>/app/controllers/FinanceiroController.php" class="fin-btn fin-btn-secondary fin-btn-sm">
-                ← Voltar às contas
+                Voltar às contas
             </a>
         </div>
     </div>
@@ -92,7 +92,7 @@ include __DIR__ . '/../shared/sidebar.php';
 
             <div class="fin-form-actions">
                 <button type="submit" class="fin-btn fin-btn-primary">
-                    ✓ Confirmar Pagamento
+                    Confirmar Pagamento
                 </button>
 
                 <a href="<?= BASE_URL ?>/app/controllers/FinanceiroController.php" class="fin-btn fin-btn-secondary">

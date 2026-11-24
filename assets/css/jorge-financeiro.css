@@ -2,18 +2,22 @@
    GYMFLOW - FINANCEIRO, FLUXO, CRM E PLANOS
 ========================================== */
 
-/* VARIÁVEIS GLOBAIS */
+/* 1. VARIÁVEIS */
 
 :root {
-    --fin-primary: var(--cor-primaria, #10b981);
-    --fin-primary-hover: var(--cor-primaria-hover, #059669);
-    --fin-primary-dark: var(--cor-primaria-hover, #059669);
-    --fin-primary-light: color-mix(in srgb, var(--fin-primary) 10%, white);
-    --fin-primary-border: color-mix(in srgb, var(--fin-primary) 28%, white);
+    --fin-primary: var(--cor-primaria);
+    --fin-primary-hover: var(--cor-primaria-hover);
+    --fin-primary-dark: var(--cor-primaria-hover);
+
+    --fin-primary-light: color-mix(in srgb, var(--fin-primary) 10%, var(--ui-fundo-card));
+    --fin-primary-border: color-mix(in srgb, var(--fin-primary) 28%, var(--ui-fundo-card));
+
+    --fin-success: var(--cor-sucesso);
+    --fin-success-light: var(--cor-sucesso-fundo);
 
     --fin-danger: #ef4444;
-    --fin-danger-dark: #dc2626;
-    --fin-danger-light: #fef2f2;
+    --fin-danger-dark: var(--cor-perigo);
+    --fin-danger-light: var(--cor-perigo-fundo);
     --fin-danger-border: #fecaca;
 
     --fin-warning: #f59e0b;
@@ -31,30 +35,57 @@
     --fin-purple-light: #f5f3ff;
     --fin-purple-border: #ddd6fe;
 
-    --fin-bg-card: var(--ui-fundo-card, #ffffff);
-    --fin-bg-main: var(--ui-fundo-pagina, #f8fafc);
-    --fin-border-color: var(--ui-borda, #e2e8f0);
-    --fin-border-light: #f1f5f9;
+    --fin-bg-card: var(--ui-fundo-card);
+    --fin-bg-main: var(--ui-fundo-pagina);
 
-    --fin-text-main: var(--ui-texto, #111827);
-    --fin-text-muted: var(--ui-texto-suave, #64748b);
-    --fin-text-light: #94a3b8;
+    --fin-border-color: var(--ui-borda);
+    --fin-border-light: var(--cor-superficie-secundaria);
 
-    --fin-radius-sm: var(--ui-raio-sm, 6px);
-    --fin-radius-md: var(--ui-raio-md, 10px);
-    --fin-radius-lg: var(--ui-raio-lg, 12px);
+    --fin-text-main: var(--ui-texto);
+    --fin-text-muted: var(--ui-texto-suave);
+    --fin-text-light: var(--cor-texto-discreto);
+
+    --fin-radius-sm: var(--ui-raio-sm);
+    --fin-radius-md: var(--ui-raio-md);
+    --fin-radius-lg: var(--ui-raio-lg);
     --fin-radius-full: 9999px;
 
-    --fin-shadow-sm: var(--ui-sombra-card, 0 1px 3px rgba(15, 23, 42, 0.04));
-    --fin-shadow-md: var(--ui-sombra-hover, 0 5px 14px rgba(15, 23, 42, 0.06));
+    --fin-shadow-sm: var(--ui-sombra-card);
+    --fin-shadow-md: var(--ui-sombra-hover);
     --fin-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.08);
 
-    --fin-transition: all 0.2s ease;
+    --fin-transition: all var(--ui-transicao);
 }
 
-/* ==========================================
-   ESTRUTURA E CABEÇALHO
-========================================== */
+/* Cores complementares do tema escuro */
+
+:root[data-theme="dark"] {
+    --fin-primary-dark: color-mix(in srgb, var(--fin-primary) 35%, #ffffff);
+
+    --fin-success: #4ade80;
+    --fin-success-light: #15372a;
+
+    --fin-danger-dark: #f87171;
+    --fin-danger-light: #3f2027;
+    --fin-danger-border: #7f3540;
+
+    --fin-warning-dark: #fbbf24;
+    --fin-warning-light: #3d301c;
+    --fin-warning-border: #785a25;
+
+    --fin-info: #38bdf8;
+    --fin-info-dark: #7dd3fc;
+    --fin-info-light: #173348;
+    --fin-info-border: #285774;
+
+    --fin-purple-dark: #c4b5fd;
+    --fin-purple-light: #302747;
+    --fin-purple-border: #554178;
+
+    --fin-border-light: var(--ui-borda);
+}
+
+/* 2. ESTRUTURA DAS PÁGINAS */
 
 .financeiro-page,
 .fluxo-page,
@@ -108,9 +139,7 @@
     gap: 12px;
 }
 
-/* ==========================================
-   INDICADORES FINANCEIROS
-========================================== */
+/* 3. INDICADORES FINANCEIROS */
 
 .fin-metrics-grid {
     display: grid;
@@ -133,9 +162,10 @@
     transition: var(--fin-transition);
 }
 
-.fin-metric-card:hover {
+.fin-metric-card:hover,
+.crm-lead-card:hover {
     transform: translateY(-2px);
-    border-color: #cbd5e1;
+    border-color: var(--cor-borda-forte);
     box-shadow: var(--fin-shadow-md);
 }
 
@@ -240,9 +270,7 @@
     line-height: 1.5;
 }
 
-/* ==========================================
-   BOTÕES
-========================================== */
+/* 4. BOTÕES */
 
 .fin-btn {
     display: inline-flex;
@@ -263,25 +291,25 @@
 
 .fin-btn-primary {
     background-color: var(--fin-primary);
-    color: #ffffff !important;
+    color: var(--cor-sobre-primaria) !important;
 }
 
 .fin-btn-primary:hover {
     background-color: var(--fin-primary-hover);
-    color: #ffffff !important;
+    color: var(--cor-sobre-primaria) !important;
     filter: brightness(0.96);
 }
 
 .fin-btn-secondary {
-    background-color: #ffffff;
+    background-color: var(--fin-bg-card);
     color: var(--fin-text-main) !important;
     border-color: var(--fin-border-color);
 }
 
 .fin-btn-secondary:hover {
-    background-color: #f8fafc;
-    border-color: #cbd5e1;
+    background-color: var(--fin-bg-main);
     color: var(--fin-text-main) !important;
+    border-color: var(--cor-borda-forte);
 }
 
 .fin-btn-danger {
@@ -290,7 +318,7 @@
 }
 
 .fin-btn-danger:hover {
-    background-color: var(--fin-danger-dark);
+    background-color: #dc2626;
     color: #ffffff !important;
 }
 
@@ -300,9 +328,7 @@
     font-size: 13px;
 }
 
-/* ==========================================
-   ABAS DE PERÍODO
-========================================== */
+/* 5. ABAS DE PERÍODO */
 
 .fin-tabs-container {
     display: inline-flex;
@@ -310,7 +336,7 @@
     flex-wrap: wrap;
     gap: 4px;
     padding: 4px;
-    background-color: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
     border-radius: var(--fin-radius-sm);
 }
 
@@ -331,14 +357,12 @@
 }
 
 .fin-tab-item.active {
-    background-color: #ffffff;
+    background-color: var(--fin-bg-card);
     color: var(--fin-primary-dark);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--fin-shadow-sm);
 }
 
-/* ==========================================
-   TABELAS
-========================================== */
+/* 6. TABELAS */
 
 .fin-table-card {
     overflow: hidden;
@@ -375,7 +399,8 @@
 .fin-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
+    background-color: var(--fin-bg-card);
+    color: var(--fin-text-main);
     font-size: 14px;
     text-align: left;
 }
@@ -400,7 +425,12 @@
 }
 
 .fin-table tbody tr {
-    transition: var(--fin-transition);
+    background-color: var(--fin-bg-card);
+    transition: background-color var(--ui-transicao);
+}
+
+.fin-table tbody td {
+    background-color: transparent;
 }
 
 .fin-table tbody tr:hover {
@@ -411,9 +441,7 @@
     border-bottom: none;
 }
 
-/* ==========================================
-   ETIQUETAS DE STATUS
-========================================== */
+/* 7. STATUS E CATEGORIAS */
 
 .fin-badge {
     display: inline-flex;
@@ -470,7 +498,7 @@
 .fin-badge-categoria {
     display: inline-flex;
     padding: 4px 8px;
-    background-color: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
     color: var(--fin-text-muted);
     border: 1px solid var(--fin-border-color);
     border-radius: 4px;
@@ -478,9 +506,7 @@
     font-weight: 500;
 }
 
-/* ==========================================
-   DRE - RESULTADO FINANCEIRO
-========================================== */
+/* 8. COMPONENTES DA DRE */
 
 .fin-dre-card {
     margin-bottom: 30px;
@@ -530,7 +556,7 @@
 }
 
 .fin-dre-item:hover {
-    background-color: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
 }
 
 .fin-dre-item.receita {
@@ -581,7 +607,7 @@
 
 .fin-dre-item.resultado .fin-dre-item-tag {
     background-color: var(--fin-primary);
-    color: #ffffff;
+    color: var(--cor-sobre-primaria);
 }
 
 .fin-dre-item-valor {
@@ -591,26 +617,21 @@
     font-weight: 700;
 }
 
-.fin-dre-item.receita .fin-dre-item-valor {
-    color: var(--fin-primary-dark);
-}
-
-.fin-dre-item.custo .fin-dre-item-valor {
-    color: var(--fin-danger-dark);
-}
-
+.fin-dre-item.receita .fin-dre-item-valor,
 .fin-dre-item.resultado .fin-dre-item-valor {
     color: var(--fin-primary-dark);
-    font-size: 18px;
 }
 
+.fin-dre-item.custo .fin-dre-item-valor,
 .fin-dre-item.resultado.negativo .fin-dre-item-valor {
     color: var(--fin-danger-dark);
 }
 
-/* ==========================================
-   CRM - KANBAN
-========================================== */
+.fin-dre-item.resultado .fin-dre-item-valor {
+    font-size: 18px;
+}
+
+/* 9. CRM - KANBAN */
 
 .crm-kanban-board {
     display: flex;
@@ -619,7 +640,7 @@
     padding-bottom: 20px;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 var(--fin-bg-main);
+    scrollbar-color: var(--cor-borda-forte) var(--fin-bg-main);
 }
 
 .crm-kanban-board::-webkit-scrollbar {
@@ -632,7 +653,7 @@
 }
 
 .crm-kanban-board::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
+    background-color: var(--cor-borda-forte);
     border-radius: 4px;
 }
 
@@ -675,7 +696,7 @@
     min-width: 22px;
     height: 22px;
     padding: 0 6px;
-    background-color: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
     color: var(--fin-text-muted);
     border-radius: var(--fin-radius-full);
     font-size: 12px;
@@ -729,9 +750,7 @@
     color: var(--fin-danger-dark);
 }
 
-/* ==========================================
-   CRM - CARDS DOS LEADS
-========================================== */
+/* Cards dos leads */
 
 .crm-column-cards {
     display: flex;
@@ -749,17 +768,12 @@
     gap: 8px;
     padding: 12px;
     margin-bottom: 10px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background-color: var(--fin-bg-card);
+    color: var(--fin-text-main);
+    border: 1px solid var(--fin-border-color);
     border-radius: 8px;
     box-shadow: var(--fin-shadow-sm);
     transition: var(--fin-transition);
-}
-
-.crm-lead-card:hover {
-    transform: translateY(-2px);
-    border-color: #cbd5e1;
-    box-shadow: var(--fin-shadow-md);
 }
 
 .crm-lead-name {
@@ -794,7 +808,7 @@
     display: inline-block;
     max-width: fit-content;
     padding: 2px 7px;
-    background-color: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
     color: var(--fin-text-muted);
     border-radius: 4px;
     font-size: 11px;
@@ -832,7 +846,7 @@
 }
 
 .crm-lead-links a.crm-delete-link:hover {
-    color: var(--fin-danger);
+    color: var(--fin-danger-dark);
 }
 
 /* Componentes simplificados do Kanban */
@@ -844,28 +858,28 @@
 }
 
 .crm-avatar-simples {
-    width: 36px;
-    height: 36px;
-    background: #e2e8f0;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    color: #475569;
     flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--fin-text-main);
+    border-radius: 50%;
+    font-weight: bold;
 }
 
 .crm-info-simples h4 {
     margin: 0;
     font-size: 14px;
-    color: #1e293b;
+    color: var(--fin-text-main);
 }
 
 .crm-info-simples p {
     margin: 0;
     font-size: 12px;
-    color: #64748b;
+    color: var(--fin-text-muted);
 }
 
 .crm-tags-simples {
@@ -875,11 +889,12 @@
 }
 
 .crm-tag-min {
-    background: #f1f5f9;
     padding: 2px 6px;
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--fin-text-muted);
+    border: 1px solid var(--fin-border-color);
     border-radius: 4px;
     font-size: 10px;
-    border: 1px solid #e2e8f0;
 }
 
 .crm-rodape-simples {
@@ -887,11 +902,11 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 4px;
-    border-top: 1px solid #f1f5f9;
     padding-top: 8px;
+    border-top: 1px solid var(--fin-border-light);
 }
 
-/* Status dos leads */
+/* Seletor de status */
 
 .crm-status-form {
     width: 100%;
@@ -914,9 +929,13 @@
 
 .crm-status-select:hover,
 .crm-status-select:focus {
-    background-color: #ffffff;
+    background-color: var(--fin-bg-card);
     border-color: var(--fin-primary);
-    outline: none;
+}
+
+.crm-status-select:focus-visible {
+    outline: 2px solid var(--fin-primary);
+    outline-offset: 1px;
 }
 
 .crm-empty-state {
@@ -927,9 +946,7 @@
     text-align: center;
 }
 
-/* ==========================================
-   FORMULÁRIOS
-========================================== */
+/* 10. FORMULÁRIOS */
 
 .fin-form-card {
     max-width: 650px;
@@ -1016,6 +1033,8 @@
     color: var(--fin-danger);
 }
 
+/* Campos compartilhados */
+
 .fin-form-input,
 .fin-form-select,
 .fin-input,
@@ -1023,13 +1042,25 @@
     box-sizing: border-box;
     width: 100%;
     padding: 10px 14px;
-    background-color: #ffffff;
-    color: var(--fin-text-main);
-    border: 1px solid var(--fin-border-color);
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+    border: 1px solid var(--ui-input-borda);
     border-radius: var(--fin-radius-sm);
     font-family: inherit;
     font-size: 14px;
     transition: var(--fin-transition);
+}
+
+.fin-form-input::placeholder,
+.fin-input::placeholder {
+    color: var(--fin-text-muted);
+}
+
+.fin-form-select option,
+.fin-select option,
+.crm-status-select option {
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
 }
 
 .fin-form-input:focus,
@@ -1051,9 +1082,7 @@
     border-top: 1px solid var(--fin-border-color);
 }
 
-/* ==========================================
-   ALERTAS
-========================================== */
+/* 11. ALERTAS */
 
 .fin-alert {
     display: flex;
@@ -1079,41 +1108,447 @@
     border: 1px solid var(--fin-primary-border);
 }
 
-/* ==========================================
-   PLANOS DE ACESSO
-========================================== */
+/* 12. PLANOS DE ACESSO */
 
 .planos-page .fin-table th.planos-coluna-acoes,
 .planos-page .fin-table td.planos-coluna-acoes {
     text-align: center;
 }
 
-.planos-page .fin-table td.planos-vazio {
+.planos-page .planos-icone-editar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fin-text-muted) !important;
+}
+
+.planos-page .planos-icone-editar svg,
+.planos-page .planos-icone-editar svg path {
+    stroke: var(--fin-text-muted) !important;
+}
+
+.planos-page .planos-icone-editar:hover svg,
+.planos-page .planos-icone-editar:hover svg path {
+    stroke: var(--fin-text-main) !important;
+}
+
+/* 13. CONTAS A RECEBER */
+
+.contas-receber-page .fin-metric-card.warning .fin-metric-value.valor-em-aberto,
+.contas-receber-page .fin-table tbody td.conta-status-aberto {
+    color: var(--fin-danger-dark) !important;
+}
+
+.contas-receber-page .fin-metric-card.success .fin-metric-value.valor-recebido,
+.contas-receber-page .fin-table tbody td.conta-status-pago {
+    color: var(--fin-success) !important;
+}
+
+.contas-receber-page .fin-metric-card.info .fin-metric-value.valor-previsto {
+    color: var(--fin-info) !important;
+}
+
+.contas-receber-page .fin-table tbody td.conta-status-pago,
+.contas-receber-page .fin-table tbody td.conta-status-aberto {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    background: transparent;
+}
+
+.contas-receber-page .fin-table th.contas-coluna-acoes,
+.contas-receber-page .fin-table td.contas-coluna-acoes {
+    text-align: right;
+}
+
+.contas-receber-page .conta-sem-acao {
+    color: var(--fin-text-light);
+}
+
+/* Mensagens de tabelas vazias */
+
+.planos-page .fin-table td.planos-vazio,
+.contas-receber-page .fin-table td.contas-vazio,
+.fluxo-relatorio-page .fin-table td.fluxo-tabela-vazia {
     text-align: center;
     padding: 32px;
     color: var(--fin-text-muted);
 }
 
-.planos-page .planos-icone-editar {
-    display: inline-flex;
+/* 14. FLUXO DE CAIXA E DRE */
+
+.fluxo-relatorio-page {
+    --fluxo-verde: var(--fin-success);
+    --fluxo-vermelho: var(--fin-danger-dark);
+    --fluxo-neutro: var(--fin-text-muted);
+
+    --fluxo-fundo-positivo: var(--fin-success-light);
+    --fluxo-fundo-negativo: var(--fin-danger-light);
+    --fluxo-fundo-neutro: var(--fin-bg-main);
+}
+
+/* Cards do relatório */
+
+.fluxo-relatorio-page .fluxo-resumo-card,
+.fluxo-relatorio-page .fluxo-dre-card,
+.fluxo-relatorio-page .fluxo-filtros-card {
+    margin-bottom: 24px;
+    background-color: var(--fin-bg-card);
+    border: 1px solid var(--fin-border-color);
+    border-radius: var(--fin-radius-md);
+    box-shadow: var(--fin-shadow-sm);
+}
+
+.fluxo-relatorio-page .fluxo-resumo-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.fluxo-relatorio-page .fluxo-dre-card {
+    padding: 24px;
+}
+
+.fluxo-relatorio-page .fluxo-filtros-card {
+    padding: 20px 24px;
+}
+
+/* Resumo do período */
+
+.fluxo-relatorio-page .fluxo-resumo-header {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    color: #64748b !important;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 24px;
+    background-color: var(--fin-bg-main);
+    border-bottom: 1px solid var(--fin-border-color);
 }
 
-.planos-page .planos-icone-editar svg,
-.planos-page .planos-icone-editar svg path {
-    stroke: #64748b !important;
+.fluxo-relatorio-page .fluxo-resumo-header h2 {
+    margin: 0;
+    color: var(--fin-text-main);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
 }
 
-.planos-page .planos-icone-editar:hover svg,
-.planos-page .planos-icone-editar:hover svg path {
-    stroke: #475569 !important;
+.fluxo-relatorio-page .fluxo-resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 22px 0;
 }
 
-/* ==========================================
-   RESPONSIVIDADE
-========================================== */
+.fluxo-relatorio-page .fluxo-resumo-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 28px;
+    min-width: 0;
+}
+
+.fluxo-relatorio-page .fluxo-resumo-item:not(:last-child) {
+    border-right: 1px solid var(--fin-border-color);
+}
+
+.fluxo-relatorio-page .fluxo-resumo-label {
+    color: var(--fin-text-main);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.fluxo-relatorio-page .fluxo-resumo-valor {
+    margin: 0;
+    font-family: inherit;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.fluxo-relatorio-page .fluxo-resumo-descricao,
+.fluxo-relatorio-page .fluxo-lancamentos-periodo {
+    margin: 0;
+    color: var(--fin-text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.fluxo-relatorio-page .fluxo-periodo-atual {
+    color: var(--fin-text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Valores financeiros */
+
+.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-positivo,
+.fluxo-relatorio-page .fluxo-dre-valor.fluxo-positivo {
+    color: var(--fluxo-verde);
+}
+
+.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-negativo,
+.fluxo-relatorio-page .fluxo-dre-valor.fluxo-negativo {
+    color: var(--fluxo-vermelho);
+}
+
+.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-neutro,
+.fluxo-relatorio-page .fluxo-dre-valor.fluxo-neutro {
+    color: var(--fluxo-neutro);
+}
+
+/* Tabela da DRE */
+
+.fluxo-relatorio-page .fluxo-dre-header {
+    margin-bottom: 18px;
+}
+
+.fluxo-relatorio-page .fluxo-dre-header h2 {
+    margin: 0 0 6px;
+    color: var(--fin-text-main);
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.fluxo-relatorio-page .fluxo-dre-header p {
+    margin: 0;
+    color: var(--fin-text-muted);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela-container {
+    overflow: hidden;
+    border: 1px solid var(--fin-border-color);
+    border-radius: var(--fin-radius-sm);
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: var(--fin-bg-card);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela th,
+.fluxo-relatorio-page .fluxo-dre-tabela td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--fin-border-color);
+    background-color: transparent;
+    vertical-align: middle;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela th {
+    color: var(--fin-text-main);
+    font-weight: 400;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela td.fluxo-dre-valor {
+    text-align: right;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.fluxo-relatorio-page .fluxo-dre-tabela tr:last-child th,
+.fluxo-relatorio-page .fluxo-dre-tabela tr:last-child td {
+    border-bottom: none;
+}
+
+/* Resultado líquido */
+
+.fluxo-relatorio-page .fluxo-dre-resultado th,
+.fluxo-relatorio-page .fluxo-dre-resultado td.fluxo-dre-valor {
+    padding-top: 18px;
+    padding-bottom: 18px;
+    font-weight: 700;
+}
+
+.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-positivo {
+    background-color: var(--fluxo-fundo-positivo);
+}
+
+.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-negativo {
+    background-color: var(--fluxo-fundo-negativo);
+}
+
+.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-neutro {
+    background-color: var(--fluxo-fundo-neutro);
+}
+
+.fluxo-relatorio-page .fluxo-dre-observacao {
+    margin: 14px 0 0;
+    padding: 0;
+    color: var(--fin-text-muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Lançamentos de custos */
+
+.fluxo-relatorio-page .fluxo-lancamentos-titulo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.fluxo-relatorio-page .fluxo-lancamentos-periodo {
+    padding: 0;
+}
+
+.fluxo-relatorio-page .fluxo-registros {
+    color: var(--fin-text-muted);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.fluxo-relatorio-page .fin-table th.fluxo-coluna-valor,
+.fluxo-relatorio-page .fin-table td.fluxo-coluna-valor {
+    text-align: right;
+}
+
+.fluxo-relatorio-page .fin-table td.fluxo-custo-valor {
+    color: var(--fluxo-vermelho);
+    font-weight: 700;
+}
+
+.fluxo-relatorio-page .fin-table tbody td:nth-child(3) {
+    color: var(--fin-text-main);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* 15. FILTROS DO HISTÓRICO FINANCEIRO */
+
+.fluxo-relatorio-page .fluxo-filtros-form {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    margin: 0;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 180px;
+    gap: 7px;
+    min-width: 160px;
+    max-width: 280px;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo[hidden] {
+    display: none !important;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo label {
+    display: block;
+    margin: 0;
+    color: var(--fin-text-main);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo input,
+.fluxo-relatorio-page .fluxo-filtro-grupo select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 10px 12px;
+    margin: 0;
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+    border: 1px solid var(--ui-input-borda);
+    border-radius: var(--fin-radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    outline: none;
+    transition: var(--fin-transition);
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo input:focus,
+.fluxo-relatorio-page .fluxo-filtro-grupo select:focus {
+    border-color: var(--fin-primary);
+    outline: 2px solid var(--fin-primary-light);
+    outline-offset: 0;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo select,
+.fluxo-relatorio-page .fluxo-filtro-grupo input[type="date"],
+.fluxo-relatorio-page .fluxo-filtro-grupo input[type="month"] {
+    cursor: pointer;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-grupo input[type="date"],
+.fluxo-relatorio-page .fluxo-filtro-grupo input[type="month"] {
+    font-variant-numeric: tabular-nums;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn {
+    box-sizing: border-box;
+    min-height: 42px;
+    padding: 10px 20px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-primary {
+    border-color: var(--fin-primary);
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-primary:hover {
+    border-color: var(--fin-primary-hover);
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-secondary {
+    color: var(--fin-text-muted) !important;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-secondary:hover {
+    color: var(--fin-text-main) !important;
+}
+
+.fluxo-relatorio-page .fluxo-filtro-alerta {
+    margin: 16px 0 0;
+    padding: 12px 16px;
+    font-size: 13px;
+}
+
+/* 16. RESPONSIVIDADE - TABLETS */
 
 @media (max-width: 900px) {
     .financeiro-page,
@@ -1143,7 +1578,33 @@
     .fin-metrics-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .fluxo-relatorio-page .fluxo-resumo-item {
+        padding: 0 18px;
+    }
+
+    .fluxo-relatorio-page .fluxo-resumo-valor {
+        font-size: 22px;
+    }
+
+    .fluxo-relatorio-page .fluxo-resumo-descricao {
+        font-size: 12px;
+    }
+
+    .fluxo-relatorio-page .fluxo-filtros-card {
+        padding: 20px;
+    }
+
+    .fluxo-relatorio-page .fluxo-filtros-form {
+        gap: 14px;
+    }
+
+    .fluxo-relatorio-page .fluxo-filtro-grupo {
+        max-width: none;
+    }
 }
+
+/* 17. RESPONSIVIDADE - CELULARES */
 
 @media (max-width: 600px) {
     .financeiro-page,
@@ -1188,427 +1649,13 @@
     }
 
     .fin-form-actions {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: stretch;
     }
 
     .fin-form-actions .fin-btn {
         width: 100%;
     }
-}
-
-/* ==========================================
-   ACESSIBILIDADE
-========================================== */
-
-@media (prefers-reduced-motion: reduce) {
-    .fin-metric-card,
-    .fin-btn,
-    .fin-tab-item,
-    .fin-table tbody tr,
-    .fin-dre-item,
-    .crm-lead-card,
-    .crm-lead-links a,
-    .crm-status-select {
-        transition: none;
-    }
-
-    .fin-metric-card:hover,
-    .crm-lead-card:hover {
-        transform: none;
-    }
-}
-/* ==========================================
-   CONTAS A RECEBER
-========================================== */
-
-/* Total em aberto - vermelho */
-
-.contas-receber-page .fin-metric-card.warning .fin-metric-value.valor-em-aberto {
-    color: #dc2626 !important;
-}
-
-/* Total recebido - verde */
-
-.contas-receber-page .fin-metric-card.success .fin-metric-value.valor-recebido {
-    color: #16a34a !important;
-}
-
-/* Total previsto - azul */
-
-.contas-receber-page .fin-metric-card.info .fin-metric-value.valor-previsto {
-    color: #0284c7 !important;
-}
-
-/* Status pago */
-
-.contas-receber-page .fin-table tbody td.conta-status-pago {
-    color: #16a34a !important;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 400;
-    background: transparent;
-}
-
-/* Status aberto */
-
-.contas-receber-page .fin-table tbody td.conta-status-aberto {
-    color: #dc2626 !important;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 400;
-    background: transparent;
-}
-
-/* Alinhamento da coluna de ações */
-
-.contas-receber-page .fin-table th.contas-coluna-acoes,
-.contas-receber-page .fin-table td.contas-coluna-acoes {
-    text-align: right;
-}
-
-/* Conta sem ação disponível */
-
-.contas-receber-page .conta-sem-acao {
-    color: var(--fin-text-light);
-}
-
-/* Tabela sem registros */
-
-.contas-receber-page .fin-table td.contas-vazio {
-    text-align: center;
-    padding: 32px;
-    color: var(--fin-text-muted);
-}
-/* ==========================================
-   FLUXO DE CAIXA & DRE
-   Layout de relatório financeiro
-========================================== */
-
-.fluxo-relatorio-page {
-    --fluxo-verde: #16a34a;
-    --fluxo-vermelho: #dc2626;
-    --fluxo-neutro: #64748b;
-
-    --fluxo-fundo-positivo: #f0fdf4;
-    --fluxo-fundo-negativo: #fef2f2;
-    --fluxo-fundo-neutro: #f8fafc;
-}
-
-
-/* ==========================================
-   RESUMO DO PERÍODO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-resumo-card {
-    padding: 0;
-    margin-bottom: 24px;
-    overflow: hidden;
-    background-color: var(--fin-bg-card);
-    border: 1px solid var(--fin-border-color);
-    border-radius: var(--fin-radius-md);
-    box-shadow: var(--fin-shadow-sm);
-}
-
-
-/* Cabeçalho do resumo */
-
-.fluxo-relatorio-page .fluxo-resumo-header {
-    padding: 14px 24px;
-    background-color: var(--fin-bg-main);
-    border-bottom: 1px solid var(--fin-border-color);
-}
-
-.fluxo-relatorio-page .fluxo-resumo-header h2 {
-    margin: 0;
-    color: var(--fin-text-main);
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.4;
-}
-
-
-/* Distribuição das três informações */
-
-.fluxo-relatorio-page .fluxo-resumo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding: 22px 0;
-}
-
-
-/* Cada informação do resumo */
-
-.fluxo-relatorio-page .fluxo-resumo-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 28px;
-    min-width: 0;
-}
-
-
-/* Divisórias verticais */
-
-.fluxo-relatorio-page .fluxo-resumo-item:not(:last-child) {
-    border-right: 1px solid var(--fin-border-color);
-}
-
-
-/* Títulos das informações */
-
-.fluxo-relatorio-page .fluxo-resumo-label {
-    color: var(--fin-text-main);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-
-/* Valores financeiros */
-
-.fluxo-relatorio-page .fluxo-resumo-valor {
-    margin: 0;
-    font-family: inherit;
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.3;
-    font-variant-numeric: tabular-nums;
-    overflow-wrap: anywhere;
-}
-
-
-/* Informações complementares */
-
-.fluxo-relatorio-page .fluxo-resumo-descricao {
-    margin: 0;
-    color: var(--fin-text-muted);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-
-
-/* ==========================================
-   CORES DOS VALORES FINANCEIROS
-========================================== */
-
-.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-positivo,
-.fluxo-relatorio-page .fluxo-dre-valor.fluxo-positivo {
-    color: var(--fluxo-verde) !important;
-}
-
-.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-negativo,
-.fluxo-relatorio-page .fluxo-dre-valor.fluxo-negativo {
-    color: var(--fluxo-vermelho) !important;
-}
-
-.fluxo-relatorio-page .fluxo-resumo-valor.fluxo-neutro,
-.fluxo-relatorio-page .fluxo-dre-valor.fluxo-neutro {
-    color: var(--fluxo-neutro) !important;
-}
-
-
-/* ==========================================
-   DEMONSTRAÇÃO DO RESULTADO - DRE
-========================================== */
-
-.fluxo-relatorio-page .fluxo-dre-card {
-    padding: 24px;
-    margin-bottom: 24px;
-    background-color: var(--fin-bg-card);
-    border: 1px solid var(--fin-border-color);
-    border-radius: var(--fin-radius-md);
-    box-shadow: var(--fin-shadow-sm);
-}
-
-
-/* Cabeçalho da DRE */
-
-.fluxo-relatorio-page .fluxo-dre-header {
-    margin-bottom: 18px;
-}
-
-.fluxo-relatorio-page .fluxo-dre-header h2 {
-    margin: 0 0 6px;
-    color: var(--fin-text-main);
-    font-family: inherit;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.4;
-}
-
-.fluxo-relatorio-page .fluxo-dre-header p {
-    margin: 0;
-    color: var(--fin-text-muted);
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-
-
-/* Contorno da tabela */
-
-.fluxo-relatorio-page .fluxo-dre-tabela-container {
-    overflow: hidden;
-    border: 1px solid var(--fin-border-color);
-    border-radius: var(--fin-radius-sm);
-}
-
-
-/* Estrutura da tabela */
-
-.fluxo-relatorio-page .fluxo-dre-tabela {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    background-color: var(--fin-bg-card);
-    font-family: inherit;
-    font-size: 14px;
-}
-
-
-/* Linhas da tabela */
-
-.fluxo-relatorio-page .fluxo-dre-tabela th,
-.fluxo-relatorio-page .fluxo-dre-tabela td {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--fin-border-color);
-    vertical-align: middle;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-
-/* Descrição dos lançamentos */
-
-.fluxo-relatorio-page .fluxo-dre-tabela th {
-    color: var(--fin-text-main);
-    font-weight: 400;
-    text-align: left;
-    text-transform: none;
-    letter-spacing: normal;
-    background-color: transparent;
-}
-
-
-/* Valores alinhados à direita */
-
-.fluxo-relatorio-page .fluxo-dre-tabela td.fluxo-dre-valor {
-    text-align: right;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    background-color: transparent;
-}
-
-
-/* Última linha */
-
-.fluxo-relatorio-page .fluxo-dre-tabela tr:last-child th,
-.fluxo-relatorio-page .fluxo-dre-tabela tr:last-child td {
-    border-bottom: none;
-}
-
-
-/* ==========================================
-   RESULTADO LÍQUIDO DO PERÍODO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-dre-resultado th,
-.fluxo-relatorio-page .fluxo-dre-resultado td.fluxo-dre-valor {
-    font-weight: 700;
-    padding-top: 18px;
-    padding-bottom: 18px;
-}
-
-
-/* Resultado positivo */
-
-.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-positivo {
-    background-color: var(--fluxo-fundo-positivo);
-}
-
-
-/* Resultado negativo */
-
-.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-negativo {
-    background-color: var(--fluxo-fundo-negativo);
-}
-
-
-/* Resultado zerado */
-
-.fluxo-relatorio-page .fluxo-dre-resultado.fluxo-neutro {
-    background-color: var(--fluxo-fundo-neutro);
-}
-
-
-/* ==========================================
-   LANÇAMENTOS DE CUSTOS
-========================================== */
-
-/* Quantidade de registros */
-
-.fluxo-relatorio-page .fluxo-registros {
-    font-size: 13px;
-    color: var(--fin-text-muted);
-}
-
-
-/* Alinhamento da coluna de valores */
-
-.fluxo-relatorio-page .fin-table th.fluxo-coluna-valor,
-.fluxo-relatorio-page .fin-table td.fluxo-coluna-valor {
-    text-align: right;
-}
-
-
-/* Valores dos custos */
-
-.fluxo-relatorio-page .fin-table td.fluxo-custo-valor {
-    color: var(--fluxo-vermelho);
-    font-weight: 700;
-}
-
-
-/* Tabela sem registros */
-
-.fluxo-relatorio-page .fin-table td.fluxo-tabela-vazia {
-    text-align: center;
-    padding: 32px;
-    color: var(--fin-text-muted);
-}
-
-
-/* ==========================================
-   RESPONSIVIDADE - TABLETS
-========================================== */
-
-@media (max-width: 900px) {
-
-    .fluxo-relatorio-page .fluxo-resumo-item {
-        padding: 0 18px;
-    }
-
-    .fluxo-relatorio-page .fluxo-resumo-valor {
-        font-size: 22px;
-    }
-
-    .fluxo-relatorio-page .fluxo-resumo-descricao {
-        font-size: 12px;
-    }
-
-}
-
-
-/* ==========================================
-   RESPONSIVIDADE - CELULARES
-========================================== */
-
-@media (max-width: 600px) {
 
     .fluxo-relatorio-page .fluxo-resumo-grid {
         grid-template-columns: 1fr;
@@ -1650,323 +1697,6 @@
         white-space: normal;
     }
 
-}
-/* ==========================================
-   FLUXO DE CAIXA - FILTROS DE CONSULTA
-========================================== */
-
-/* Card dos filtros */
-
-.fluxo-relatorio-page .fluxo-filtros-card {
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    background-color: var(--fin-bg-card);
-    border: 1px solid var(--fin-border-color);
-    border-radius: var(--fin-radius-md);
-    box-shadow: var(--fin-shadow-sm);
-}
-
-
-/* ==========================================
-   FORMULÁRIO DE CONSULTA
-========================================== */
-
-.fluxo-relatorio-page .fluxo-filtros-form {
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 16px;
-    width: 100%;
-    margin: 0;
-}
-
-
-/* Grupo de campos */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 180px;
-    gap: 7px;
-    min-width: 160px;
-    max-width: 280px;
-}
-
-
-/* Oculta os campos de períodos não selecionados */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo[hidden] {
-    display: none !important;
-}
-
-
-/* Labels */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo label {
-    display: block;
-    margin: 0;
-    color: var(--fin-text-main);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-
-/* ==========================================
-   CAMPOS DE DATA E SELEÇÃO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo input,
-.fluxo-relatorio-page .fluxo-filtro-grupo select {
-    box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
-    height: 42px;
-    padding: 10px 12px;
-    margin: 0;
-
-    background-color: var(--fin-bg-card);
-    color: var(--fin-text-main);
-
-    border: 1px solid var(--fin-border-color);
-    border-radius: var(--fin-radius-sm);
-
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 400;
-
-    outline: none;
-    transition: var(--fin-transition);
-}
-
-
-/* Campo selecionado */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo input:focus,
-.fluxo-relatorio-page .fluxo-filtro-grupo select:focus {
-    border-color: var(--fin-primary);
-    outline: 2px solid var(--fin-primary-light);
-    outline-offset: 0;
-}
-
-
-/* Seletor de período */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo select {
-    cursor: pointer;
-}
-
-
-/* Campos de data */
-
-.fluxo-relatorio-page .fluxo-filtro-grupo input[type="date"],
-.fluxo-relatorio-page .fluxo-filtro-grupo input[type="month"] {
-    cursor: pointer;
-    font-variant-numeric: tabular-nums;
-}
-
-
-/* ==========================================
-   BOTÕES DE CONSULTA
-========================================== */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    gap: 10px;
-    margin-left: auto;
-}
-
-
-/* Padronização dos botões */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn {
-    box-sizing: border-box;
-    min-height: 42px;
-    padding: 10px 20px;
-    margin: 0;
-
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-
-    white-space: nowrap;
-}
-
-
-/* Botão Consultar */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-primary {
-    background-color: var(--fin-primary);
-    border-color: var(--fin-primary);
-}
-
-
-/* Hover do botão Consultar */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-primary:hover {
-    background-color: var(--fin-primary-hover);
-    border-color: var(--fin-primary-hover);
-}
-
-
-/* Botão Limpar */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-secondary {
-    background-color: var(--fin-bg-card);
-    color: var(--fin-text-muted) !important;
-    border: 1px solid var(--fin-border-color);
-}
-
-
-/* Hover do botão Limpar */
-
-.fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn-secondary:hover {
-    background-color: var(--fin-bg-main);
-    color: var(--fin-text-main) !important;
-}
-
-
-/* ==========================================
-   MENSAGENS DE VALIDAÇÃO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-filtro-alerta {
-    margin: 16px 0 0;
-    padding: 12px 16px;
-    font-size: 13px;
-}
-
-
-/* ==========================================
-   RESUMO DO PERÍODO SELECIONADO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-resumo-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    padding: 14px 24px;
-
-    background-color: var(--fin-bg-main);
-    border-bottom: 1px solid var(--fin-border-color);
-}
-
-
-/* Data ou período apresentado no cabeçalho */
-
-.fluxo-relatorio-page .fluxo-periodo-atual {
-    color: var(--fin-text-muted);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-
-/* ==========================================
-   OBSERVAÇÃO DO DEMONSTRATIVO
-========================================== */
-
-.fluxo-relatorio-page .fluxo-dre-observacao {
-    margin: 14px 0 0;
-    padding: 0;
-
-    color: var(--fin-text-muted);
-
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.6;
-}
-
-
-/* ==========================================
-   LANÇAMENTOS DE CUSTOS
-========================================== */
-
-/* Cabeçalho da tabela */
-
-.fluxo-relatorio-page .fluxo-lancamentos-titulo {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-
-/* Período dos lançamentos */
-
-.fluxo-relatorio-page .fluxo-lancamentos-periodo {
-    margin: 0;
-    padding: 0;
-
-    color: var(--fin-text-muted);
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-
-
-/* Quantidade de registros */
-
-.fluxo-relatorio-page .fluxo-registros {
-    color: var(--fin-text-muted);
-    font-size: 13px;
-    font-weight: 400;
-}
-
-
-/* Categoria como texto normal */
-
-.fluxo-relatorio-page .fin-table tbody td:nth-child(3) {
-    color: var(--fin-text-main);
-    font-size: 14px;
-    font-weight: 400;
-}
-
-
-/* ==========================================
-   RESPONSIVIDADE - TABLETS
-========================================== */
-
-@media (max-width: 900px) {
-
-    .fluxo-relatorio-page .fluxo-filtros-card {
-        padding: 20px;
-    }
-
-    .fluxo-relatorio-page .fluxo-filtros-form {
-        gap: 14px;
-    }
-
-    .fluxo-relatorio-page .fluxo-filtro-grupo {
-        flex: 1 1 180px;
-        max-width: none;
-    }
-
-    .fluxo-relatorio-page .fluxo-filtro-acoes {
-        margin-left: auto;
-    }
-
-}
-
-
-/* ==========================================
-   RESPONSIVIDADE - CELULARES
-========================================== */
-
-@media (max-width: 600px) {
-
     .fluxo-relatorio-page .fluxo-filtros-card {
         padding: 16px;
         margin-bottom: 20px;
@@ -1998,31 +1728,30 @@
         padding: 10px 14px;
     }
 
-    .fluxo-relatorio-page .fluxo-resumo-header {
-        padding: 14px 18px;
-    }
-
     .fluxo-relatorio-page .fluxo-periodo-atual {
         font-size: 12px;
     }
-
-    .fluxo-relatorio-page .fluxo-dre-observacao {
-        font-size: 12px;
-    }
-
 }
 
-
-/* ==========================================
-   ACESSIBILIDADE
-========================================== */
+/* 18. ACESSIBILIDADE */
 
 @media (prefers-reduced-motion: reduce) {
-
+    .fin-metric-card,
+    .fin-btn,
+    .fin-tab-item,
+    .fin-table tbody tr,
+    .fin-dre-item,
+    .crm-lead-card,
+    .crm-lead-links a,
+    .crm-status-select,
     .fluxo-relatorio-page .fluxo-filtro-grupo input,
     .fluxo-relatorio-page .fluxo-filtro-grupo select,
     .fluxo-relatorio-page .fluxo-filtro-acoes .fin-btn {
         transition: none;
     }
 
+    .fin-metric-card:hover,
+    .crm-lead-card:hover {
+        transform: none;
+    }
 }

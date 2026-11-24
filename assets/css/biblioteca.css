@@ -1,45 +1,35 @@
 ﻿/* ==========================================
    GYMFLOW - BIBLIOTECA DE EXERCÍCIOS
    ADMIN / PROFESSOR
-   ========================================== */
+========================================== */
+
+/* 1. ESTRUTURA DA PÁGINA */
 
 .biblioteca-page {
-    --bib-primaria: var(--cor-primaria, #eab308);
-    --bib-texto: var(--ui-texto, #111827);
-    --bib-suave: var(--ui-texto-suave, #64748b);
-    --bib-borda: var(--ui-borda, #e2e8f0);
-    --bib-card: var(--ui-fundo-card, #ffffff);
-    --bib-fundo: var(--ui-fundo-pagina, #f8fafc);
-
     width: 100%;
     max-width: 1500px;
     min-width: 0;
     margin: 0 auto;
     padding: 30px 32px 45px;
-
-    color: var(--bib-texto);
-    font-family: inherit;
+    color: var(--ui-texto);
 }
 
-/* CABEÇALHO */
+/* 2. CABEÇALHO */
 
 .biblioteca-page .biblioteca-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-
     margin-bottom: 28px;
     padding-bottom: 22px;
-
-    border-bottom: 1px solid var(--bib-borda);
+    border-bottom: 1px solid var(--ui-borda);
 }
 
 .biblioteca-page .biblioteca-etiqueta {
     display: block;
     margin-bottom: 8px;
-
-    color: var(--bib-primaria);
+    color: var(--cor-primaria);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: .8px;
@@ -47,8 +37,7 @@
 
 .biblioteca-page .biblioteca-header h1 {
     margin: 0 0 8px;
-
-    color: var(--bib-texto);
+    color: var(--ui-texto);
     font-size: 28px;
     font-weight: 700;
     line-height: 1.2;
@@ -56,109 +45,101 @@
 
 .biblioteca-page .biblioteca-header p {
     margin: 0;
-    color: var(--bib-suave);
+    color: var(--ui-texto-suave);
     font-size: 14px;
     line-height: 1.6;
 }
 
-/* BOTÕES COMPARTILHADOS DO MÓDULO */
+/* 3. BOTÕES */
 
 .biblioteca-page .biblioteca-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     min-height: 43px;
     padding: 10px 18px;
-
     border: 1px solid transparent;
-    border-radius: var(--ui-raio-sm, 7px);
-
+    border-radius: var(--ui-raio-sm);
     font: inherit;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-
     transition:
-        background-color .2s ease,
-        border-color .2s ease,
-        color .2s ease;
+        background-color var(--ui-transicao),
+        border-color var(--ui-transicao),
+        color var(--ui-transicao);
 }
 
 .biblioteca-page .biblioteca-btn-primary {
-    background: var(--bib-primaria);
-    color: #ffffff;
+    background-color: var(--ui-botao-fundo);
+    color: var(--ui-botao-texto);
 }
 
 .biblioteca-page .biblioteca-btn-primary:hover {
-    background: var(--cor-primaria-hover, var(--bib-primaria));
-    color: #ffffff;
-    filter: brightness(.95);
+    background-color: var(--ui-botao-fundo-hover);
+    color: var(--ui-botao-texto);
 }
 
 .biblioteca-page .biblioteca-btn-secondary {
-    background: #ffffff;
-    color: var(--bib-texto);
-    border-color: var(--bib-borda);
+    background-color: var(--ui-fundo-card);
+    color: var(--ui-texto);
+    border-color: var(--ui-borda);
 }
 
 .biblioteca-page .biblioteca-btn-secondary:hover {
-    background: #f8fafc;
-    color: var(--bib-texto);
-    border-color: #cbd5e1;
+    background-color: var(--ui-fundo-pagina);
+    color: var(--ui-texto);
+    border-color: var(--cor-borda-forte);
 }
 
-/* ALERTAS */
+/* 4. ALERTAS */
 
 .biblioteca-page .biblioteca-alerta {
     padding: 14px 18px;
     margin-bottom: 22px;
-
     border: 1px solid transparent;
     border-radius: 8px;
-
     font-size: 14px;
     font-weight: 500;
     line-height: 1.5;
 }
 
 .biblioteca-page .biblioteca-alerta-sucesso {
-    background: #ecfdf5;
+    background-color: var(--cor-sucesso-fundo);
     color: #047857;
     border-color: #a7f3d0;
 }
 
 .biblioteca-page .biblioteca-alerta-erro {
-    background: #fef2f2;
+    background-color: var(--cor-perigo-fundo);
     color: #b91c1c;
     border-color: #fecaca;
 }
 
-/* FILTROS */
+/* 5. FILTROS */
 
 .biblioteca-page .biblioteca-filtros-card {
     margin-bottom: 28px;
     padding: 24px;
-
-    background: var(--bib-card);
-    border: 1px solid var(--bib-borda);
-    border-radius: var(--ui-raio-md, 10px);
-    box-shadow: var(--ui-sombra-card, 0 1px 3px rgba(0, 0, 0, .04));
+    background-color: var(--ui-fundo-card);
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-md);
+    box-shadow: var(--ui-sombra-card);
 }
 
 .biblioteca-page .biblioteca-section-title {
     padding-bottom: 18px;
     margin-bottom: 22px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--ui-borda);
 }
 
 .biblioteca-page .biblioteca-section-title h2,
 .biblioteca-page .biblioteca-resultados-header h2 {
     margin: 0 0 6px;
-    color: var(--bib-texto);
+    color: var(--ui-texto);
     font-size: 19px;
     font-weight: 700;
 }
@@ -166,14 +147,17 @@
 .biblioteca-page .biblioteca-section-title p,
 .biblioteca-page .biblioteca-resultados-header p {
     margin: 0;
-    color: var(--bib-suave);
+    color: var(--ui-texto-suave);
     font-size: 13px;
     line-height: 1.5;
 }
 
 .biblioteca-page .biblioteca-filtros-form {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+    grid-template-columns:
+        minmax(0, 1.4fr)
+        minmax(0, 1fr)
+        auto;
     align-items: end;
     gap: 16px;
 }
@@ -187,33 +171,47 @@
 
 .biblioteca-page .biblioteca-campo label {
     margin: 0;
-    color: var(--bib-texto);
+    color: var(--ui-texto);
     font-size: 13px;
     font-weight: 600;
 }
 
+/* 6. CAMPOS DE PESQUISA */
+
 .biblioteca-page .biblioteca-campo input,
 .biblioteca-page .biblioteca-campo select {
     width: 100%;
+    min-width: 0;
     min-height: 43px;
     padding: 10px 12px;
-
-    background: #ffffff;
-    color: var(--bib-texto);
-
-    border: 1px solid var(--bib-borda);
-    border-radius: var(--ui-raio-sm, 7px);
-
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+    border: 1px solid var(--ui-input-borda);
+    border-radius: var(--ui-raio-sm);
     font: inherit;
     font-size: 14px;
-    outline: none;
+    transition: border-color var(--ui-transicao);
+}
+
+.biblioteca-page .biblioteca-campo input:hover,
+.biblioteca-page .biblioteca-campo select:hover {
+    border-color: var(--cor-borda-forte);
 }
 
 .biblioteca-page .biblioteca-campo input:focus,
 .biblioteca-page .biblioteca-campo select:focus {
-    border-color: var(--bib-primaria);
-    outline: 2px solid var(--bib-primaria);
+    border-color: var(--ui-input-foco);
+    outline: 2px solid var(--ui-input-foco);
     outline-offset: 1px;
+}
+
+.biblioteca-page .biblioteca-campo input::placeholder {
+    color: var(--ui-texto-suave);
+}
+
+.biblioteca-page .biblioteca-campo select option {
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
 }
 
 .biblioteca-page .biblioteca-filtros-acoes {
@@ -224,12 +222,12 @@
 
 .biblioteca-page .biblioteca-filtro-ajuda {
     margin: 14px 0 0;
-    color: var(--bib-suave);
+    color: var(--ui-texto-suave);
     font-size: 12px;
     line-height: 1.5;
 }
 
-/* RESULTADOS */
+/* 7. RESULTADOS */
 
 .biblioteca-page .biblioteca-resultados {
     width: 100%;
@@ -241,28 +239,23 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 14px;
-
     margin-bottom: 20px;
 }
 
 .biblioteca-page .biblioteca-contador {
     display: inline-flex;
     align-items: center;
-
     padding: 7px 12px;
-
-    background: var(--bib-card);
-    color: var(--bib-suave);
-
-    border: 1px solid var(--bib-borda);
+    background-color: var(--ui-fundo-card);
+    color: var(--ui-texto-suave);
+    border: 1px solid var(--ui-borda);
     border-radius: 999px;
-
     font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
 }
 
-/* GRID DE CARDS */
+/* 8. GRID E CARDS DOS EXERCÍCIOS */
 
 .biblioteca-page .exercicios-grid {
     display: grid;
@@ -275,38 +268,32 @@
     flex-direction: column;
     min-width: 0;
     overflow: hidden;
-
-    background: var(--bib-card);
-    border: 1px solid var(--bib-borda);
-    border-radius: var(--ui-raio-md, 10px);
-
-    box-shadow: var(--ui-sombra-card, 0 1px 3px rgba(0, 0, 0, .04));
-
+    background-color: var(--ui-fundo-card);
+    border: 1px solid var(--ui-borda);
+    border-radius: var(--ui-raio-md);
+    box-shadow: var(--ui-sombra-card);
     transition:
-        box-shadow .2s ease,
-        border-color .2s ease;
+        box-shadow var(--ui-transicao),
+        border-color var(--ui-transicao);
 }
 
 .biblioteca-page .exercicio-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: var(--ui-sombra-hover, 0 5px 16px rgba(15, 23, 42, .07));
+    border-color: var(--cor-borda-forte);
+    box-shadow: var(--ui-sombra-hover);
 }
 
-/* MÍDIA */
+/* 9. IMAGENS E VÍDEOS */
 
 .biblioteca-page .exercicio-midia {
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 100%;
     height: 210px;
     overflow: hidden;
-
-    background: #f1f5f9;
-    border-bottom: 1px solid var(--bib-borda);
+    background-color: var(--cor-superficie-secundaria);
+    border-bottom: 1px solid var(--ui-borda);
 }
 
 .biblioteca-page .exercicio-midia img,
@@ -315,7 +302,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #f1f5f9;
+    background-color: var(--cor-superficie-secundaria);
 }
 
 .biblioteca-page .exercicio-sem-midia {
@@ -324,12 +311,10 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-
     width: 100%;
     height: 100%;
     padding: 20px;
-
-    color: #94a3b8;
+    color: var(--ui-texto-suave);
     text-align: center;
 }
 
@@ -343,14 +328,13 @@
     font-size: 13px;
 }
 
-/* INFORMAÇÕES */
+/* 10. INFORMAÇÕES DOS EXERCÍCIOS */
 
 .biblioteca-page .exercicio-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-
     flex: 1;
     min-width: 0;
     padding: 20px;
@@ -359,14 +343,11 @@
 .biblioteca-page .exercicio-grupo {
     display: inline-flex;
     align-items: center;
-
     max-width: 100%;
     padding: 6px 10px;
-
-    background: #f1f5f9;
-    color: #475569;
-    border-radius: 6px;
-
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--ui-texto-suave);
+    border-radius: var(--ui-raio-sm);
     font-size: 11px;
     font-weight: 700;
     line-height: 1.35;
@@ -375,114 +356,139 @@
 .biblioteca-page .exercicio-info h3 {
     width: 100%;
     margin: 0;
-
-    color: var(--bib-texto);
+    color: var(--ui-texto);
     font-size: 17px;
     font-weight: 700;
     line-height: 1.4;
-
     overflow-wrap: anywhere;
 }
 
-/* AÇÕES */
+/* 11. AÇÕES DOS CARDS */
 
 .biblioteca-page .exercicio-acoes {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-
     padding: 16px 20px;
-    border-top: 1px solid var(--bib-borda);
+    border-top: 1px solid var(--ui-borda);
 }
 
 .biblioteca-page .exercicio-acoes a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     min-height: 39px;
     padding: 9px 12px;
-
     border: 1px solid transparent;
-    border-radius: 7px;
-
+    border-radius: var(--ui-raio-sm);
     font-size: 13px;
     font-weight: 600;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
+    transition:
+        background-color var(--ui-transicao),
+        border-color var(--ui-transicao),
+        color var(--ui-transicao);
 }
 
-.biblioteca-page .exercicio-btn-editar {
-    background: #f8fafc;
-    color: var(--bib-texto);
-    border-color: var(--bib-borda) !important;
+/* Editar */
+
+.biblioteca-page .exercicio-acoes .exercicio-btn-editar {
+    background-color: var(--ui-fundo-pagina);
+    color: var(--ui-texto);
+    border-color: var(--ui-borda);
 }
 
-.biblioteca-page .exercicio-btn-editar:hover {
-    background: #f1f5f9;
-    color: var(--bib-texto);
+.biblioteca-page .exercicio-acoes .exercicio-btn-editar:hover {
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--ui-texto);
+    border-color: var(--cor-borda-forte);
 }
 
-.biblioteca-page .exercicio-btn-excluir {
-    background: #fef2f2;
+/* Excluir */
+
+.biblioteca-page .exercicio-acoes .exercicio-btn-excluir {
+    background-color: var(--cor-perigo-fundo);
     color: #b91c1c;
-    border-color: #fecaca !important;
+    border-color: #fecaca;
 }
 
-.biblioteca-page .exercicio-btn-excluir:hover {
-    background: #fee2e2;
+.biblioteca-page .exercicio-acoes .exercicio-btn-excluir:hover {
+    background-color: #fee2e2;
     color: #991b1b;
 }
 
-/* ESTADO VAZIO */
+/* 12. ESTADO VAZIO */
 
 .biblioteca-page .nenhum-exercicio {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 12px;
     padding: 55px 24px;
-
-    background: var(--bib-card);
-    border: 1px dashed var(--bib-borda);
-    border-radius: 10px;
-
+    background-color: var(--ui-fundo-card);
+    border: 1px dashed var(--ui-borda);
+    border-radius: var(--ui-raio-md);
     text-align: center;
 }
 
 .biblioteca-page .nenhum-exercicio-icone {
     font-size: 40px;
-    color: #94a3b8;
+    color: var(--cor-texto-discreto);
 }
 
 .biblioteca-page .nenhum-exercicio h3 {
     margin: 0;
-    color: var(--bib-texto);
+    color: var(--ui-texto);
     font-size: 19px;
 }
 
 .biblioteca-page .nenhum-exercicio p {
     max-width: 440px;
     margin: 0 0 10px;
-
-    color: var(--bib-suave);
+    color: var(--ui-texto-suave);
     font-size: 14px;
     line-height: 1.6;
 }
 
-/* ACESSIBILIDADE */
+/* 13. ESTADOS NO TEMA ESCURO */
+
+:root[data-theme="dark"]
+.biblioteca-page .biblioteca-alerta-sucesso {
+    background-color: #15372a;
+    color: #86efac;
+    border-color: #286344;
+}
+
+:root[data-theme="dark"]
+.biblioteca-page .biblioteca-alerta-erro,
+
+:root[data-theme="dark"]
+.biblioteca-page .exercicio-acoes .exercicio-btn-excluir {
+    background-color: #3f2027;
+    color: #fca5a5;
+    border-color: #7f3540;
+}
+
+:root[data-theme="dark"]
+.biblioteca-page .exercicio-acoes .exercicio-btn-excluir:hover {
+    background-color: #57272f;
+    color: #fecaca;
+}
+
+/* 14. ACESSIBILIDADE */
 
 .biblioteca-page a:focus-visible,
 .biblioteca-page button:focus-visible {
-    outline: 2px solid var(--bib-primaria);
+    outline: 2px solid var(--cor-primaria);
     outline-offset: 3px;
 }
 
-/* RESPONSIVIDADE */
+/* 15. RESPONSIVIDADE */
 
 @media (max-width: 1100px) {
+
     .biblioteca-page .exercicios-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -497,6 +503,7 @@
 }
 
 @media (max-width: 700px) {
+
     .biblioteca-page {
         padding: 22px 18px 35px;
     }
@@ -510,7 +517,7 @@
         font-size: 25px;
     }
 
-    .biblioteca-page .biblioteca-header>.biblioteca-btn {
+    .biblioteca-page .biblioteca-header > .biblioteca-btn {
         align-self: flex-start;
     }
 
@@ -533,13 +540,5 @@
 
     .biblioteca-page .exercicio-midia {
         height: 230px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    .biblioteca-page .exercicio-card,
-    .biblioteca-page .biblioteca-btn {
-        transition: none;
     }
 }
