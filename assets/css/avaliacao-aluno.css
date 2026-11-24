@@ -402,6 +402,46 @@
     }
 }
 
+/* =============================================
+   CORREÇÃO - NAVEGAÇÃO DO PORTAL
+   ============================================= */
+
+.avaliacao-aluno-page .avaliacao-cabecalho {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.avaliacao-aluno-page .avaliacao-voltar {
+    position: relative;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: none;
+
+    background-color: var(--ui-fundo-card, #ffffff);
+    color: var(--ui-texto, #111827);
+    border-color: var(--ui-borda, #e5e7eb);
+}
+
+.avaliacao-aluno-page .avaliacao-voltar:hover {
+    background-color: var(--cor-primaria, #ffb000);
+    color: var(--cor-sobre-primaria, #111827);
+    border-color: var(--cor-primaria, #ffb000);
+}
+
+.avaliacao-aluno-page .avaliacao-voltar:focus-visible {
+    outline: 2px solid var(--cor-primaria, #ffb000);
+    outline-offset: 3px;
+}
+
 @media (max-width: 640px) {
     .avaliacao-card {
         padding: 20px;

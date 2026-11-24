@@ -505,12 +505,12 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                         focusable="false">
 
                                         <path
-                                            d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                            d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
 
                                         <circle
                                             cx="12"
                                             cy="10"
-                                            r="2.5"/>
+                                            r="2.5" />
 
                                     </svg>
 
@@ -553,9 +553,9 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                         <circle
                                             cx="12"
                                             cy="12"
-                                            r="9"/>
+                                            r="9" />
 
-                                        <path d="M12 7v5l3.5 2"/>
+                                        <path d="M12 7v5l3.5 2" />
 
                                     </svg>
 
@@ -584,10 +584,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                         <circle
                                             cx="12"
                                             cy="7"
-                                            r="4"/>
+                                            r="4" />
 
                                         <path
-                                            d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                                            d="M4 21v-2a8 8 0 0 1 16 0v2" />
 
                                     </svg>
 
@@ -625,12 +625,12 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                     focusable="false">
 
                                     <path
-                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
 
                                     <circle
                                         cx="12"
                                         cy="10"
-                                        r="2.5"/>
+                                        r="2.5" />
 
                                 </svg>
 
@@ -762,7 +762,6 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
     </div>
 
     <style>
-
         /* ==========================================
            ÍCONES SVG DAS UNIDADES
         =========================================== */
@@ -888,11 +887,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
         #mapa-unidades-completo .leaflet-tile-pane {
             filter:
-                grayscale(100%)
-                invert(100%)
-                brightness(0.95)
-                contrast(1.2)
-                hue-rotate(180deg);
+                grayscale(100%) invert(100%) brightness(0.95) contrast(1.2) hue-rotate(180deg);
         }
 
         #mapa-unidades-completo .leaflet-popup-content-wrapper,
@@ -938,7 +933,6 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 padding: 18px;
             }
         }
-
     </style>
 
     <!-- ==========================================
@@ -1335,7 +1329,6 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 </form>
 
                 <script>
-
                     function enviarWhatsApp(event, telefoneZap) {
 
                         event.preventDefault();
@@ -1382,7 +1375,6 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                         window.open(url, '_blank');
 
                     }
-
                 </script>
 
             </div>
@@ -1439,9 +1431,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
             $_SESSION['feedback_csrf_token'] =
                 bin2hex(random_bytes(32));
-
         }
-
     }
 
     $statusFeedback = $_GET['feedback'] ?? '';
@@ -1543,10 +1533,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             type="hidden"
                             name="csrf_token"
                             value="<?= htmlspecialchars(
-                                $_SESSION['feedback_csrf_token'],
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ) ?>">
+                                        $_SESSION['feedback_csrf_token'],
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ) ?>">
 
                         <?php if ($nomeExibicao !== ''): ?>
 
@@ -1656,7 +1646,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     </form>
 
-                <!-- ALUNO DE OUTRA ACADEMIA -->
+                    <!-- ALUNO DE OUTRA ACADEMIA -->
 
                 <?php elseif ($usuarioDeOutraAcademia): ?>
 
@@ -1674,7 +1664,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     </div>
 
-                <!-- USUÁRIO LOGADO, MAS NÃO ALUNO -->
+                    <!-- USUÁRIO LOGADO, MAS NÃO ALUNO -->
 
                 <?php elseif ($usuarioIdFeedback > 0): ?>
 
@@ -1691,7 +1681,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     </div>
 
-                <!-- VISITANTE -->
+                    <!-- VISITANTE -->
 
                 <?php else: ?>
 
@@ -1707,14 +1697,14 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                         </p>
 
                         <a
-                            href="<?= BASE_URL ?>/app/controllers/LoginController.php?acao=login&amp;destino=avaliacao"
+                            href="<?= BASE_URL ?>/app/controllers/LoginController.php?acao=login&amp;destino=avaliacao&amp;empresa=<?= (int) $empresaDoSite ?>"
                             class="feedback-btn"
                             style="
-                                display: inline-flex;
-                                align-items: center;
-                                justify-content: center;
-                                text-decoration: none;
-                            ">
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    ">
 
                             Entrar para avaliar
 
@@ -1734,10 +1724,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     <img
                         src="<?= htmlspecialchars(
-                            $config['feedback_image'],
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ) ?>"
+                                    $config['feedback_image'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>"
                         alt="Experiência na academia"
                         class="feedback-imagem">
 
@@ -1876,8 +1866,8 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                                     <span
                                         class="<?= $estrela <= $notaFeedback
-                                            ? 'ativa'
-                                            : '' ?>">
+                                                    ? 'ativa'
+                                                    : '' ?>">
 
                                         ★
 
@@ -1916,17 +1906,15 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 =========================================== -->
 
 <script>
-
     window.GYMFLOW_UNIDADES = <?= json_encode(
-        $filiais ?? [],
-        JSON_UNESCAPED_UNICODE |
-        JSON_UNESCAPED_SLASHES |
-        JSON_HEX_TAG |
-        JSON_HEX_AMP |
-        JSON_HEX_APOS |
-        JSON_HEX_QUOT
-    ) ?>;
-
+                                    $filiais ?? [],
+                                    JSON_UNESCAPED_UNICODE |
+                                        JSON_UNESCAPED_SLASHES |
+                                        JSON_HEX_TAG |
+                                        JSON_HEX_AMP |
+                                        JSON_HEX_APOS |
+                                        JSON_HEX_QUOT
+                                ) ?>;
 </script>
 
 <!-- JAVASCRIPT DO PORTFÓLIO -->
