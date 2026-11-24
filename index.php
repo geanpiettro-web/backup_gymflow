@@ -9,35 +9,53 @@ require_once __DIR__ . '/app/models/Portfolio.php';
 
 $usuarioLogado = isset($_SESSION['usuario_id']);
 $roleUsuario = $_SESSION['usuario_role'] ?? '';
-$nomeUsuarioLogado = $usuarioLogado ? trim($_SESSION['usuario_nome'] ?? '') : '';
+$nomeUsuarioLogado = $usuarioLogado
+    ? trim($_SESSION['usuario_nome'] ?? '')
+    : '';
 
 $tituloPagina = $config['app_name'] ?? "GymCore";
+
 include __DIR__ . '/app/views/shared/portfolio_header.php';
 ?>
+
 <main>
+
+    <!-- ==========================================
+         INÍCIO / CARROSSEL
+    =========================================== -->
+
     <section id="inicio" class="portfolio-hero">
 
         <!-- IMAGENS DO CARROSSEL -->
+
         <div class="hero-carrossel">
+
             <?php if (!empty($slides)): ?>
+
                 <?php foreach ($slides as $index => $slide): ?>
+
                     <div class="hero-slide <?= $index === 0 ? 'ativo' : '' ?>">
+
                         <img
                             src="<?= htmlspecialchars($slide['image_url'] ?? '') ?>"
                             alt="Imagem do portfólio">
+
                     </div>
+
                 <?php endforeach; ?>
+
             <?php else: ?>
-                <!-- caso o Admin ainda não tenha cadastrado imagens -->
+
                 <div class="hero-slide ativo hero-slide-vazio"></div>
+
             <?php endif; ?>
+
         </div>
 
-        <!-- escurecimento da imagem carrossel -->
         <div class="hero-overlay"></div>
 
-        <!-- conteudo -->
         <div class="hero-conteudo">
+
             <h1>
                 <?= htmlspecialchars($config['hero_title'] ?? '') ?>
             </h1>
@@ -47,49 +65,74 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
             </p>
 
             <div class="hero-acoes">
-                <a class="hero-btn hero-btn-principal" href="#planos">
+
+                <a
+                    class="hero-btn hero-btn-principal"
+                    href="#planos">
+
                     <?= htmlspecialchars($config['hero_cta'] ?? 'Matricule-se') ?>
+
                 </a>
 
-                <a class="hero-btn hero-btn-secundario" href="#unidades">
+                <a
+                    class="hero-btn hero-btn-secundario"
+                    href="#unidades">
+
                     Encontrar unidade
+
                 </a>
+
             </div>
+
         </div>
 
         <?php if (!empty($slides) && count($slides) > 1): ?>
-            <!-- setas -->
+
             <button
                 type="button"
                 class="hero-seta hero-seta-anterior"
                 aria-label="Imagem anterior">
+
                 &#10094;
+
             </button>
 
             <button
                 type="button"
                 class="hero-seta hero-seta-proxima"
                 aria-label="Próxima imagem">
+
                 &#10095;
+
             </button>
 
-            <!-- bolinhas -->
             <div class="hero-indicadores">
+
                 <?php foreach ($slides as $index => $slide): ?>
+
                     <button
                         type="button"
                         class="hero-indicador <?= $index === 0 ? 'ativo' : '' ?>"
                         data-slide="<?= $index ?>"
-                        aria-label="Ir para imagem <?= $index + 1 ?>"></button>
+                        aria-label="Ir para imagem <?= $index + 1 ?>">
+                    </button>
+
                 <?php endforeach; ?>
+
             </div>
+
         <?php endif; ?>
 
     </section>
 
-    <!-- modalidades -->
+    <!-- ==========================================
+         MODALIDADES
+    =========================================== -->
+
     <section id="modalidades" class="portfolio-modalidades">
+
         <div class="modalidades-cabecalho">
+
             <span class="secao-destaque">
                 Nossas Modalidades
             </span>
@@ -101,25 +144,37 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
             <p>
                 Encontre a modalidade ideal para você
             </p>
+
         </div>
 
         <?php if (empty($modalidades)): ?>
+
             <p class="mensagem-vazia">
                 Nenhuma modalidade cadastrada no momento.
             </p>
+
         <?php else: ?>
+
             <div class="modalidades-grid">
+
                 <?php foreach ($modalidades as $mod): ?>
+
                     <article class="modalidade-card">
+
                         <?php if (!empty($mod['image_url'])): ?>
+
                             <div class="modalidade-imagem">
+
                                 <img
                                     src="<?= htmlspecialchars($mod['image_url']) ?>"
                                     alt="<?= htmlspecialchars($mod['name'] ?? '') ?>">
+
                             </div>
+
                         <?php endif; ?>
 
                         <div class="modalidade-conteudo">
+
                             <h3>
                                 <?= htmlspecialchars($mod['name'] ?? '') ?>
                             </h3>
@@ -127,18 +182,31 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             <p>
                                 <?= htmlspecialchars($mod['description'] ?? '') ?>
                             </p>
-                            <a href="#" class="modalidade-saiba-mais">
+
+                            <a
+                                href="#"
+                                class="modalidade-saiba-mais">
+
                                 Saiba mais →
+
                             </a>
+
                         </div>
+
                     </article>
+
                 <?php endforeach; ?>
+
             </div>
+
         <?php endif; ?>
+
     </section>
 
+    <!-- ==========================================
+         PLANOS
+    =========================================== -->
 
-    <!-- planos -->
     <section id="planos" class="portfolio-planos">
 
         <div class="planos-cabecalho">
@@ -170,8 +238,13 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 <?php foreach ($planos as $plano): ?>
 
                     <article class="plano-card">
+
                         <?php if (($plano['id'] ?? 0) == ($planos[1]['id'] ?? 0)): ?>
-                            <span class="plano-destaque">Mais escolhido</span>
+
+                            <span class="plano-destaque">
+                                Mais escolhido
+                            </span>
+
                         <?php endif; ?>
 
                         <span class="plano-categoria">
@@ -183,16 +256,20 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                         </h3>
 
                         <div class="plano-preco">
+
                             <span>R$</span>
 
                             <strong>
+
                                 <?= number_format(
-                                    (float)($plano['valor'] ?? 0),
+                                    (float) ($plano['valor'] ?? 0),
                                     2,
                                     ',',
                                     '.'
                                 ) ?>
+
                             </strong>
+
                         </div>
 
                         <p class="plano-duracao">
@@ -203,8 +280,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                         <a
                             class="plano-btn"
-                            href="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=identificacao&amp;company_id=<?= (int)$company_id ?>&amp;plano_id=<?= (int)($plano['id'] ?? 0) ?>">
+                            href="<?= BASE_URL ?>/app/controllers/MatriculaController.php?acao=identificacao&amp;company_id=<?= (int) $company_id ?>&amp;plano_id=<?= (int) ($plano['id'] ?? 0) ?>">
+
                             Matricule-se agora
+
                         </a>
 
                     </article>
@@ -215,84 +294,157 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
         <?php endif; ?>
 
-        <!-- parceiros dos planos -->
+        <!-- ==========================================
+             PARCEIROS E BENEFÍCIOS
+        =========================================== -->
+
         <?php
+
         $aceitaWellhub = !empty($config['accepts_wellhub']);
         $aceitaTotalpass = !empty($config['accepts_totalpass']);
+
         ?>
 
         <?php if ($aceitaWellhub || $aceitaTotalpass): ?>
-            <div class="portfolio-parceiros" aria-labelledby="parceiros-titulo">
+
+            <div
+                class="portfolio-parceiros"
+                aria-labelledby="parceiros-titulo">
+
                 <div class="parceiros-conteudo">
+
                     <div class="parceiros-texto">
-                        <span class="secao-destaque">Benefícios</span>
-                        <h2 id="parceiros-titulo">Nossas unidades aceitam</h2>
-                        <p>Use seu benefício fitness e treine com a gente.</p>
+
+                        <span class="secao-destaque">
+                            Benefícios
+                        </span>
+
+                        <h2 id="parceiros-titulo">
+                            Nossas unidades aceitam
+                        </h2>
+
+                        <p>
+                            Use seu benefício fitness e treine com a gente.
+                        </p>
+
                     </div>
 
                     <div class="parceiros-marcas">
+
                         <?php if ($aceitaWellhub): ?>
+
                             <div class="parceiro-marca">
+
                                 <?php if (!empty($config['wellhub_icon'])): ?>
+
                                     <span class="parceiro-icone parceiro-icone-imagem">
+
                                         <img
                                             src="<?= htmlspecialchars($config['wellhub_icon']) ?>"
                                             alt="Wellhub"
                                             style="width: 100%; height: 100%; object-fit: contain;">
+
                                     </span>
+
                                 <?php else: ?>
-                                    <span class="parceiro-icone parceiro-icone-wellhub" aria-hidden="true">✦</span>
+
+                                    <span
+                                        class="parceiro-icone parceiro-icone-wellhub"
+                                        aria-hidden="true">
+
+                                        ✦
+
+                                    </span>
+
                                 <?php endif; ?>
 
                                 <div>
+
                                     <strong>Wellhub</strong>
+
                                     <small>(Gympass)</small>
+
                                 </div>
+
                             </div>
+
                         <?php endif; ?>
 
                         <?php if ($aceitaWellhub && $aceitaTotalpass): ?>
-                            <span class="parceiro-divisor" aria-hidden="true"></span>
+
+                            <span
+                                class="parceiro-divisor"
+                                aria-hidden="true">
+                            </span>
+
                         <?php endif; ?>
 
                         <?php if ($aceitaTotalpass): ?>
+
                             <div class="parceiro-marca">
+
                                 <?php if (!empty($config['totalpass_icon'])): ?>
+
                                     <span class="parceiro-icone parceiro-icone-imagem">
+
                                         <img
                                             src="<?= htmlspecialchars($config['totalpass_icon']) ?>"
                                             alt="TotalPass"
                                             style="width: 100%; height: 100%; object-fit: contain;">
+
                                     </span>
+
                                 <?php else: ?>
-                                    <span class="parceiro-icone parceiro-icone-totalpass" aria-hidden="true">TP</span>
+
+                                    <span
+                                        class="parceiro-icone parceiro-icone-totalpass"
+                                        aria-hidden="true">
+
+                                        TP
+
+                                    </span>
+
                                 <?php endif; ?>
 
                                 <div>
                                     <strong>TotalPass</strong>
                                 </div>
+
                             </div>
+
                         <?php endif; ?>
+
                     </div>
+
                 </div>
+
             </div>
+
         <?php endif; ?>
 
     </section>
 
-    <!-- unidades -->
+    <!-- ==========================================
+         UNIDADES
+    =========================================== -->
+
     <section id="unidades" class="portfolio-unidades">
 
         <div class="unidades-cabecalho">
-            <span class="secao-destaque">Nossas Unidades</span>
+
+            <span class="secao-destaque">
+                Nossas Unidades
+            </span>
 
             <h2>
                 Conheça nossas unidades
             </h2>
 
             <p>
-                Encontre a unidade ideal para treinar com conforto, estrutura e qualidade.
+                Encontre a unidade ideal para treinar com conforto,
+                estrutura e qualidade.
             </p>
+
         </div>
 
         <?php if (empty($filiais)): ?>
@@ -309,14 +461,22 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     <article class="unidade-card">
 
+                        <!-- IMAGEM DA UNIDADE -->
+
                         <div class="unidade-imagem">
+
                             <?php if (!empty($filial['image_url'])): ?>
+
                                 <img
                                     src="<?= htmlspecialchars($filial['image_url']) ?>"
                                     alt="<?= htmlspecialchars($filial['nome'] ?? 'Unidade') ?>"
                                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+
                             <?php endif; ?>
+
                         </div>
+
+                        <!-- INFORMAÇÕES -->
 
                         <div class="unidade-conteudo">
 
@@ -325,28 +485,157 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             </h3>
 
                             <ul class="unidade-info">
+
+                                <!-- LOCALIZAÇÃO -->
+
                                 <li>
-                                    <span>📍</span>
+
+                                    <svg
+                                        class="unidade-icone"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                        focusable="false">
+
+                                        <path
+                                            d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+
+                                        <circle
+                                            cx="12"
+                                            cy="10"
+                                            r="2.5"/>
+
+                                    </svg>
+
                                     <span>
-                                        <?= !empty($filial['endereco']) ? htmlspecialchars($filial['endereco']) : 'Endereço não cadastrado' ?>
-                                        <?= !empty($filial['numero']) ? ', ' . htmlspecialchars($filial['numero']) : '' ?>
-                                        <?= !empty($filial['complemento']) ? ' (' . htmlspecialchars($filial['complemento']) . ')' : '' ?>
+
+                                        <?= !empty($filial['endereco'])
+                                            ? htmlspecialchars($filial['endereco'])
+                                            : 'Endereço não cadastrado' ?>
+
+                                        <?= !empty($filial['numero'])
+                                            ? ', ' . htmlspecialchars($filial['numero'])
+                                            : '' ?>
+
+                                        <?= !empty($filial['complemento'])
+                                            ? ' (' . htmlspecialchars($filial['complemento']) . ')'
+                                            : '' ?>
+
                                     </span>
+
                                 </li>
 
+                                <!-- HORÁRIO DE FUNCIONAMENTO -->
+
                                 <li>
-                                    <span>🕒</span>
+
+                                    <svg
+                                        class="unidade-icone"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                        focusable="false">
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="9"/>
+
+                                        <path d="M12 7v5l3.5 2"/>
+
+                                    </svg>
+
                                     <span>24 Horas</span>
+
                                 </li>
 
+                                <!-- RESPONSÁVEL PELA UNIDADE -->
+
                                 <li>
-                                    <span>🏋</span>
-                                    <span>Responsável: <?= htmlspecialchars($filial['responsavel'] ?? '') ?></span>
+
+                                    <svg
+                                        class="unidade-icone"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                        focusable="false">
+
+                                        <circle
+                                            cx="12"
+                                            cy="7"
+                                            r="4"/>
+
+                                        <path
+                                            d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+
+                                    </svg>
+
+                                    <span>
+
+                                        Responsável:
+                                        <?= htmlspecialchars($filial['responsavel'] ?? '') ?>
+
+                                    </span>
+
                                 </li>
+
                             </ul>
 
-                            <a class="unidade-btn" href="https://www.google.com/maps/search/?api=1&query=<?= urlencode(($filial['latitude'] ?? '') . ',' . ($filial['longitude'] ?? '')) ?>" target="_blank" style="display: inline-flex; align-items: center; gap: 6px;">
-                                <span aria-hidden="true">📍</span> Abrir no Google Maps
+                            <!-- BOTÃO GOOGLE MAPS -->
+
+                            <a
+                                class="unidade-btn"
+                                href="https://www.google.com/maps/search/?api=1&query=<?= urlencode(($filial['latitude'] ?? '') . ',' . ($filial['longitude'] ?? '')) ?>"
+                                target="_blank"
+                                style="display: inline-flex; align-items: center; gap: 6px;">
+
+                                <svg
+                                    class="unidade-icone"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                    focusable="false">
+
+                                    <path
+                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+
+                                    <circle
+                                        cx="12"
+                                        cy="10"
+                                        r="2.5"/>
+
+                                </svg>
+
+                                Abrir no Google Maps
+
                             </a>
 
                         </div>
@@ -357,45 +646,98 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
             </div>
 
+            <!-- TODAS AS UNIDADES -->
+
             <div class="unidades-acao">
+
                 <span class="unidades-texto-geral">
                     Conheça todas as nossas unidades
                 </span>
+
             </div>
 
+            <!-- MAPA DAS UNIDADES -->
+
             <div class="unidades-mapa">
+
                 <div class="unidades-mapa-conteudo">
+
                     <div class="unidades-mapa-texto">
-                        <h3>Veja a mais próxima de você</h3>
+
+                        <h3>
+                            Veja a mais próxima de você
+                        </h3>
+
                         <p>
-                            Use nosso mapa e descubra a unidade mais perto de você.
+                            Use nosso mapa e descubra a unidade
+                            mais perto de você.
                         </p>
 
-                        <button type="button" class="unidades-mapa-btn" id="abrir-mapa-completo">
-                            <span class="unidades-mapa-btn-icone" aria-hidden="true">⌖</span>
+                        <button
+                            type="button"
+                            class="unidades-mapa-btn"
+                            id="abrir-mapa-completo">
+
+                            <span
+                                class="unidades-mapa-btn-icone"
+                                aria-hidden="true">
+
+                                ⌖
+
+                            </span>
+
                             Ver mapa completo
+
                         </button>
+
                     </div>
 
                     <div
                         class="unidades-mapa-box"
                         id="mapa-unidades"
-                        aria-label="Mapa com as unidades da GymFlow"></div>
+                        aria-label="Mapa com as unidades da GymFlow">
+                    </div>
+
                 </div>
+
             </div>
 
         <?php endif; ?>
 
     </section>
 
-    <div class="mapa-modal" id="mapa-modal" aria-hidden="true">
-        <div class="mapa-modal-overlay" data-fechar-mapa></div>
+    <!-- ==========================================
+         MODAL DO MAPA
+    =========================================== -->
 
-        <div class="mapa-modal-conteudo" role="dialog" aria-modal="true" aria-labelledby="mapa-modal-titulo">
+    <div
+        class="mapa-modal"
+        id="mapa-modal"
+        aria-hidden="true">
+
+        <div
+            class="mapa-modal-overlay"
+            data-fechar-mapa>
+        </div>
+
+        <div
+            class="mapa-modal-conteudo"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mapa-modal-titulo">
+
             <div class="mapa-modal-topo">
+
                 <div>
-                    <span class="mapa-modal-destaque">Nossas Unidades</span>
-                    <h2 id="mapa-modal-titulo">Mapa completo</h2>
+
+                    <span class="mapa-modal-destaque">
+                        Nossas Unidades
+                    </span>
+
+                    <h2 id="mapa-modal-titulo">
+                        Mapa completo
+                    </h2>
+
                 </div>
 
                 <button
@@ -403,15 +745,54 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     class="mapa-modal-fechar"
                     id="fechar-mapa-completo"
                     aria-label="Fechar mapa">
+
                     ×
+
                 </button>
+
             </div>
 
-            <div id="mapa-unidades-completo" aria-label="Mapa completo com as unidades da GymFlow"></div>
+            <div
+                id="mapa-unidades-completo"
+                aria-label="Mapa completo com as unidades da GymFlow">
+            </div>
+
         </div>
+
     </div>
 
     <style>
+
+        /* ==========================================
+           ÍCONES SVG DAS UNIDADES
+        =========================================== */
+
+        .portfolio-unidades .unidade-icone {
+            display: block;
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            color: var(--portfolio-primary);
+        }
+
+        .portfolio-unidades .unidade-info li {
+            align-items: flex-start;
+        }
+
+        .portfolio-unidades .unidade-info li .unidade-icone {
+            margin-top: 1px;
+        }
+
+        .portfolio-unidades .unidade-btn:hover .unidade-icone,
+        .portfolio-unidades .unidade-btn:focus .unidade-icone,
+        .portfolio-unidades .unidade-btn:active .unidade-icone {
+            color: inherit;
+        }
+
+        /* ==========================================
+           MODAL DO MAPA
+        =========================================== */
+
         .mapa-modal {
             position: fixed;
             inset: 0;
@@ -506,7 +887,12 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
         }
 
         #mapa-unidades-completo .leaflet-tile-pane {
-            filter: grayscale(100%) invert(100%) brightness(0.95) contrast(1.2) hue-rotate(180deg);
+            filter:
+                grayscale(100%)
+                invert(100%)
+                brightness(0.95)
+                contrast(1.2)
+                hue-rotate(180deg);
         }
 
         #mapa-unidades-completo .leaflet-popup-content-wrapper,
@@ -537,6 +923,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
         }
 
         @media (max-width: 700px) {
+
             .mapa-modal {
                 padding: 14px;
             }
@@ -551,14 +938,22 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 padding: 18px;
             }
         }
+
     </style>
 
+    <!-- ==========================================
+         SOBRE NÓS
+    =========================================== -->
 
-    <!-- sobre Nós -->
     <section id="sobre" class="portfolio-sobre">
+
         <div class="sobre-principal">
+
             <div class="sobre-texto">
-                <span class="secao-destaque">Sobre nós</span>
+
+                <span class="secao-destaque">
+                    Sobre nós
+                </span>
 
                 <h2>
                     Mais que uma academia.<br>
@@ -566,248 +961,487 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 </h2>
 
                 <p class="sobre-descricao">
-                    <?= nl2br(htmlspecialchars($config['about_text'] ?? '')) ?>
+
+                    <?= nl2br(htmlspecialchars(
+                        $config['about_text'] ?? ''
+                    )) ?>
+
                 </p>
 
                 <div class="sobre-linha"></div>
 
                 <p class="sobre-frase">
-                    Movimento, estrutura e acompanhamento para transformar cada etapa da sua jornada.
+                    Movimento, estrutura e acompanhamento
+                    para transformar cada etapa da sua jornada.
                 </p>
+
             </div>
 
             <div class="sobre-imagem-wrap">
+
                 <?php if (!empty($config['about_image'])): ?>
+
                     <img
                         src="<?= htmlspecialchars($config['about_image']) ?>"
                         alt="Ambiente da academia"
                         class="sobre-imagem">
+
                 <?php else: ?>
+
                     <div class="sobre-imagem-vazia">
                         Adicione uma imagem no Admin
                     </div>
+
                 <?php endif; ?>
+
             </div>
+
         </div>
 
         <div class="sobre-essencia">
+
             <div class="sobre-essencia-cabecalho">
-                <span class="secao-destaque">Nossa essência</span>
-                <h3>O que guia a GymFlow todos os dias</h3>
+
+                <span class="secao-destaque">
+                    Nossa essência
+                </span>
+
+                <h3>
+                    O que guia a GymFlow todos os dias
+                </h3>
+
             </div>
 
             <div class="sobre-cards">
+
                 <article class="sobre-card">
-                    <div class="sobre-card-icone" aria-hidden="true">♡</div>
+
+                    <div
+                        class="sobre-card-icone"
+                        aria-hidden="true">
+
+                        ♡
+
+                    </div>
+
                     <h4>Nossos Valores</h4>
-                    <p><?= nl2br(htmlspecialchars($config['company_values'] ?? '')) ?></p>
+
+                    <p>
+
+                        <?= nl2br(htmlspecialchars(
+                            $config['company_values'] ?? ''
+                        )) ?>
+
+                    </p>
+
                 </article>
 
                 <article class="sobre-card">
-                    <div class="sobre-card-icone" aria-hidden="true">✦</div>
+
+                    <div
+                        class="sobre-card-icone"
+                        aria-hidden="true">
+
+                        ✦
+
+                    </div>
+
                     <h4>Nossas Competências</h4>
-                    <p><?= nl2br(htmlspecialchars($config['company_competencies'] ?? '')) ?></p>
+
+                    <p>
+
+                        <?= nl2br(htmlspecialchars(
+                            $config['company_competencies'] ?? ''
+                        )) ?>
+
+                    </p>
+
                 </article>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- contato -->
+    <!-- ==========================================
+         CONTATO
+    =========================================== -->
+
     <section id="contato" class="portfolio-contato">
+
         <div class="contato-cabecalho">
-            <span class="secao-destaque">Fale conosco</span>
+
+            <span class="secao-destaque">
+                Fale conosco
+            </span>
 
             <h2>
                 <?= htmlspecialchars($config['contact_title'] ?? '') ?>
             </h2>
 
             <p>
-                <?= nl2br(htmlspecialchars($config['contact_subtitle'] ?? '')) ?>
+
+                <?= nl2br(htmlspecialchars(
+                    $config['contact_subtitle'] ?? ''
+                )) ?>
+
             </p>
+
         </div>
 
         <div class="contato-conteudo">
+
             <div class="contato-informacoes">
+
                 <div class="contato-imagem-wrap">
+
                     <?php if (!empty($config['contact_image'])): ?>
+
                         <img
                             src="<?= htmlspecialchars($config['contact_image']) ?>"
                             alt="Atendimento GymFlow"
                             class="contato-imagem">
+
                     <?php else: ?>
+
                         <div class="contato-imagem-vazia">
                             Adicione uma imagem no Admin
                         </div>
+
                     <?php endif; ?>
+
                 </div>
 
                 <div class="contato-dados">
+
+                    <!-- E-MAIL -->
+
                     <?php if (!empty($config['contact_email'])): ?>
+
                         <article class="contato-dado">
-                            <span class="contato-dado-icone" aria-hidden="true">✉</span>
+
+                            <span
+                                class="contato-dado-icone"
+                                aria-hidden="true">
+
+                                ✉
+
+                            </span>
+
                             <div>
+
                                 <strong>E-mail</strong>
-                                <p><?= htmlspecialchars($config['contact_email']) ?></p>
+
+                                <p>
+                                    <?= htmlspecialchars($config['contact_email']) ?>
+                                </p>
+
                             </div>
+
                         </article>
+
                     <?php endif; ?>
+
+                    <!-- TELEFONE -->
 
                     <?php if (!empty($config['contact_phone'])): ?>
+
                         <article class="contato-dado">
-                            <span class="contato-dado-icone" aria-hidden="true">☎</span>
+
+                            <span
+                                class="contato-dado-icone"
+                                aria-hidden="true">
+
+                                ☎
+
+                            </span>
+
                             <div>
+
                                 <strong>Telefone / WhatsApp</strong>
-                                <p><?= htmlspecialchars($config['contact_phone']) ?></p>
+
+                                <p>
+                                    <?= htmlspecialchars($config['contact_phone']) ?>
+                                </p>
+
                             </div>
+
                         </article>
+
                     <?php endif; ?>
+
+                    <!-- HORÁRIO -->
 
                     <?php if (!empty($config['contact_hours'])): ?>
+
                         <article class="contato-dado">
-                            <span class="contato-dado-icone" aria-hidden="true">◷</span>
+
+                            <span
+                                class="contato-dado-icone"
+                                aria-hidden="true">
+
+                                ◷
+
+                            </span>
+
                             <div>
+
                                 <strong>Horário de atendimento</strong>
-                                <p><?= nl2br(htmlspecialchars($config['contact_hours'])) ?></p>
+
+                                <p>
+
+                                    <?= nl2br(htmlspecialchars(
+                                        $config['contact_hours']
+                                    )) ?>
+
+                                </p>
+
                             </div>
+
                         </article>
+
                     <?php endif; ?>
+
                 </div>
+
             </div>
 
+            <!-- FORMULÁRIO DE CONTATO -->
+
             <div class="contato-formulario-wrap">
+
                 <h3>
-                    <?= htmlspecialchars($config['contact_form_title'] ?? '') ?>
+
+                    <?= htmlspecialchars(
+                        $config['contact_form_title'] ?? ''
+                    ) ?>
+
                 </h3>
 
-                <?php $wpPort = preg_replace('/\D/', '', $config['contact_phone'] ?? ''); ?>
-                <form class="contato-formulario" onsubmit="enviarWhatsApp(event, '<?= $wpPort ?>')">
+                <?php
+
+                $wpPort = preg_replace(
+                    '/\D/',
+                    '',
+                    $config['contact_phone'] ?? ''
+                );
+
+                ?>
+
+                <form
+                    class="contato-formulario"
+                    onsubmit="enviarWhatsApp(event, '<?= $wpPort ?>')">
+
                     <div class="contato-campo">
-                        <label for="contato-nome">Nome</label>
+
+                        <label for="contato-nome">
+                            Nome
+                        </label>
+
                         <input
                             type="text"
                             id="contato-nome"
                             name="nome"
                             placeholder="Digite seu nome"
                             required>
+
                     </div>
 
                     <div class="contato-campo">
-                        <label for="contato-email">E-mail</label>
+
+                        <label for="contato-email">
+                            E-mail
+                        </label>
+
                         <input
                             type="email"
                             id="contato-email"
                             name="email"
                             placeholder="Digite seu e-mail"
                             required>
+
                     </div>
 
                     <div class="contato-campo">
-                        <label for="contato-telefone">Telefone</label>
+
+                        <label for="contato-telefone">
+                            Telefone
+                        </label>
+
                         <input
                             type="text"
                             id="contato-telefone"
                             name="telefone"
                             placeholder="(11) 99999-9999"
                             required>
+
                     </div>
 
                     <div class="contato-campo">
-                        <label for="contato-unidade">Unidade desejada</label>
-                        <select id="contato-unidade" name="filial_id" required>
-                            <option value="">Selecione uma unidade</option>
+
+                        <label for="contato-unidade">
+                            Unidade desejada
+                        </label>
+
+                        <select
+                            id="contato-unidade"
+                            name="filial_id"
+                            required>
+
+                            <option value="">
+                                Selecione uma unidade
+                            </option>
 
                             <?php foreach (($filiais ?? []) as $filial): ?>
-                                <option value="<?= (int)($filial['id'] ?? 0) ?>">
-                                    <?= htmlspecialchars($filial['nome'] ?? '') ?>
+
+                                <option value="<?= (int) ($filial['id'] ?? 0) ?>">
+
+                                    <?= htmlspecialchars(
+                                        $filial['nome'] ?? ''
+                                    ) ?>
+
                                 </option>
+
                             <?php endforeach; ?>
+
                         </select>
+
                     </div>
 
                     <div class="contato-campo">
-                        <label for="contato-mensagem">Mensagem</label>
+
+                        <label for="contato-mensagem">
+                            Mensagem
+                        </label>
+
                         <textarea
                             id="contato-mensagem"
                             name="mensagem"
                             rows="5"
                             placeholder="Como podemos ajudar?"
                             required></textarea>
+
                     </div>
 
-                    <button type="submit" class="contato-btn">
+                    <button
+                        type="submit"
+                        class="contato-btn">
+
                         Enviar mensagem
+
                     </button>
+
                 </form>
 
                 <script>
+
                     function enviarWhatsApp(event, telefoneZap) {
+
                         event.preventDefault();
+
                         if (!telefoneZap) {
-                            alert("O número de WhatsApp da academia ainda não foi configurado.");
+
+                            alert(
+                                "O número de WhatsApp da academia ainda não foi configurado."
+                            );
+
                             return;
                         }
 
-                        const nome = document.getElementById('contato-nome').value;
-                        const email = document.getElementById('contato-email').value;
-                        const fone = document.getElementById('contato-telefone').value;
+                        const nome =
+                            document.getElementById('contato-nome').value;
 
-                        const unidadeSelect = document.getElementById('contato-unidade');
+                        const email =
+                            document.getElementById('contato-email').value;
+
+                        const fone =
+                            document.getElementById('contato-telefone').value;
+
+                        const unidadeSelect =
+                            document.getElementById('contato-unidade');
+
                         let unidadeNome = 'Nenhuma específica';
+
                         if (unidadeSelect.selectedIndex > 0) {
-                            unidadeNome = unidadeSelect.options[unidadeSelect.selectedIndex].text.trim();
+
+                            unidadeNome =
+                                unidadeSelect.options[
+                                    unidadeSelect.selectedIndex
+                                ].text.trim();
+
                         }
 
-                        const mensagem = document.getElementById('contato-mensagem').value;
+                        const mensagem =
+                            document.getElementById('contato-mensagem').value;
 
                         const textoZap = `Olá! Meu nome é *${nome}*.\nE-mail: ${email}\nTelefone de Contato: ${fone}\nUnidade de interesse: *${unidadeNome}*\n\nMensagem: ${mensagem}`;
 
                         const url = `https://wa.me/55${telefoneZap}?text=${encodeURIComponent(textoZap)}`;
+
                         window.open(url, '_blank');
+
                     }
+
                 </script>
+
             </div>
+
         </div>
+
     </section>
 
-
-    <!-- ============================================
-     GYMFLOW - AVALIAÇÕES DO SITE PÚBLICO
-     ============================================ -->
+    <!-- ==========================================
+         AVALIAÇÕES DO SITE PÚBLICO
+    =========================================== -->
 
     <?php
+
     // Empresa exibida no site público.
-    // $company_id já é definido no início do index.php.
+
     $empresaDoSite = (int) ($company_id ?? 0);
 
-    // Identificação da sessão, usada somente para
-    // decidir qual interface mostrar.
+    // Identificação da sessão.
     // A autorização real ocorre no FeedbackController.
-    $usuarioIdFeedback = (int) ($_SESSION['usuario_id'] ?? 0);
-    $empresaDoUsuario = (int) ($_SESSION['company_id'] ?? 0);
-    $papelUsuario = $_SESSION['usuario_role'] ?? '';
 
-    $ehAluno = $usuarioIdFeedback > 0
-        && $papelUsuario === 'Aluno';
+    $usuarioIdFeedback =
+        (int) ($_SESSION['usuario_id'] ?? 0);
 
-    $alunoDaAcademia = $ehAluno
-        && $empresaDoSite > 0
-        && $empresaDoUsuario === $empresaDoSite;
+    $empresaDoUsuario =
+        (int) ($_SESSION['company_id'] ?? 0);
 
-    $usuarioDeOutraAcademia = $ehAluno
-        && $empresaDoSite > 0
-        && $empresaDoUsuario !== $empresaDoSite;
+    $papelUsuario =
+        $_SESSION['usuario_role'] ?? '';
 
-    // Gera token apenas quando o aluno pode avaliar
-    // esta academia. A sessão já foi iniciada
-    // por config/sessao.php no começo do index.php.
+    $ehAluno =
+        $usuarioIdFeedback > 0 &&
+        $papelUsuario === 'Aluno';
+
+    $alunoDaAcademia =
+        $ehAluno &&
+        $empresaDoSite > 0 &&
+        $empresaDoUsuario === $empresaDoSite;
+
+    $usuarioDeOutraAcademia =
+        $ehAluno &&
+        $empresaDoSite > 0 &&
+        $empresaDoUsuario !== $empresaDoSite;
+
+    // Gera token somente quando o aluno pode
+    // avaliar a academia exibida.
+
     if ($alunoDaAcademia) {
+
         if (
             empty($_SESSION['feedback_csrf_token']) ||
             !is_string($_SESSION['feedback_csrf_token'])
         ) {
+
             $_SESSION['feedback_csrf_token'] =
                 bin2hex(random_bytes(32));
+
         }
+
     }
 
     $statusFeedback = $_GET['feedback'] ?? '';
@@ -815,6 +1449,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
     $nomeExibicao = trim(
         (string) ($_SESSION['usuario_nome'] ?? '')
     );
+
     ?>
 
     <section id="feedback" class="portfolio-feedback">
@@ -828,19 +1463,23 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                 </span>
 
                 <h2>
+
                     <?= htmlspecialchars(
                         $config['feedback_title'] ?? '',
                         ENT_QUOTES,
                         'UTF-8'
                     ) ?>
+
                 </h2>
 
                 <p>
+
                     <?= nl2br(htmlspecialchars(
                         $config['feedback_subtitle'] ?? '',
                         ENT_QUOTES,
                         'UTF-8'
                     )) ?>
+
                 </p>
 
                 <!-- MENSAGENS DE RETORNO -->
@@ -850,9 +1489,11 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     <div
                         class="feedback-status feedback-status-sucesso"
                         role="status">
+
                         Sua avaliação foi salva com sucesso!
                         Ela está aguardando aprovação para
                         aparecer no site.
+
                     </div>
 
                 <?php elseif ($statusFeedback === 'dados_invalidos'): ?>
@@ -860,8 +1501,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     <div
                         class="feedback-status feedback-status-erro"
                         role="alert">
+
                         Escolha uma nota de 1 a 5 estrelas
                         e escreva um comentário válido.
+
                     </div>
 
                 <?php elseif ($statusFeedback === 'erro'): ?>
@@ -869,8 +1512,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     <div
                         class="feedback-status feedback-status-erro"
                         role="alert">
+
                         Não foi possível salvar sua avaliação.
                         Tente novamente.
+
                     </div>
 
                 <?php endif; ?>
@@ -885,34 +1530,40 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                         action="<?= BASE_URL ?>/app/controllers/FeedbackController.php"
                         id="feedbackFormularioPublico">
 
-                        <!-- Identifica a origem do envio -->
+                        <!-- ORIGEM DO ENVIO -->
+
                         <input
                             type="hidden"
                             name="origem"
                             value="site">
 
-                        <!-- Proteção CSRF -->
+                        <!-- PROTEÇÃO CSRF -->
+
                         <input
                             type="hidden"
                             name="csrf_token"
                             value="<?= htmlspecialchars(
-                                        $_SESSION['feedback_csrf_token'],
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ) ?>">
+                                $_SESSION['feedback_csrf_token'],
+                                ENT_QUOTES,
+                                'UTF-8'
+                            ) ?>">
 
                         <?php if ($nomeExibicao !== ''): ?>
 
                             <div class="feedback-usuario-logado">
+
                                 Avaliando como
 
                                 <strong>
+
                                     <?= htmlspecialchars(
                                         $nomeExibicao,
                                         ENT_QUOTES,
                                         'UTF-8'
                                     ) ?>
+
                                 </strong>
+
                             </div>
 
                         <?php endif; ?>
@@ -924,7 +1575,9 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             <span
                                 class="feedback-avaliacao-label"
                                 id="feedbackRotuloNota">
+
                                 Sua avaliação
+
                             </span>
 
                             <div
@@ -940,7 +1593,9 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                         data-nota="<?= $estrela ?>"
                                         aria-label="<?= $estrela ?> estrela<?= $estrela > 1 ? 's' : '' ?>"
                                         aria-pressed="false">
+
                                         ☆
+
                                     </button>
 
                                 <?php endfor; ?>
@@ -979,25 +1634,29 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             type="submit"
                             class="feedback-btn"
                             id="feedbackBotaoEnviar">
+
                             Enviar avaliação
+
                         </button>
 
                         <p
                             style="
-                            margin-top: 12px;
-                            font-size: 12px;
-                            opacity: 0.8;
-                            line-height: 1.6;
-                        ">
+                                margin-top: 12px;
+                                font-size: 12px;
+                                opacity: 0.8;
+                                line-height: 1.6;
+                            ">
+
                             Seu comentário será analisado
                             antes de aparecer no site.
                             Se você já avaliou, este envio
                             atualizará sua avaliação anterior.
+
                         </p>
 
                     </form>
 
-                    <!-- ALUNO DE OUTRA ACADEMIA -->
+                <!-- ALUNO DE OUTRA ACADEMIA -->
 
                 <?php elseif ($usuarioDeOutraAcademia): ?>
 
@@ -1015,7 +1674,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     </div>
 
-                    <!-- USUÁRIO LOGADO, MAS NÃO ALUNO -->
+                <!-- USUÁRIO LOGADO, MAS NÃO ALUNO -->
 
                 <?php elseif ($usuarioIdFeedback > 0): ?>
 
@@ -1032,7 +1691,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     </div>
 
-                    <!-- VISITANTE -->
+                <!-- VISITANTE -->
 
                 <?php else: ?>
 
@@ -1051,12 +1710,14 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             href="<?= BASE_URL ?>/app/controllers/LoginController.php?acao=login&amp;destino=avaliacao"
                             class="feedback-btn"
                             style="
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            text-decoration: none;
-                        ">
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                text-decoration: none;
+                            ">
+
                             Entrar para avaliar
+
                         </a>
 
                     </div>
@@ -1073,10 +1734,10 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                     <img
                         src="<?= htmlspecialchars(
-                                    $config['feedback_image'],
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>"
+                            $config['feedback_image'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
                         alt="Experiência na academia"
                         class="feedback-imagem">
 
@@ -1092,9 +1753,9 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
         </div>
 
-        <!-- ========================================
-         AVALIAÇÕES PUBLICADAS
-         ======================================== -->
+        <!-- ==========================================
+             AVALIAÇÕES PUBLICADAS
+        =========================================== -->
 
         <div class="feedback-recentes">
 
@@ -1123,6 +1784,7 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     <?php foreach ($feedbacks as $feedback): ?>
 
                         <?php
+
                         $nomeFeedback = trim(
                             (string) ($feedback['nome'] ?? 'Aluno')
                         );
@@ -1136,13 +1798,16 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                         );
 
                         $dataFeedback = !empty($feedback['criado_em'])
+
                             ? date(
                                 'd/m/Y',
                                 strtotime($feedback['criado_em'])
                             )
+
                             : '';
 
                         $inicialFeedback = function_exists('mb_substr')
+
                             ? mb_strtoupper(
                                 mb_substr(
                                     $nomeFeedback,
@@ -1152,9 +1817,11 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                                 ),
                                 'UTF-8'
                             )
+
                             : strtoupper(
                                 substr($nomeFeedback, 0, 1)
                             );
+
                         ?>
 
                         <article class="feedback-card">
@@ -1162,31 +1829,37 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             <div class="feedback-autor">
 
                                 <div class="feedback-avatar">
+
                                     <?= htmlspecialchars(
                                         $inicialFeedback,
                                         ENT_QUOTES,
                                         'UTF-8'
                                     ) ?>
+
                                 </div>
 
                                 <div class="feedback-autor-info">
 
                                     <strong>
+
                                         <?= htmlspecialchars(
                                             $nomeFeedback,
                                             ENT_QUOTES,
                                             'UTF-8'
                                         ) ?>
+
                                     </strong>
 
                                     <?php if ($dataFeedback !== ''): ?>
 
                                         <span>
+
                                             <?= htmlspecialchars(
                                                 $dataFeedback,
                                                 ENT_QUOTES,
                                                 'UTF-8'
                                             ) ?>
+
                                         </span>
 
                                     <?php endif; ?>
@@ -1203,9 +1876,11 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
                                     <span
                                         class="<?= $estrela <= $notaFeedback
-                                                    ? 'ativa'
-                                                    : '' ?>">
+                                            ? 'ativa'
+                                            : '' ?>">
+
                                         ★
+
                                     </span>
 
                                 <?php endfor; ?>
@@ -1213,11 +1888,13 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                             </div>
 
                             <p>
+
                                 <?= nl2br(htmlspecialchars(
                                     $feedback['mensagem'] ?? '',
                                     ENT_QUOTES,
                                     'UTF-8'
                                 )) ?>
+
                             </p>
 
                         </article>
@@ -1232,21 +1909,28 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
     </section>
 
-
 </main>
 
-<script>
-    window.GYMFLOW_UNIDADES = <?= json_encode(
-                                    $filiais ?? [],
-                                    JSON_UNESCAPED_UNICODE |
-                                        JSON_UNESCAPED_SLASHES |
-                                        JSON_HEX_TAG |
-                                        JSON_HEX_AMP |
-                                        JSON_HEX_APOS |
-                                        JSON_HEX_QUOT
-                                ) ?>;
-</script>
-<script src="<?= BASE_URL ?>/assets/js/portfolio.js?v=1"></script>
+<!-- ==========================================
+     DADOS DAS UNIDADES PARA O MAPA
+=========================================== -->
 
+<script>
+
+    window.GYMFLOW_UNIDADES = <?= json_encode(
+        $filiais ?? [],
+        JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES |
+        JSON_HEX_TAG |
+        JSON_HEX_AMP |
+        JSON_HEX_APOS |
+        JSON_HEX_QUOT
+    ) ?>;
+
+</script>
+
+<!-- JAVASCRIPT DO PORTFÓLIO -->
+
+<script src="<?= BASE_URL ?>/assets/js/portfolio.js?v=1"></script>
 
 <?php include __DIR__ . '/app/views/shared/portfolio_footer.php'; ?>
