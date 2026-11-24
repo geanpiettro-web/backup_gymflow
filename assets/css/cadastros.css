@@ -1,11 +1,11 @@
-﻿/* ========================================
+/* ==========================================
    GYMFLOW - CADASTROS
    PADRONIZAÇÃO VISUAL
-   ======================================== */
+========================================== */
 
-/* ========================================
+/* ==========================================
    PÁGINA DE FILIAIS
-   ======================================== */
+========================================== */
 
 .filiais-page {
     --cad-texto: var(--ui-texto, #111827);
@@ -17,7 +17,6 @@
     width: 100%;
     min-width: 0;
     min-height: calc(100vh - 52px);
-
     padding: 30px 32px 45px;
 
     background: var(--cad-fundo);
@@ -28,9 +27,10 @@
     box-sizing: border-box;
 }
 
-/* ========================================
+
+/* ==========================================
    CABEÇALHO
-   ======================================== */
+========================================== */
 
 .filiais-page .filiais-topo {
     display: flex;
@@ -39,7 +39,6 @@
     flex-wrap: wrap;
 
     gap: 20px;
-
     margin-bottom: 28px;
     padding-bottom: 20px;
 
@@ -48,9 +47,7 @@
 
 .filiais-page .filiais-titulo h1 {
     margin: 0 0 7px;
-
     color: var(--cad-texto);
-
     font-size: 28px;
     font-weight: 700;
     line-height: 1.2;
@@ -58,22 +55,20 @@
 
 .filiais-page .filiais-titulo p {
     margin: 0;
-
     color: var(--cad-suave);
-
     font-size: 14px;
     line-height: 1.5;
 }
 
-/* ========================================
+
+/* ==========================================
    FILTROS E AÇÕES
-   ======================================== */
+========================================== */
 
 .filiais-page .filiais-acoes {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-
     gap: 10px;
 }
 
@@ -84,7 +79,6 @@
 .filiais-page .filiais-acoes select {
     width: 200px;
     height: 42px;
-
     padding: 0 12px;
 
     background: var(--cad-card);
@@ -110,9 +104,10 @@
     outline-offset: 1px;
 }
 
-/* ========================================
+
+/* ==========================================
    BOTÃO CRIAR FILIAL
-   ======================================== */
+========================================== */
 
 .filiais-page .btn-criar-filial {
     display: inline-flex;
@@ -147,23 +142,22 @@
     transform: translateY(-1px);
 }
 
-/* ========================================
+
+/* ==========================================
    GRID DE CARDS
-   ======================================== */
+========================================== */
 
 .filiais-page .cards-container {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     width: 100%;
 }
 
-/* ========================================
+
+/* ==========================================
    CARD DA FILIAL
-   ======================================== */
+========================================== */
 
 .filiais-page .card-filial {
     display: flex;
@@ -177,8 +171,10 @@
     border: 1px solid var(--cad-borda);
     border-radius: var(--ui-raio-lg, 12px);
 
-    box-shadow: var(--ui-sombra-card,
-            0 1px 2px rgba(15, 23, 42, 0.03));
+    box-shadow: var(
+        --ui-sombra-card,
+        0 1px 2px rgba(15, 23, 42, 0.03)
+    );
 
     transition:
         transform 0.2s ease,
@@ -188,16 +184,18 @@
 
 .filiais-page .card-filial:hover {
     transform: translateY(-2px);
-
     border-color: #cbd5e1;
 
-    box-shadow: var(--ui-sombra-hover,
-            0 5px 14px rgba(15, 23, 42, 0.06));
+    box-shadow: var(
+        --ui-sombra-hover,
+        0 5px 14px rgba(15, 23, 42, 0.06)
+    );
 }
 
-/* ========================================
+
+/* ==========================================
    CABEÇALHO DO CARD
-   ======================================== */
+========================================== */
 
 .filiais-page .card-header {
     display: flex;
@@ -210,7 +208,6 @@
 
 .filiais-page .card-header h2 {
     margin: 0;
-
     color: var(--cad-texto);
 
     font-size: 18px;
@@ -220,9 +217,10 @@
     overflow-wrap: anywhere;
 }
 
-/* ========================================
-   BADGES DE STATUS
-   ======================================== */
+
+/* ==========================================
+   STATUS
+========================================== */
 
 .filiais-page .badge {
     display: inline-flex;
@@ -230,7 +228,6 @@
     justify-content: center;
 
     flex-shrink: 0;
-
     padding: 5px 10px;
 
     border-radius: 999px;
@@ -250,9 +247,10 @@
     color: #64748b;
 }
 
-/* ========================================
+
+/* ==========================================
    INFORMAÇÕES DA FILIAL
-   ======================================== */
+========================================== */
 
 .filiais-page .card-body {
     flex: 1;
@@ -261,7 +259,6 @@
 
 .filiais-page .card-body p {
     margin: 0 0 12px;
-
     color: var(--cad-texto);
 
     font-size: 14px;
@@ -278,16 +275,14 @@
     color: var(--cad-suave);
 }
 
-/* ========================================
+
+/* ==========================================
    BOTÕES DOS CARDS
-   ======================================== */
+========================================== */
 
 .filiais-page .card-footer {
     display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 9px;
 }
 
@@ -299,7 +294,6 @@
 
     min-height: 40px;
     min-width: 0;
-
     padding: 9px 12px;
 
     border-radius: var(--ui-raio-sm, 6px);
@@ -324,7 +318,6 @@
 .filiais-page .btn-editar {
     background: #ffffff;
     color: var(--cad-texto);
-
     border: 1px solid var(--cad-borda);
 }
 
@@ -339,7 +332,6 @@
 .filiais-page .btn-inativar {
     background: var(--cor-perigo, #ef4444);
     color: #ffffff;
-
     border: 1px solid transparent;
 }
 
@@ -353,7 +345,6 @@
 .filiais-page .btn-ativar {
     background: var(--cor-primaria, #10b981);
     color: #ffffff;
-
     border: 1px solid transparent;
 }
 
@@ -379,36 +370,37 @@
     border-color: #cbd5e1;
 }
 
-/* ========================================
+
+/* ==========================================
    ESTADO VAZIO
-   ======================================== */
+========================================== */
 
 .filiais-page .filiais-vazio {
     grid-column: 1 / -1;
-
     padding: 40px 24px;
 
     background: var(--cad-card);
+    color: var(--cad-suave);
 
     border: 1px solid var(--cad-borda);
     border-radius: var(--ui-raio-lg, 12px);
 
-    color: var(--cad-suave);
-
     font-size: 14px;
     text-align: center;
 
-    box-shadow: var(--ui-sombra-card,
-            0 1px 2px rgba(15, 23, 42, 0.03));
+    box-shadow: var(
+        --ui-sombra-card,
+        0 1px 2px rgba(15, 23, 42, 0.03)
+    );
 }
 
-/* ========================================
+
+/* ==========================================
    MENSAGEM DE SUCESSO
-   ======================================== */
+========================================== */
 
 .mensagem-sucesso {
     position: fixed;
-
     top: 38px;
     right: 30px;
 
@@ -419,15 +411,13 @@
 
     width: min(445px, calc(100vw - 32px));
     min-height: 62px;
-
     padding: 12px 18px;
 
     background: #ecfdf5;
+    color: #047857;
 
     border: 1px solid #a7f3d0;
     border-radius: var(--ui-raio-md, 10px);
-
-    color: #047857;
 
     font-size: 14px;
     font-weight: 600;
@@ -435,8 +425,8 @@
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
 
     z-index: 9999;
-
     opacity: 1;
+
     transition: opacity 0.3s ease;
 }
 
@@ -460,9 +450,10 @@
     line-height: 1;
 }
 
-/* ========================================
+
+/* ==========================================
    MODAL - EDITAR FILIAL
-   ======================================== */
+========================================== */
 
 .modal-overlay {
     position: fixed;
@@ -496,9 +487,10 @@
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.20);
 }
 
-/* ========================================
+
+/* ==========================================
    CABEÇALHO DO MODAL
-   ======================================== */
+========================================== */
 
 .modal-editar-header {
     display: flex;
@@ -511,7 +503,6 @@
 
 .modal-editar-header h2 {
     margin: 0;
-
     color: var(--ui-texto, #111827);
 
     font-size: 22px;
@@ -527,7 +518,6 @@
 
     width: 32px;
     height: 32px;
-
     padding: 0;
 
     color: #64748b;
@@ -553,9 +543,10 @@
     color: #111827;
 }
 
-/* ========================================
+
+/* ==========================================
    FORMULÁRIO DE EDIÇÃO
-   ======================================== */
+========================================== */
 
 .form-editar-filial {
     width: 100%;
@@ -567,7 +558,6 @@
 
 .campo-editar-filial label {
     display: block;
-
     margin-bottom: 7px;
 
     color: var(--ui-texto, #111827);
@@ -579,7 +569,6 @@
 .campo-editar-filial input {
     width: 100%;
     min-height: 42px;
-
     padding: 10px 12px;
 
     background: #ffffff;
@@ -604,30 +593,30 @@
     outline-offset: 1px;
 }
 
-/* ========================================
+
+/* ==========================================
    MENSAGEM DE ERRO
-   ======================================== */
+========================================== */
 
 .mensagem-erro-filial {
     margin-bottom: 20px;
-
     padding: 12px 14px;
 
     background: #fef2f2;
+    color: #b91c1c;
 
     border: 1px solid #fecaca;
     border-radius: var(--ui-raio-sm, 6px);
-
-    color: #b91c1c;
 
     font-size: 13px;
     font-weight: 600;
     line-height: 1.5;
 }
 
-/* ========================================
+
+/* ==========================================
    AÇÕES DO MODAL
-   ======================================== */
+========================================== */
 
 .modal-editar-acoes {
     display: flex;
@@ -645,7 +634,6 @@
     justify-content: center;
 
     min-height: 42px;
-
     padding: 10px 18px;
 
     border-radius: var(--ui-raio-sm, 6px);
@@ -688,16 +676,17 @@
     transform: translateY(-1px);
 }
 
-/* ========================================
+
+/* ==========================================
    RESPONSIVIDADE
-   ======================================== */
+========================================== */
 
 @media (max-width: 1100px) {
 
     .filiais-page .cards-container {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
 }
 
 @media (max-width: 768px) {
@@ -714,7 +703,6 @@
     .filiais-page .filiais-acoes {
         flex-direction: column;
         align-items: stretch;
-
         width: 100%;
     }
 
@@ -747,9 +735,9 @@
     .mensagem-sucesso {
         top: 16px;
         right: 16px;
-
         font-size: 13px;
     }
+
 }
 
 @media (max-width: 700px) {
@@ -771,7 +759,13 @@
     .btn-salvar-editar {
         width: 100%;
     }
+
 }
+
+
+/* ==========================================
+   ACESSIBILIDADE
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -787,4 +781,67 @@
     .btn-salvar-editar:hover {
         transform: none;
     }
+
+}
+
+
+/* ==========================================
+   COMPATIBILIDADE COM O TEMA ESCURO
+========================================== */
+
+/* Bordas dos cards */
+
+:root[data-theme="dark"] .filiais-page .card-filial:hover {
+    border-color: var(--cor-borda-forte);
+}
+
+/* Botões secundários */
+
+:root[data-theme="dark"] .filiais-page .btn-editar,
+:root[data-theme="dark"] .filiais-page .btn-historico,
+:root[data-theme="dark"] .btn-cancelar-editar {
+    background-color: var(--ui-fundo-card);
+    color: var(--ui-texto);
+    border-color: var(--ui-borda);
+}
+
+:root[data-theme="dark"] .filiais-page .btn-editar:hover,
+:root[data-theme="dark"] .filiais-page .btn-historico:hover,
+:root[data-theme="dark"] .btn-cancelar-editar:hover {
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--ui-texto);
+    border-color: var(--cor-borda-forte);
+}
+
+/* Modal */
+
+:root[data-theme="dark"] .modal-editar-filial {
+    background-color: var(--ui-fundo-card);
+    color: var(--ui-texto);
+}
+
+/* Formulários */
+
+:root[data-theme="dark"] .campo-editar-filial input {
+    background-color: var(--ui-input-fundo);
+    color: var(--ui-input-texto);
+    border-color: var(--ui-input-borda);
+}
+
+/* Fechar modal */
+
+:root[data-theme="dark"] .modal-fechar {
+    color: var(--ui-texto-suave);
+}
+
+:root[data-theme="dark"] .modal-fechar:hover {
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--ui-texto);
+}
+
+/* Status inativo */
+
+:root[data-theme="dark"] .filiais-page .badge.inativa {
+    background-color: var(--cor-superficie-secundaria);
+    color: var(--ui-texto-suave);
 }

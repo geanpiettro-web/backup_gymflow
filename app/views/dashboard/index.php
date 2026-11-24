@@ -66,14 +66,19 @@ include __DIR__ . '/../shared/sidebar.php';
 
         <div class="dashboard-data">
             <span>Atualizado em</span>
-            <strong><?= date('d/m/Y') ?></strong>
+
+            <strong>
+                <?= date('d/m/Y') ?>
+            </strong>
         </div>
 
     </header>
 
     <!-- CARDS -->
-    <section class="dashboard-indicadores"
-        aria-label="Indicadores principais">
+    <section
+        class="dashboard-indicadores"
+        aria-label="Indicadores principais"
+    >
 
         <?php foreach ($cards ?? [] as $indice => $card): ?>
 
@@ -87,11 +92,6 @@ include __DIR__ . '/../shared/sidebar.php';
                             ENT_QUOTES,
                             'UTF-8'
                         ) ?>
-                    </span>
-
-                    <span class="dashboard-indicador-icone"
-                        aria-hidden="true">
-                        <?= ['↗', '▤', '◈', '%'][$indice % 4] ?>
                     </span>
 
                 </div>
@@ -128,7 +128,9 @@ include __DIR__ . '/../shared/sidebar.php';
                     ACOMPANHAMENTO
                 </span>
 
-                <h2>Crescimento de alunos</h2>
+                <h2>
+                    Crescimento de alunos
+                </h2>
 
                 <p>
                     Novos alunos cadastrados ao longo
@@ -137,7 +139,10 @@ include __DIR__ . '/../shared/sidebar.php';
             </div>
 
             <div class="dashboard-grafico-total">
-                <span>Total no ano</span>
+
+                <span>
+                    Total no ano
+                </span>
 
                 <strong>
                     <?= number_format(
@@ -148,7 +153,10 @@ include __DIR__ . '/../shared/sidebar.php';
                     ) ?>
                 </strong>
 
-                <small>novos cadastros</small>
+                <small>
+                    novos cadastros
+                </small>
+
             </div>
 
         </div>
@@ -178,9 +186,18 @@ include __DIR__ . '/../shared/sidebar.php';
         }
 
         const meses = [
-            'Jan', 'Fev', 'Mar', 'Abr',
-            'Mai', 'Jun', 'Jul', 'Ago',
-            'Set', 'Out', 'Nov', 'Dez'
+            'Jan',
+            'Fev',
+            'Mar',
+            'Abr',
+            'Mai',
+            'Jun',
+            'Jul',
+            'Ago',
+            'Set',
+            'Out',
+            'Nov',
+            'Dez'
         ];
 
         const valores = <?= json_encode(
@@ -194,57 +211,88 @@ include __DIR__ . '/../shared/sidebar.php';
             document.documentElement
         ).getPropertyValue('--cor-primaria').trim() || '#10b981';
 
-
         const gradiente = contexto.createLinearGradient(
-            0, 0, 0, 340
+            0,
+            0,
+            0,
+            340
         );
 
-        gradiente.addColorStop(0, corPrimaria + '38');
-        gradiente.addColorStop(1, corPrimaria + '00');
+        gradiente.addColorStop(
+            0,
+            corPrimaria + '38'
+        );
 
+        gradiente.addColorStop(
+            1,
+            corPrimaria + '00'
+        );
 
         new Chart(contexto, {
+
             type: 'line',
 
             data: {
+
                 labels: meses,
 
                 datasets: [{
                     label: 'Novos alunos',
+
                     data: valores,
+
                     borderColor: corPrimaria,
+
                     backgroundColor: gradiente,
+
                     fill: true,
+
                     borderWidth: 3,
+
                     tension: 0.35,
+
                     pointRadius: 4,
+
                     pointHoverRadius: 7,
+
                     pointBackgroundColor: '#ffffff',
+
                     pointBorderColor: corPrimaria,
+
                     pointBorderWidth: 2
                 }]
             },
 
             options: {
+
                 responsive: true,
+
                 maintainAspectRatio: false,
 
                 plugins: {
+
                     legend: {
                         display: false
                     },
 
                     tooltip: {
+
                         backgroundColor: '#181818',
+
                         titleColor: '#ffffff',
+
                         bodyColor: '#ffffff',
+
                         padding: 14,
+
                         cornerRadius: 10
                     }
                 },
 
                 scales: {
+
                     x: {
+
                         grid: {
                             display: false
                         },
@@ -255,10 +303,13 @@ include __DIR__ . '/../shared/sidebar.php';
                     },
 
                     y: {
+
                         beginAtZero: true,
 
                         ticks: {
+
                             precision: 0,
+
                             color: '#858585'
                         },
 

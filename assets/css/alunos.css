@@ -1,0 +1,249 @@
+/* ==========================================
+   GYMFLOW - MÓDULO DE ALUNOS
+   Arquivo: aluno.css
+========================================== */
+
+
+/* ==========================================
+   LISTAGEM DE ALUNOS - INDEX
+========================================== */
+
+/* Títulos das colunas */
+
+.alunos-page .titulo-coluna {
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+
+
+/* Filtros de busca */
+
+.alunos-page .alunos-filtros-card {
+    margin-bottom: 24px;
+}
+
+.alunos-page .alunos-filtros {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    padding: 20px;
+}
+
+.alunos-page .alunos-filtro-campo {
+    flex: 1;
+}
+
+
+/* Tabela de alunos */
+
+.alunos-page .alunos-coluna-acoes {
+    text-align: right;
+}
+
+.alunos-page .fin-table td.alunos-vazio {
+    text-align: center;
+    padding: 32px;
+    color: var(--fin-text-muted);
+}
+
+
+/* Ícones de ações */
+
+.alunos-page .icones-acoes {
+    display: inline-flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.alunos-page .icone {
+    display: flex;
+    color: #64748b;
+    transition: 0.2s;
+}
+
+.alunos-page .icone:hover {
+    color: #3b82f6;
+}
+
+
+/* WhatsApp */
+
+.alunos-page .icone-whats {
+    color: #22c55e;
+}
+
+.alunos-page .icone-whats:hover {
+    color: #22c55e;
+    opacity: 0.7;
+}
+
+
+/* Editar */
+
+.alunos-page .icone-editar {
+    color: #475569;
+}
+
+.alunos-page .icone-editar:hover {
+    color: #f59e0b;
+}
+
+
+/* Status dos alunos na listagem */
+
+.alunos-page .fin-table td.status-ativo {
+    color: #16a34a;
+}
+
+.alunos-page .fin-table td.status-inativo {
+    color: #94a3b8;
+}
+
+
+/* ==========================================
+   VISUALIZAÇÃO DO ALUNO
+========================================== */
+
+/* Títulos das seções */
+
+.aluno-visualizar-page .titulo-secao {
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    margin: 0;
+    color: #1e293b;
+}
+
+
+/* Espaçamento entre as seções */
+
+.aluno-visualizar-page .aluno-secao {
+    margin-bottom: 24px;
+}
+
+.aluno-visualizar-page .aluno-secao-conteudo {
+    padding: 20px;
+}
+
+
+/* ==========================================
+   MENSAGENS DE ERRO E SUCESSO
+========================================== */
+
+.aluno-visualizar-page .mensagem {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    font-weight: bold;
+}
+
+.aluno-visualizar-page .mensagem-erro {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.aluno-visualizar-page .mensagem-sucesso {
+    background-color: #dcfce3;
+    color: #15803d;
+}
+
+
+/* ==========================================
+   DADOS CADASTRAIS
+========================================== */
+
+.aluno-visualizar-page .aluno-dados-grid {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+
+/* Status cadastral */
+
+.aluno-visualizar-page .aluno-status {
+    font: inherit;
+    display: inline;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.aluno-visualizar-page .aluno-status.status-ativo {
+    color: #16a34a;
+}
+
+.aluno-visualizar-page .aluno-status.status-inativo {
+    color: #94a3b8;
+}
+
+
+/* ==========================================
+   MATRÍCULA
+========================================== */
+
+/* Dados da matrícula existente */
+
+.aluno-visualizar-page .aluno-matricula-dados {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+
+/* Mensagem de aluno sem matrícula */
+
+.aluno-visualizar-page .aluno-sem-matricula {
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+
+/* Formulário de matrícula */
+
+.aluno-visualizar-page .aluno-matricula-form {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    padding: 16px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+}
+
+.aluno-visualizar-page .aluno-matricula-plano {
+    flex: 2;
+}
+
+.aluno-visualizar-page .aluno-matricula-campo {
+    flex: 1;
+}
+
+
+/* ==========================================
+   MENSALIDADES
+========================================== */
+
+/* Status pago */
+
+.aluno-visualizar-page .fin-table td.status-pago {
+    color: #16a34a;
+}
+
+
+/* Status não pago */
+
+.aluno-visualizar-page .fin-table td.status-nao-pago {
+    color: #dc2626;
+}
+
+
+/* Nenhuma mensalidade encontrada */
+
+.aluno-visualizar-page .fin-table td.aluno-mensalidades-vazio {
+    text-align: center;
+    color: #64748b;
+}

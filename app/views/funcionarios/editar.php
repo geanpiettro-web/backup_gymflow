@@ -79,8 +79,8 @@ include __DIR__ . '/../shared/sidebar.php';
                     <label>CEP</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="text" id="cep" class="fin-input" maxlength="9" placeholder="00000-000">
-                        <button type="button" class="fin-btn fin-btn-secondary" onclick="buscarCep()" style="padding: 8px 12px;">🔎</button>
-                    </div>
+                      <button type="button" class="fin-btn fin-btn-secondary" onclick="buscarCep()" style="padding: 8px 12px; color: #ffffff;">Buscar</button>
+  </div>
                 </div>
                 <div class="fin-form-group">
                     <label>Endereço Completo (Rua, Número, Bairro, Cidade - UF)</label>

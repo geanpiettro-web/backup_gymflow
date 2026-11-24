@@ -1,14 +1,24 @@
-﻿/* =========================================
-   GYMFLOW | MINHA MARCA
-   Integração com o Design System Global
-   ========================================= */
+﻿/* ==========================================
+   GYMFLOW - MINHA MARCA
+========================================== */
 
-/* ESTRUTURA DA PÁGINA */
+/* ==========================================
+   ESTRUTURA DA PÁGINA
+========================================== */
 
 .minha-marca-page {
-    min-height: calc(100vh - var(--layout-header-altura));
-    background: var(--ui-fundo-pagina);
-    color: var(--ui-texto);
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: calc(100vh - var(--layout-header-altura, 64px));
+    padding: 30px 32px 45px;
+
+    background-color: var(--ui-fundo-pagina, #f8fafc);
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
 }
 
 .minha-marca-page *,
@@ -17,462 +27,883 @@
     box-sizing: border-box;
 }
 
+.minha-marca-page [hidden] {
+    display: none !important;
+}
+
+
+/* ==========================================
+   CABEÇALHO DA PÁGINA
+========================================== */
+
 .minha-marca-page .mm-topo {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 16px;
+
     margin-bottom: 28px;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--ui-borda, #e2e8f0);
 }
 
-.minha-marca-page .mm-kicker {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--cor-texto-secundario);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-}
+.minha-marca-page .mm-topo h1 {
+    margin: 0 0 7px;
 
-.minha-marca-page .mm-topo h2 {
-    margin: 0 0 6px;
-    color: var(--ui-texto);
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
     font-size: 28px;
     font-weight: 700;
+    line-height: 1.2;
+
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 .minha-marca-page .mm-topo p {
     margin: 0;
-    color: var(--ui-texto-suave);
+    color: var(--ui-texto-suave, #64748b);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
-.minha-marca-page .mm-tag {
-    padding: 8px 12px;
-    border-radius: var(--ui-raio-md);
-    background: var(--cor-primaria-suave);
-    color: var(--ui-texto);
-    font-size: 12px;
-    font-weight: 600;
-}
 
-/* GRID */
+/* ==========================================
+   DISTRIBUIÇÃO DAS COLUNAS
+========================================== */
 
 .minha-marca-page .mm-grid {
     display: grid;
+
     grid-template-columns:
-        minmax(0, 1.1fr) minmax(0, .9fr);
-    gap: 24px;
+        minmax(0, 1.1fr)
+        minmax(0, 0.9fr);
+
     align-items: start;
+    gap: 24px;
 }
 
-.minha-marca-page .mm-form,
+.minha-marca-page .mm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
 .minha-marca-page .mm-lateral {
+    position: sticky;
+    top: 20px;
     min-width: 0;
 }
 
-/* CARDS */
+
+/* ==========================================
+   CARDS
+========================================== */
 
 .minha-marca-page .mm-card {
+    min-width: 0;
+    margin: 0;
     padding: 24px;
-    margin-bottom: 18px;
-    background: var(--ui-fundo-card);
-    color: var(--ui-texto);
-    border: 1px solid var(--ui-borda);
-    border-radius: var(--ui-raio-xl);
-    box-shadow: var(--ui-sombra-card);
-    transition: box-shadow var(--ui-transicao);
+
+    background-color: var(--ui-fundo-card, #ffffff);
+    color: var(--ui-texto, #111827);
+
+    border: 1px solid var(--ui-borda, #e2e8f0);
+    border-radius: var(--ui-raio-md, 10px);
+
+    box-shadow: var(
+        --ui-sombra-card,
+        0 1px 3px rgba(15, 23, 42, 0.04)
+    );
 }
 
 .minha-marca-page .mm-card-top {
     display: flex;
-    align-items: flex-start;
-    gap: 13px;
-    margin-bottom: 22px;
-}
-
-.minha-marca-page .mm-numero {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 35px;
-    height: 35px;
-    background: var(--cor-primaria-suave);
-    color: var(--ui-texto);
-    border-radius: var(--ui-raio-md);
-    font-size: 12px;
-    font-weight: 700;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .minha-marca-page .mm-card h3 {
-    margin: 0 0 5px;
+    margin: 0;
     padding: 0;
     border: 0;
-    color: var(--ui-texto);
-    font-size: 17px;
+
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
+    font-size: 18px;
     font-weight: 700;
+    line-height: 1.4;
+
+    letter-spacing: normal;
+    text-transform: none;
 }
 
-.minha-marca-page .mm-card p {
-    margin: 0;
-    color: var(--ui-texto-suave);
-    font-size: 13px;
-    line-height: 1.55;
-}
 
-/* FORMULÁRIOS */
+/* ==========================================
+   CAMPOS DO FORMULÁRIO
+========================================== */
 
 .minha-marca-page .mm-card label:not(.mm-opcao) {
     display: block;
-    margin-bottom: 9px;
-    color: var(--ui-texto);
+    margin-bottom: 8px;
+
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
     font-size: 13px;
     font-weight: 600;
+    line-height: 1.5;
+
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 .minha-marca-page input[type="text"],
 .minha-marca-page select {
     display: block;
+    box-sizing: border-box;
+
     width: 100%;
+    min-width: 0;
     min-height: 44px;
-    padding: 10px 13px;
-    background: var(--ui-input-fundo);
-    color: var(--ui-input-texto);
-    border: 1px solid var(--ui-input-borda);
-    border-radius: var(--ui-raio-md);
-    font: inherit;
+
+    margin: 0;
+    padding: 10px 14px;
+
+    background-color: var(--ui-input-fundo, #ffffff);
+    color: var(--ui-input-texto, #111827);
+
+    border: 1px solid var(--ui-input-borda, #e2e8f0);
+    border-radius: var(--ui-raio-sm, 6px);
+
+    font-family: inherit;
     font-size: 14px;
-    transition: border-color var(--ui-transicao);
+    font-weight: 400;
+    line-height: 1.5;
+
+    transition: border-color 0.2s ease;
+}
+
+.minha-marca-page select {
+    cursor: pointer;
+}
+
+.minha-marca-page input[type="text"]::placeholder {
+    color: var(--ui-texto-suave, #64748b);
 }
 
 .minha-marca-page input:focus-visible,
 .minha-marca-page select:focus-visible,
 .minha-marca-page button:focus-visible {
-    outline: 2px solid var(--ui-input-foco);
-    outline-offset: 3px;
+    outline: 2px solid var(
+        --ui-input-foco,
+        var(--cor-primaria, #ffb000)
+    );
+
+    outline-offset: 2px;
 }
 
-.minha-marca-page .mm-ajuda {
-    display: block;
-    margin-top: 9px;
-    color: var(--ui-texto-suave);
-    font-size: 12px;
-}
 
-/* SELEÇÃO DE APARÊNCIA */
+/* ==========================================
+   SELEÇÃO DE APARÊNCIA
+========================================== */
 
 .minha-marca-page .mm-temas {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 14px;
 }
 
 .minha-marca-page .mm-opcao {
+    position: relative;
+
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    position: relative;
-    padding: 13px;
-    background: var(--ui-fundo-card);
-    color: var(--ui-texto);
-    border: 1px solid var(--ui-borda);
-    border-radius: var(--ui-raio-md);
+    gap: 10px;
+
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+
+    background-color: var(--ui-fundo-card, #ffffff);
+    color: var(--ui-texto, #111827);
+
+    border: 1px solid var(--ui-borda, #e2e8f0);
+    border-radius: var(--ui-raio-md, 10px);
+
+    font-family: inherit;
+
     cursor: pointer;
-    transition: border-color var(--ui-transicao);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.minha-marca-page .mm-opcao:hover {
+    border-color: var(--cor-primaria, #ffb000);
 }
 
 .minha-marca-page .mm-opcao:has(input:checked) {
-    border-color: var(--cor-primaria);
-    box-shadow: inset 0 0 0 1px var(--cor-primaria);
+    border-color: var(--cor-primaria, #ffb000);
+
+    box-shadow: inset 0 0 0 1px
+        var(--cor-primaria, #ffb000);
 }
 
 .minha-marca-page .mm-opcao input {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    accent-color: var(--cor-primaria);
+    top: 19px;
+    right: 19px;
+
+    width: 14px;
+    height: 14px;
+    margin: 0;
+
+    accent-color: var(--cor-primaria, #ffb000);
+
+    cursor: pointer;
 }
 
 .minha-marca-page .mm-opcao-cor {
+    display: block;
     width: 100%;
-    height: 48px;
-    border-radius: var(--ui-raio-sm);
-    border: 1px solid var(--ui-borda);
+    height: 50px;
+
+    border: 1px solid #dbe1e8;
+    border-radius: var(--ui-raio-sm, 6px);
 }
 
-/* Amostras visuais dos dois temas */
+
+/* Amostra do tema claro */
 
 .minha-marca-page .mm-claro {
-    background: linear-gradient(135deg,
-            #f8fafc 50%,
-            #e2e8f0 50%);
+    background: linear-gradient(
+        90deg,
+        #e2e8f0 30%,
+        #f8fafc 30%
+    );
 }
 
+
+/* Amostra do tema escuro */
+
 .minha-marca-page .mm-escuro {
-    background: linear-gradient(135deg,
-            #111827 50%,
-            #293241 50%);
+    background: linear-gradient(
+        90deg,
+        #111827 30%,
+        #293241 30%
+    );
+
+    border-color: #334155;
 }
 
 .minha-marca-page .mm-opcao strong {
-    font-size: 13px;
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+
+    letter-spacing: normal;
 }
 
-.minha-marca-page .mm-opcao small {
-    color: var(--ui-texto-suave);
-    font-size: 11px;
-}
 
-/* SELETORES DE COR */
+/* ==========================================
+   PALETA DE CORES
+========================================== */
 
 .minha-marca-page .mm-cores {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px;
-    margin-top: 20px;
+
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.minha-marca-page .mm-cores > div {
+    min-width: 0;
 }
 
 .minha-marca-page .mm-cor-input {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+
     min-width: 0;
-    padding: 7px;
-    border: 1px solid var(--ui-input-borda);
-    border-radius: var(--ui-raio-md);
-    background: var(--ui-input-fundo);
+    min-height: 46px;
+
+    padding: 7px 10px;
+
+    background-color: var(--ui-input-fundo, #ffffff);
+
+    border: 1px solid var(--ui-input-borda, #e2e8f0);
+    border-radius: var(--ui-raio-sm, 6px);
 }
 
 .minha-marca-page input[type="color"] {
-    width: 40px;
-    height: 36px;
+    display: block;
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 30px;
+
+    margin: 0;
     padding: 0;
-    border: 0;
+
     background: transparent;
+    border: 0;
+
     cursor: pointer;
+}
+
+.minha-marca-page input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.minha-marca-page input[type="color"]::-webkit-color-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+}
+
+.minha-marca-page input[type="color"]::-moz-color-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
 }
 
 .minha-marca-page .mm-cor-input output {
-    color: var(--ui-texto-suave);
-    font-family: monospace;
-    font-size: 12px;
-}
+    color: var(--ui-texto, #111827);
 
-/* AVISOS E AÇÕES */
-
-.minha-marca-page .mm-aviso {
-    padding: 16px;
-    background: var(--cor-superficie-secundaria);
-    color: var(--ui-texto-suave);
-    border: 1px dashed var(--ui-borda);
-    border-radius: var(--ui-raio-md);
+    font-family: inherit;
     font-size: 13px;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.5;
+
+    letter-spacing: normal;
 }
 
-.minha-marca-page .mm-salvar {
+
+/* ==========================================
+   LOGOTIPO
+========================================== */
+
+.minha-marca-page .mm-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.minha-marca-page .mm-logo-imagem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 100px;
+    height: 100px;
+
+    padding: 12px;
+
+    overflow: hidden;
+
+    background-color: var(--ui-fundo-pagina, #f8fafc);
+
+    border: 1px solid var(--ui-borda, #e2e8f0);
+    border-radius: var(--ui-raio-md, 10px);
+}
+
+.minha-marca-page .mm-logo-imagem img {
     display: block;
     width: 100%;
-    min-height: 46px;
-    padding: 12px;
-    background: var(--ui-botao-fundo);
-    color: var(--ui-botao-texto);
-    border: 0;
-    border-radius: var(--ui-raio-md);
-    font: inherit;
-    font-weight: 700;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.minha-marca-page #mmLogoPlaceholder {
+    color: var(--ui-texto-suave, #64748b);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.minha-marca-page .mm-logo-detalhes {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* Campo de upload */
+
+.minha-marca-page .mm-logo-file {
+    display: block;
+    box-sizing: border-box;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0;
+    padding: 7px;
+
+    background-color: var(--ui-input-fundo, #ffffff);
+    color: var(--ui-input-texto, #111827);
+
+    border: 1px solid var(--ui-input-borda, #e2e8f0);
+    border-radius: var(--ui-raio-sm, 6px);
+
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.minha-marca-page .mm-logo-file::file-selector-button {
+    margin-right: 10px;
+    padding: 8px 12px;
+
+    background-color: var(--ui-fundo-pagina, #f8fafc);
+    color: var(--ui-texto, #111827);
+
+    border: 1px solid var(--ui-borda, #e2e8f0);
+    border-radius: 4px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
     cursor: pointer;
-    transition: background var(--ui-transicao);
+}
+
+.minha-marca-page .mm-logo-file::file-selector-button:hover {
+    background-color: var(
+        --cor-superficie-secundaria,
+        #e2e8f0
+    );
+}
+
+.minha-marca-page #mmLogoNome {
+    margin: 8px 0 3px;
+
+    color: var(--ui-texto-suave, #64748b);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+
+    overflow-wrap: anywhere;
+}
+
+.minha-marca-page .mm-logo-detalhes small {
+    display: block;
+
+    color: var(--ui-texto-suave, #64748b);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+
+/* Remoção do logotipo */
+
+.minha-marca-page .mm-card label.mm-logo-remover {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 18px 0 0;
+
+    color: var(--ui-texto, #111827);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+.minha-marca-page .mm-logo-remover input {
+    flex-shrink: 0;
+
+    width: 15px;
+    height: 15px;
+    margin: 0;
+
+    accent-color: var(--cor-primaria, #ffb000);
+
+    cursor: pointer;
+}
+
+.minha-marca-page .mm-logo-remover:has(input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.minha-marca-page .mm-logo-remover input:disabled {
+    cursor: not-allowed;
+}
+
+
+/* ==========================================
+   BOTÃO SALVAR
+========================================== */
+
+.minha-marca-page .mm-salvar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 44px;
+
+    margin: 0;
+    padding: 11px 20px;
+
+    background-color: var(
+        --ui-botao-fundo,
+        var(--cor-primaria, #ffb000)
+    );
+
+    color: var(--ui-botao-texto, #111827);
+
+    border: 0;
+    border-radius: var(--ui-raio-sm, 6px);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+
+    letter-spacing: normal;
+    text-transform: none;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
 }
 
 .minha-marca-page .mm-salvar:hover {
-    background: var(--ui-botao-fundo-hover);
+    background-color: var(
+        --ui-botao-fundo-hover,
+        var(--cor-primaria-hover, #e5a000)
+    );
 }
+
+
+/* ==========================================
+   MENSAGEM DE CONFIRMAÇÃO
+========================================== */
 
 .minha-marca-page .mm-alert {
     margin-bottom: 20px;
-    padding: 14px 17px;
-    background: var(--cor-sucesso-fundo);
-    color: var(--cor-sucesso);
-    border: 1px solid var(--cor-sucesso);
-    border-radius: var(--ui-raio-md);
+    padding: 12px 16px;
+
+    background-color: var(--cor-sucesso-fundo, #f0fdf4);
+    color: var(--cor-sucesso, #15803d);
+
+    border: 1px solid #bbf7d0;
+    border-radius: var(--ui-raio-sm, 6px);
+
+    font-family: inherit;
     font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
-/* PRÉ-VISUALIZAÇÃO */
 
-.minha-marca-page .mm-lateral {
-    position: sticky;
-    top: 20px;
+/* ==========================================
+   PRÉ-VISUALIZAÇÃO
+========================================== */
+
+.minha-marca-page .mm-preview-card {
+    padding: 24px;
 }
 
 .minha-marca-page .mm-preview-topo {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 18px;
+    align-items: center;
+    margin-bottom: 20px;
 }
-
-.minha-marca-page .mm-ao-vivo {
-    padding: 7px 9px;
-    background: var(--cor-superficie-secundaria);
-    color: var(--ui-texto-suave);
-    border-radius: var(--ui-raio-md);
-    font-size: 10px;
-    font-weight: 700;
-}
-
-/*
- * Apenas a prévia utiliza variáveis próprias.
- * Elas simulam as escolhas antes do salvamento.
- */
 
 .minha-marca-page .mm-preview {
-    --mm-cor1: var(--cor-primaria);
-    --mm-cor2: var(--cor-secundaria);
-    --mm-texto1: var(--cor-sobre-primaria);
-    --mm-texto2: var(--cor-sobre-secundaria);
+    --mm-cor1: var(--cor-primaria, #ffb000);
+    --mm-cor2: var(--cor-secundaria, #000000);
+
+    --mm-texto1: var(--cor-sobre-primaria, #111827);
+    --mm-texto2: var(--cor-sobre-secundaria, #ffffff);
 
     display: flex;
-    min-height: 330px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 300px;
+
     overflow: hidden;
-    border: 1px solid var(--ui-borda);
-    border-radius: var(--ui-raio-lg);
-    font-size: 12px;
+
+    border: 1px solid var(--ui-borda, #e2e8f0);
+    border-radius: var(--ui-raio-md, 10px);
+
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
+
+/* ==========================================
+   MENU DA PRÉ-VISUALIZAÇÃO
+========================================== */
+
 .minha-marca-page .mm-preview-menu {
-    width: 38%;
     flex-shrink: 0;
-    padding: 17px 10px;
-    background: var(--mm-cor2);
+
+    width: 35%;
+    min-width: 0;
+
+    padding: 18px 12px;
+
+    background-color: var(--mm-cor2);
     color: var(--mm-texto2);
 }
 
 .minha-marca-page .mm-preview-logo {
-    padding: 5px 7px 22px;
+    margin-bottom: 18px;
+    padding: 4px 8px;
+
+    color: inherit;
+
+    font-family: inherit;
     font-size: 15px;
     font-weight: 700;
+    line-height: 1.4;
+
     overflow-wrap: anywhere;
 }
 
 .minha-marca-page .mm-preview-item {
+    margin-bottom: 4px;
     padding: 10px 8px;
-    margin-bottom: 5px;
-    border-radius: var(--ui-raio-sm);
-    opacity: .8;
+
+    border-radius: var(--ui-raio-sm, 6px);
+
+    color: inherit;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+
+    opacity: 0.85;
 }
 
 .minha-marca-page .mm-preview-item.ativo {
-    background: var(--mm-cor1);
+    background-color: var(--mm-cor1);
     color: var(--mm-texto1);
-    font-weight: 700;
+
+    font-weight: 600;
+
     opacity: 1;
 }
+
+
+/* ==========================================
+   CONTEÚDO DA PRÉ-VISUALIZAÇÃO
+========================================== */
 
 .minha-marca-page .mm-preview-painel {
     flex: 1;
     min-width: 0;
-    background: var(--ui-fundo-pagina);
-    color: var(--ui-texto);
+
+    background-color: #f8fafc;
+    color: #111827;
 }
 
 .minha-marca-page .mm-preview-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 12px;
-    background: var(--ui-fundo-card);
-    border-bottom: 1px solid var(--ui-borda);
-    font-weight: 700;
-}
 
-.minha-marca-page .mm-preview-user {
-    display: grid;
-    place-items: center;
-    width: 27px;
-    height: 27px;
-    background: var(--mm-cor1);
-    color: var(--mm-texto1);
-    border-radius: 50%;
-    font-size: 10px;
+    min-height: 44px;
+    padding: 12px 16px;
+
+    background-color: #ffffff;
+    color: #111827;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .minha-marca-page .mm-preview-body {
-    padding: 15px;
+    padding: 18px 15px;
 }
 
 .minha-marca-page .mm-preview-body h4 {
-    margin: 0 0 5px;
+    margin: 0 0 16px;
+
     color: inherit;
-    font-size: 14px;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    letter-spacing: normal;
 }
 
-.minha-marca-page .mm-preview-body p {
-    margin-bottom: 15px;
-    color: var(--ui-texto-suave);
-    font-size: 12px;
-}
+
+/* Indicador de alunos */
 
 .minha-marca-page .mm-preview-stat {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
+
+    margin-bottom: 14px;
     padding: 16px;
-    margin-bottom: 15px;
-    background: var(--ui-fundo-card);
-    border: 1px solid var(--ui-borda);
-    border-radius: var(--ui-raio-md);
+
+    background-color: #ffffff;
+    color: #111827;
+
+    border: 1px solid #e2e8f0;
+    border-radius: var(--ui-raio-sm, 6px);
+}
+
+.minha-marca-page .mm-preview-stat small {
+    color: #64748b;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
 .minha-marca-page .mm-preview-stat strong {
     color: inherit;
+
+    font-family: inherit;
     font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    font-variant-numeric: tabular-nums;
 }
 
-.minha-marca-page .mm-preview-stat span {
-    color: var(--ui-texto-suave);
-    font-size: 10px;
-}
+
+/* Botão demonstrativo */
 
 .minha-marca-page .mm-preview-botao {
-    padding: 11px 8px;
-    background: var(--mm-cor1);
+    padding: 10px 12px;
+
+    background-color: var(--mm-cor1);
     color: var(--mm-texto1);
-    border-radius: var(--ui-raio-sm);
+
+    border-radius: var(--ui-raio-sm, 6px);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+
     text-align: center;
-    font-weight: 700;
 }
 
-/* Tema escuro somente dentro da prévia */
+
+/* ==========================================
+   TEMA CLARO DA PRÉ-VISUALIZAÇÃO
+========================================== */
+
+.minha-marca-page .mm-preview[data-theme="light"] {
+    color-scheme: light;
+}
+
+.minha-marca-page .mm-preview[data-theme="light"] .mm-preview-painel {
+    background-color: #f8fafc;
+    color: #111827;
+}
+
+.minha-marca-page .mm-preview[data-theme="light"] .mm-preview-header,
+.minha-marca-page .mm-preview[data-theme="light"] .mm-preview-stat {
+    background-color: #ffffff;
+    color: #111827;
+    border-color: #e2e8f0;
+}
+
+.minha-marca-page .mm-preview[data-theme="light"] .mm-preview-stat small {
+    color: #64748b;
+}
+
+
+/* ==========================================
+   TEMA ESCURO DA PRÉ-VISUALIZAÇÃO
+========================================== */
+
+.minha-marca-page .mm-preview[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+/* Fundo do painel */
 
 .minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-painel {
-    background: #0f172a;
+    background-color: #0f172a;
     color: #f8fafc;
 }
 
-.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-header,
-.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat {
-    background: #1e293b;
+/* Cabeçalho */
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-header {
+    background-color: var(--mm-cor2);
+    color: var(--mm-texto2);
     border-color: #334155;
-    color: #f8fafc;
 }
 
-.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-body p,
-.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat span {
+/* Cards */
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat {
+    background-color: #1e293b;
+    color: #f8fafc;
+    border-color: #334155;
+}
+
+.minha-marca-page .mm-preview[data-theme="dark"] .mm-preview-stat small {
     color: #94a3b8;
 }
 
+
+/* ==========================================
+   OBSERVAÇÃO DA PRÉ-VISUALIZAÇÃO
+========================================== */
+
 .minha-marca-page .mm-nota {
-    margin: 14px 0 0;
-    color: var(--ui-texto-suave);
+    margin: 12px 0 0;
+
+    color: var(--ui-texto-suave, #64748b);
+
+    font-family: inherit;
     font-size: 12px;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
-/* RESPONSIVIDADE */
+
+/* ==========================================
+   RESPONSIVIDADE
+========================================== */
 
 @media (max-width: 1100px) {
+
     .minha-marca-page .mm-grid {
         grid-template-columns: 1fr;
     }
@@ -480,27 +911,115 @@
     .minha-marca-page .mm-lateral {
         position: static;
     }
+
 }
 
-@media (max-width: 600px) {
-    .minha-marca-page .mm-topo {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+@media (max-width: 900px) {
 
-    .minha-marca-page .mm-topo h2 {
-        font-size: 25px;
+    .minha-marca-page {
+        padding: 24px 20px 40px;
     }
 
     .minha-marca-page .mm-card {
-        padding: 17px;
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .minha-marca-page {
+        padding: 20px 16px 35px;
+    }
+
+    .minha-marca-page .mm-topo {
+        margin-bottom: 22px;
+        padding-bottom: 16px;
+    }
+
+    .minha-marca-page .mm-topo h1 {
+        font-size: 26px;
+    }
+
+    .minha-marca-page .mm-card {
+        padding: 18px;
+    }
+
+    .minha-marca-page .mm-card h3 {
+        font-size: 17px;
+    }
+
+    .minha-marca-page .mm-card-top {
+        margin-bottom: 16px;
     }
 
     .minha-marca-page .mm-cores {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
 
-    .minha-marca-page .mm-tag {
-        display: none;
+    .minha-marca-page .mm-temas {
+        gap: 10px;
     }
+
+    .minha-marca-page .mm-opcao {
+        padding: 10px;
+    }
+
+    .minha-marca-page .mm-logo-area {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .minha-marca-page .mm-logo-detalhes {
+        width: 100%;
+    }
+
+    .minha-marca-page .mm-preview {
+        min-height: 260px;
+    }
+
+    .minha-marca-page .mm-preview-menu {
+        width: 35%;
+        padding: 12px 7px;
+    }
+
+    .minha-marca-page .mm-preview-logo {
+        padding: 4px;
+        font-size: 13px;
+    }
+
+    .minha-marca-page .mm-preview-item {
+        padding: 8px 5px;
+        font-size: 11px;
+    }
+
+    .minha-marca-page .mm-preview-body {
+        padding: 12px;
+    }
+
+    .minha-marca-page .mm-preview-stat {
+        padding: 12px;
+    }
+
+    .minha-marca-page .mm-preview-stat strong {
+        font-size: 24px;
+    }
+
+}
+
+
+/* ==========================================
+   ACESSIBILIDADE
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .minha-marca-page *,
+    .minha-marca-page *::before,
+    .minha-marca-page *::after {
+        transition: none;
+    }
+
 }

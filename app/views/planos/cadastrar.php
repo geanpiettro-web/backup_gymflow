@@ -21,7 +21,7 @@ include __DIR__ . '/../shared/sidebar.php';
         </div>
         <div class="fin-header-actions">
             <a href="<?= BASE_URL ?>/app/controllers/PlanoController.php?acao=listar" class="fin-btn fin-btn-secondary">
-                ← Voltar para Lista
+                Voltar para Lista
             </a>
         </div>
     </div>
@@ -90,7 +90,7 @@ include __DIR__ . '/../shared/sidebar.php';
                     Cancelar
                 </a>
                 <button type="submit" class="fin-btn fin-btn-primary">
-                    ✓ Salvar Plano
+                    Salvar Plano
                 </button>
             </div>
 

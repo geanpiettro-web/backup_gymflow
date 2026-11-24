@@ -18,11 +18,7 @@ $role = $_SESSION['usuario_role'] ?? 'Admin';
 
 $corPrimaria = $_SESSION['cor_primaria'] ?? '#ffb000';
 $corSecundaria = $_SESSION['cor_secundaria'] ?? '#111827';
-$tema = $_SESSION['tema'] ?? 'light';
-
-// Apenas cores hexadecimais são aceitas.
-// Isso evita inserir valores inválidos
-// ou CSS arbitrário no HTML.
+$temaPainel = $_SESSION['tema'] ?? 'light';
 
 function validarCorGymflow($cor, $padrao)
 {
@@ -50,9 +46,6 @@ $corSecundaria = validarCorGymflow(
 // =============================================
 // 2. CONTRASTE AUTOMÁTICO
 // =============================================
-
-// Determina se o texto sobre determinada
-// cor deve ser claro ou escuro.
 
 function corTextoContrasteGymflow($hex)
 {
@@ -90,28 +83,25 @@ $textoSobreSecundaria = corTextoContrasteGymflow(
 );
 
 // =============================================
-// 3. TEMA DO CABEÇALHO
+// 3. APARÊNCIA DO PAINEL
 // =============================================
 
-// Por enquanto, preservamos as páginas
-// internas com fundo claro.
-//
-// A preferência dark/light controla o
-// cabeçalho, como já acontecia anteriormente.
-//
-// Na etapa de temas, os demais componentes
-// poderão consumir variáveis específicas.
+$temaPainel = $temaPainel === 'dark'
+    ? 'dark'
+    : 'light';
 
-$tema = $tema === 'dark' ? 'dark' : 'light';
+if ($temaPainel === 'dark') {
 
-if ($tema === 'dark') {
     $corFundoHeader = $corSecundaria;
     $corTextoHeader = $textoSobreSecundaria;
-    $corBordaHeader = 'rgba(0, 0, 0, 0.1)';
+    $corBordaHeader = '#334155';
+
 } else {
+
     $corFundoHeader = '#ffffff';
     $corTextoHeader = '#111827';
     $corBordaHeader = '#e2e8f0';
+
 }
 
 // =============================================
@@ -131,9 +121,10 @@ $escapar = static function ($valor) {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="<?= $escapar($temaPainel) ?>">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -145,25 +136,19 @@ $escapar = static function ($valor) {
         <?= $escapar($titulo) ?>
     </title>
 
-    <!-- =====================================
-         CSS GLOBAL
-         ===================================== -->
+    <!-- CSS GLOBAL -->
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/global.css">
+        href="<?= BASE_URL ?>/assets/css/global.css?v=tema1">
 
-    <!-- =====================================
-         LAYOUT COMPARTILHADO
-         ===================================== -->
+    <!-- LAYOUT COMPARTILHADO -->
 
     <link
         rel="stylesheet"
         href="<?= BASE_URL ?>/assets/css/layout.css">
 
-    <!-- =====================================
-         CSS DO PORTAL DO ALUNO
-         ===================================== -->
+    <!-- CSS DO PORTAL DO ALUNO -->
 
     <?php if ($role === 'Aluno'): ?>
 
@@ -177,17 +162,13 @@ $escapar = static function ($valor) {
 
     <?php endif; ?>
 
-    <!-- =====================================
-         CSS DOS CADASTROS
-         ===================================== -->
+    <!-- CSS DOS CADASTROS -->
 
     <link
         rel="stylesheet"
-        href="<?= BASE_URL ?>/assets/css/cadastros.css">
+        href="<?= BASE_URL ?>/assets/css/cadastros.css?v=tema1">
 
-    <!-- =====================================
-         CSS ESPECÍFICO DA PÁGINA
-         ===================================== -->
+    <!-- CSS ESPECÍFICO DA PÁGINA -->
 
     <?php if (!empty($cssEspecifico)): ?>
 
@@ -197,18 +178,10 @@ $escapar = static function ($valor) {
 
     <?php endif; ?>
 
-    <!-- =====================================
-         VARIÁVEIS DA IDENTIDADE VISUAL
-         ===================================== -->
+    <!-- VARIÁVEIS DA IDENTIDADE VISUAL -->
 
     <style>
         :root {
-            /*
-             * Identidade visual da academia.
-             *
-             * Os valores são definidos pelo PHP,
-             * a partir da sessão autenticada.
-             */
 
             --cor-primaria: <?= $corPrimaria ?>;
             --cor-secundaria: <?= $corSecundaria ?>;
@@ -216,61 +189,32 @@ $escapar = static function ($valor) {
             --cor-sobre-primaria: <?= $textoSobrePrimaria ?>;
             --cor-sobre-secundaria: <?= $textoSobreSecundaria ?>;
 
-            /*
-             * Compatibilidade com módulos
-             * financeiros existentes.
-             */
-
             --fin-primary: var(--cor-primaria);
             --fin-primary-dark: var(--cor-primaria-hover);
-
-            /*
-             * Cores específicas do cabeçalho.
-             */
 
             --header-fundo: <?= $corFundoHeader ?>;
             --header-texto: <?= $corTextoHeader ?>;
             --header-borda: <?= $corBordaHeader ?>;
         }
 
-        /*
-         * Preservamos o fundo claro do painel
-         * enquanto os módulos são padronizados.
-         */
-
         body {
             background-color: var(--ui-fundo-pagina);
             color: var(--ui-texto);
         }
 
-        /*
-         * Cabeçalho compartilhado.
-         *
-         * Agora depende de variáveis, sem
-         * bloquear futuras personalizações.
-         */
-
-        body>.header {
+        body > .header {
             background-color: var(--header-fundo);
             color: var(--header-texto);
-
             border-bottom: 1px solid var(--header-borda);
         }
 
-        body>.header h1,
-        body>.header .header-direita,
-        body>.header .header-direita span {
+        body > .header h1,
+        body > .header .header-direita,
+        body > .header .header-direita span {
             color: var(--header-texto);
         }
 
-        /*
-         * Botão de menu no celular.
-         *
-         * Mantemos o posicionamento definido
-         * em layout.css.
-         */
-
-        body>.header .mobile-toggle {
+        body > .header .mobile-toggle {
             color: var(--header-texto);
         }
     </style>
@@ -279,9 +223,7 @@ $escapar = static function ($valor) {
 
 <body>
 
-    <!-- =====================================
-         OVERLAY DO MENU MOBILE
-         ===================================== -->
+    <!-- OVERLAY DO MENU MOBILE -->
 
     <div
         class="mobile-overlay"
@@ -291,11 +233,10 @@ $escapar = static function ($valor) {
                 .classList.remove('open');
 
             this.classList.remove('active');
-        "></div>
+        ">
+    </div>
 
-    <!-- =====================================
-         CABEÇALHO
-         ===================================== -->
+    <!-- CABEÇALHO -->
 
     <header class="header">
 

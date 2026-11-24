@@ -44,49 +44,7 @@ if (!empty($funcionario['telefone'])) {
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/jorge-financeiro.css">
 
 <!-- Estilos só desta página -->
-<style>
-    .icone {
-        display: flex;
-        color: #64748b;
-        transition: 0.2s;
-    }
 
-    .icone:hover {
-        color: #3b82f6;
-    }
-
-    .icone-whats {
-        color: #22c55e;
-    }
-
-    .icone-whats:hover {
-        color: #22c55e;
-        opacity: 0.7;
-    }
-
-    .titulo-bloco {
-        font-size: 14px;
-        color: #64748b;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .info {
-        margin-bottom: 12px;
-    }
-
-    .info-nome {
-        display: block;
-        font-size: 12px;
-        color: #94a3b8;
-    }
-
-    .info-valor {
-        font-weight: 500;
-        color: #1e293b;
-    }
-</style>
 
 <main class="conteudo financeiro-page">
 

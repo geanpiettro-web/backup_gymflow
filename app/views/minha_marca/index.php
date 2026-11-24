@@ -27,32 +27,46 @@ if (!preg_match('/^#[0-9a-fA-F]{6}$/', $secundaria)) {
 
 $temLogo = !empty($logo);
 
-$cssEspecifico = BASE_URL . '/assets/css/minha-marca.css?v=3';
+$arquivoCss = dirname(__DIR__, 3) . '/assets/css/minha-marca.css';
+
+$versaoCss = is_file($arquivoCss)
+    ? filemtime($arquivoCss)
+    : '4';
+
+$cssEspecifico = BASE_URL . '/assets/css/minha-marca.css?v=' . $versaoCss;
 
 include __DIR__ . '/../shared/header.php';
 include __DIR__ . '/../shared/sidebar.php';
 ?>
 
+<link rel="stylesheet" href="<?= $esc($cssEspecifico) ?>">
+
 <main class="conteudo minha-marca-page">
 
+    <!-- Cabeçalho da página -->
     <div class="mm-topo">
+
         <div>
-            <span class="mm-kicker">PERSONALIZAÇÃO</span>
-            <h2>Minha Marca</h2>
-            <p>Deixe o painel com a sua identidade.</p>
+            <h1>Minha Marca</h1>
+            <p>Personalize a aparência do seu painel.</p>
         </div>
-        <span class="mm-tag">Preferências pessoais</span>
+
     </div>
 
+    <!-- Mensagem de confirmação -->
     <?php if (($_GET['msg'] ?? '') === 'salvo'): ?>
+
         <div class="mm-alert" role="status">
             Suas preferências foram salvas com sucesso.
         </div>
+
     <?php endif; ?>
+
 
     <div class="mm-grid">
 
         <!-- FORMULÁRIO -->
+
         <form
             class="mm-form"
             id="formMinhaMarca"
@@ -65,17 +79,18 @@ include __DIR__ . '/../shared/sidebar.php';
                 name="csrf_token"
                 value="<?= $esc($_SESSION['minha_marca_csrf'] ?? '') ?>">
 
-            <!-- 01 - IDENTIDADE -->
+
+            <!-- IDENTIDADE DO PAINEL -->
+
             <section class="mm-card">
+
                 <div class="mm-card-top">
-                    <span class="mm-numero">01</span>
-                    <div>
-                        <h3>Identidade do painel</h3>
-                        <p>Defina como o ambiente será identificado.</p>
-                    </div>
+                    <h3>Identidade do painel</h3>
                 </div>
 
-                <label for="nome_painel">Nome do painel</label>
+                <label for="nome_painel">
+                    Nome do painel
+                </label>
 
                 <input
                     type="text"
@@ -86,56 +101,63 @@ include __DIR__ . '/../shared/sidebar.php';
                     value="<?= $esc($nome) ?>"
                     placeholder="Ex.: Minha Academia">
 
-                <span class="mm-ajuda">
-                    Este nome será associado à sua conta.
-                </span>
             </section>
 
-            <!-- 02 - APARÊNCIA -->
+
+            <!-- APARÊNCIA -->
+
             <section class="mm-card">
+
                 <div class="mm-card-top">
-                    <span class="mm-numero">02</span>
-                    <div>
-                        <h3>Aparência</h3>
-                        <p>Escolha o estilo visual do painel.</p>
-                    </div>
+                    <h3>Aparência</h3>
                 </div>
 
                 <div class="mm-temas">
 
+                    <!-- Tema claro -->
+
                     <label class="mm-opcao">
+
                         <input
                             type="radio"
                             name="tema"
                             value="light"
                             <?= $tema === 'light' ? 'checked' : '' ?>>
+
                         <span class="mm-opcao-cor mm-claro"></span>
+
                         <strong>Tema claro</strong>
-                        <small>Leve e minimalista</small>
+
                     </label>
 
+
+                    <!-- Tema escuro -->
+
                     <label class="mm-opcao">
+
                         <input
                             type="radio"
                             name="tema"
                             value="dark"
                             <?= $tema !== 'light' ? 'checked' : '' ?>>
+
                         <span class="mm-opcao-cor mm-escuro"></span>
+
                         <strong>Tema escuro</strong>
-                        <small>Elegante e moderno</small>
+
                     </label>
 
                 </div>
+
             </section>
 
-            <!-- 03 - PALETA -->
+
+            <!-- PALETA DE CORES -->
+
             <section class="mm-card">
+
                 <div class="mm-card-top">
-                    <span class="mm-numero">03</span>
-                    <div>
-                        <h3>Paleta de cores</h3>
-                        <p>Escolha uma combinação ou personalize.</p>
-                    </div>
+                    <h3>Paleta de cores</h3>
                 </div>
 
                 <label for="tema_predefinido">
@@ -145,6 +167,7 @@ include __DIR__ . '/../shared/sidebar.php';
                 <select
                     id="tema_predefinido"
                     name="tema_predefinido">
+
                     <?php
                     $opcoes = [
                         'padrao' => 'GymFlow padrão',
@@ -157,22 +180,32 @@ include __DIR__ . '/../shared/sidebar.php';
 
                     foreach ($opcoes as $valor => $rotulo):
                     ?>
+
                         <option
                             value="<?= $esc($valor) ?>"
                             <?= $preset === $valor ? 'selected' : '' ?>>
+
                             <?= $esc($rotulo) ?>
+
                         </option>
+
                     <?php endforeach; ?>
+
                 </select>
+
 
                 <div class="mm-cores">
 
+                    <!-- Cor primária -->
+
                     <div>
+
                         <label for="cor_primaria">
                             Cor primária
                         </label>
 
                         <div class="mm-cor-input">
+
                             <input
                                 type="color"
                                 id="cor_primaria"
@@ -182,15 +215,22 @@ include __DIR__ . '/../shared/sidebar.php';
                             <output id="codigoPrimaria">
                                 <?= $esc($primaria) ?>
                             </output>
+
                         </div>
+
                     </div>
 
+
+                    <!-- Cor secundária -->
+
                     <div>
+
                         <label for="cor_secundaria">
                             Cor secundária
                         </label>
 
                         <div class="mm-cor-input">
+
                             <input
                                 type="color"
                                 id="cor_secundaria"
@@ -200,20 +240,22 @@ include __DIR__ . '/../shared/sidebar.php';
                             <output id="codigoSecundaria">
                                 <?= $esc($secundaria) ?>
                             </output>
+
                         </div>
+
                     </div>
 
                 </div>
+
             </section>
 
-            <!-- 04 - LOGOTIPO -->
+
+            <!-- LOGOTIPO -->
+
             <section class="mm-card">
+
                 <div class="mm-card-top">
-                    <span class="mm-numero">04</span>
-                    <div>
-                        <h3>Logotipo</h3>
-                        <p>Personalize a identidade do seu painel.</p>
-                    </div>
+                    <h3>Logotipo</h3>
                 </div>
 
                 <div class="mm-logo-area">
@@ -229,46 +271,22 @@ include __DIR__ . '/../shared/sidebar.php';
                         <span
                             id="mmLogoPlaceholder"
                             <?= $temLogo ? 'hidden' : '' ?>>
-                            <svg
-                                width="28"
-                                height="28"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                aria-hidden="true">
-                                <rect
-                                    x="3" y="3"
-                                    width="18" height="18"
-                                    rx="3" />
-                                <circle
-                                    cx="8.5" cy="8.5" r="1.5" />
-                                <path
-                                    d="m4 17 5-5 4 4 3-3 4 4" />
-                            </svg>
+
+                            Sem imagem
+
                         </span>
 
                     </div>
+
 
                     <div class="mm-logo-detalhes">
 
                         <label
                             class="mm-logo-upload"
                             for="logotipo">
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true">
-                                <path
-                                    d="M12 16V3m0 0L7 8m5-5 5 5" />
-                                <path d="M4 16v4h16v-4" />
-                            </svg>
 
                             Escolher imagem
+
                         </label>
 
                         <input
@@ -279,19 +297,24 @@ include __DIR__ . '/../shared/sidebar.php';
                             class="mm-logo-file">
 
                         <p id="mmLogoNome">
+
                             <?= $temLogo
                                 ? 'Logotipo atual'
                                 : 'Nenhuma imagem selecionada' ?>
+
                         </p>
 
                         <small>
                             PNG, JPG ou WEBP · Até 2 MB
                         </small>
+
                     </div>
 
                 </div>
 
+
                 <label class="mm-logo-remover">
+
                     <input
                         type="checkbox"
                         name="remover_logo"
@@ -300,72 +323,91 @@ include __DIR__ . '/../shared/sidebar.php';
                         <?= $temLogo ? '' : 'disabled' ?>>
 
                     Remover logotipo atual
+
                 </label>
+
             </section>
+
+
+            <!-- SALVAR ALTERAÇÕES -->
 
             <button
                 class="mm-salvar"
                 type="submit">
+
                 Salvar alterações
+
             </button>
 
         </form>
 
+
         <!-- PRÉ-VISUALIZAÇÃO -->
+
         <aside class="mm-lateral">
 
             <div class="mm-card mm-preview-card">
 
                 <div class="mm-preview-topo">
-                    <div>
-                        <h3>Pré-visualização</h3>
-                        <p>Veja suas escolhas em tempo real.</p>
-                    </div>
 
-                    <span class="mm-ao-vivo">PRÉVIA</span>
+                    <h3>Pré-visualização</h3>
+
                 </div>
 
+
                 <div id="mmPreview" class="mm-preview">
+
+                    <!-- Menu lateral da prévia -->
 
                     <div class="mm-preview-menu">
 
                         <div
                             class="mm-preview-logo"
                             id="mmNomePreview">
+
                             <?= $esc($nome) ?>
+
                         </div>
 
                         <div class="mm-preview-item ativo">
                             Visão geral
                         </div>
+
                         <div class="mm-preview-item">
                             Alunos
                         </div>
+
                         <div class="mm-preview-item">
                             Treinos
                         </div>
+
                         <div class="mm-preview-item">
                             Financeiro
                         </div>
 
                     </div>
 
+
+                    <!-- Conteúdo da prévia -->
+
                     <div class="mm-preview-painel">
 
                         <div class="mm-preview-header">
+
                             <span>Dashboard</span>
-                            <span class="mm-preview-user">GF</span>
+
                         </div>
 
                         <div class="mm-preview-body">
 
                             <h4>Visão geral</h4>
-                            <p>Seu painel personalizado.</p>
 
                             <div class="mm-preview-stat">
+
                                 <small>Alunos ativos</small>
+
                                 <strong>128</strong>
-                                <span>Exemplo de indicador</span>
+
                             </div>
 
                             <div class="mm-preview-botao">
@@ -373,22 +415,26 @@ include __DIR__ . '/../shared/sidebar.php';
                             </div>
 
                         </div>
+
                     </div>
 
                 </div>
 
                 <p class="mm-nota">
-                    Esta é uma demonstração. As alterações serão
-                    persistidas quando você salvar.
+                    As alterações serão aplicadas ao salvar.
                 </p>
 
             </div>
 
         </aside>
+
     </div>
+
 </main>
 
+
 <!-- JAVASCRIPT COMPLETO -->
+
 <script>
     (() => {
         'use strict';

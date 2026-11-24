@@ -1,41 +1,25 @@
 /* ==========================================
    GYMFLOW - DESIGN SYSTEM GLOBAL
-   Base preparada para White Label / Multi-Tenant
-   ========================================== */
+   White Label / Multi-Tenant
+========================================== */
 
 /* ==========================================
    1. IDENTIDADE VISUAL PADRÃO
-   ========================================== */
+========================================== */
 
 :root {
-    /*
-     * CORES DA MARCA
-     *
-     * Estes valores são apenas o padrão.
-     * Futuramente, o Minha Marca substituirá
-     * essas variáveis conforme a academia.
-     */
+
+    /* Cores da marca */
 
     --cor-primaria: #ffb000;
     --cor-secundaria: #111827;
 
-    /*
-     * TEXTO SOBRE AS CORES DA MARCA
-     *
-     * Separado para garantir contraste.
-     * Uma cor clara pode precisar de texto escuro;
-     * uma cor escura pode precisar de texto branco.
-     */
+    /* Contraste sobre as cores da marca */
 
     --cor-sobre-primaria: #111827;
     --cor-sobre-secundaria: #ffffff;
 
-    /*
-     * VARIAÇÕES AUTOMÁTICAS
-     *
-     * A mudança da cor principal também
-     * atualiza o hover e fundos suaves.
-     */
+    /* Variações automáticas */
 
     --cor-primaria-hover:
         color-mix(in srgb,
@@ -53,13 +37,14 @@
             #ffffff);
 
     /* ======================================
-       2. CORES NEUTRAS
-       ====================================== */
+       2. CORES NEUTRAS - TEMA CLARO
+    ====================================== */
 
     --cor-branca: #ffffff;
 
     --cor-fundo: #ffffff;
     --cor-fundo-pagina: #f8fafc;
+
     --cor-superficie: #ffffff;
     --cor-superficie-secundaria: #f1f5f9;
 
@@ -72,13 +57,7 @@
 
     /* ======================================
        3. ESTADOS DO SISTEMA
-       ====================================== */
-
-    /*
-     * Estas cores indicam estados funcionais.
-     * Não devem ser substituídas livremente
-     * pela cor escolhida para a marca.
-     */
+    ====================================== */
 
     --cor-sucesso: #16a34a;
     --cor-sucesso-fundo: #f0fdf4;
@@ -94,7 +73,7 @@
 
     /* ======================================
        4. COMPONENTES
-       ====================================== */
+    ====================================== */
 
     --ui-fundo-pagina: var(--cor-fundo-pagina);
     --ui-fundo-card: var(--cor-superficie);
@@ -120,7 +99,7 @@
 
     /* ======================================
        5. BOTÕES E FORMULÁRIOS
-       ====================================== */
+    ====================================== */
 
     --ui-botao-fundo: var(--cor-primaria);
 
@@ -137,20 +116,74 @@
 
     /* ======================================
        6. COMPATIBILIDADE
-       ====================================== */
-
-    /*
-     * Mantemos esses nomes porque outros
-     * arquivos do GymFlow podem utilizá-los.
-     */
+    ====================================== */
 
     --fin-primary: var(--cor-primaria);
     --fin-primary-dark: var(--cor-primaria-hover);
 }
 
+
 /* ==========================================
-   7. CONFIGURAÇÕES GERAIS
-   ========================================== */
+   7. APARÊNCIA - TEMA CLARO
+========================================== */
+
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+
+/* ==========================================
+   8. APARÊNCIA - TEMA ESCURO
+========================================== */
+
+:root[data-theme="dark"] {
+
+    color-scheme: dark;
+
+    /* Fundos */
+
+    --cor-fundo: #0f172a;
+    --cor-fundo-pagina: #0f172a;
+
+    --cor-superficie: #1e293b;
+    --cor-superficie-secundaria: #273449;
+
+    /* Textos */
+
+    --cor-texto: #f8fafc;
+    --cor-texto-secundario: #a5b4c6;
+    --cor-texto-discreto: #94a3b8;
+
+    /* Bordas */
+
+    --cor-borda: #334155;
+    --cor-borda-forte: #475569;
+
+    /* Variações da identidade visual */
+
+    --cor-primaria-suave:
+        color-mix(in srgb,
+            var(--cor-primaria) 12%,
+            var(--cor-superficie));
+
+    --cor-primaria-borda:
+        color-mix(in srgb,
+            var(--cor-primaria) 35%,
+            var(--cor-superficie));
+
+    /* Sombras */
+
+    --ui-sombra-card:
+        0 2px 6px rgba(0, 0, 0, 0.12);
+
+    --ui-sombra-hover:
+        0 5px 14px rgba(0, 0, 0, 0.20);
+}
+
+
+/* ==========================================
+   9. CONFIGURAÇÕES GERAIS
+========================================== */
 
 *,
 *::before,
@@ -185,9 +218,10 @@ img {
     max-width: 100%;
 }
 
+
 /* ==========================================
-   8. TIPOGRAFIA
-   ========================================== */
+   10. TIPOGRAFIA
+========================================== */
 
 h1,
 h2,
@@ -221,9 +255,10 @@ small {
     color: var(--cor-texto-secundario);
 }
 
+
 /* ==========================================
-   9. LINKS
-   ========================================== */
+   11. LINKS
+========================================== */
 
 a {
     color: var(--cor-primaria);
@@ -235,15 +270,10 @@ a:hover {
     color: var(--cor-primaria-hover);
 }
 
-/* ==========================================
-   10. FORMULÁRIOS
-   ========================================== */
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
+/* ==========================================
+   12. FORMULÁRIOS
+========================================== */
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
 select,
@@ -265,10 +295,11 @@ textarea {
         box-shadow var(--ui-transicao);
 }
 
-/*
- * Mantém os campos de seleção nativos,
- * sem obrigar checkboxes a ocupar 100%.
- */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
 input[type="checkbox"],
 input[type="radio"] {
@@ -301,9 +332,10 @@ textarea:disabled {
     cursor: not-allowed;
 }
 
+
 /* ==========================================
-   11. BOTÕES
-   ========================================== */
+   13. BOTÕES
+========================================== */
 
 button,
 input[type="submit"],
@@ -351,9 +383,10 @@ input[type="button"]:disabled {
     cursor: not-allowed;
 }
 
+
 /* ==========================================
-   12. TABELAS
-   ========================================== */
+   14. TABELAS
+========================================== */
 
 table {
     width: 100%;
@@ -377,9 +410,10 @@ td {
     color: var(--ui-texto);
 }
 
+
 /* ==========================================
-   13. ELEMENTOS UTILITÁRIOS
-   ========================================== */
+   15. ELEMENTOS UTILITÁRIOS
+========================================== */
 
 .ui-texto-suave {
     color: var(--ui-texto-suave);
@@ -400,9 +434,10 @@ td {
     color: var(--cor-sobre-primaria);
 }
 
+
 /* ==========================================
-   14. ACESSIBILIDADE
-   ========================================== */
+   16. ACESSIBILIDADE
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
