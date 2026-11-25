@@ -1,49 +1,281 @@
 <?php
+// =============================================
+// GYMFLOW - SIDEBAR GLOBAL
 // app/views/shared/sidebar.php
+// =============================================
 
-$nomePainel = $_SESSION['nome_painel'] ?? 'Gymflow';
-$role = $_SESSION['usuario_role'] ?? '';
+$nomePainel =
+    $_SESSION['nome_painel'] ?? 'Gymflow';
 
-// Logotipo personalizado do usuário, salvo pelo Minha Marca.
-$logoPainel = $_SESSION['logo_url'] ?? '';
-$usuarioId = (int) ($_SESSION['usuario_id'] ?? 0);
-$prefixoLogo = BASE_URL . '/assets/uploads/minha-marca/' . $usuarioId . '/';
+$role =
+    $_SESSION['usuario_role'] ?? '';
 
-// Exibe somente arquivos associados à conta logada.
-if (
-    !is_string($logoPainel) ||
-    $usuarioId <= 0 ||
-    !preg_match(
-        '~^' . preg_quote($prefixoLogo, '~') . '[a-f0-9]{32}\.(png|jpg|webp)$~',
-        $logoPainel
+$logoPainel =
+    $_SESSION['logo_url'] ?? '';
+
+$usuarioId =
+    (int) ($_SESSION['usuario_id'] ?? 0);
+
+$companyId =
+    (int) ($_SESSION['company_id'] ?? 0);
+
+// =============================================
+// 1. VALIDAR LOGOTIPO
+// =============================================
+
+if ($role === 'Aluno') {
+
+    // Logotipo institucional do Portfólio.
+
+    require_once __DIR__ .
+        '/../../models/IdentidadePortalAluno.php';
+
+    $logoPainel =
+        validarLogoPortalAluno($logoPainel);
+} else {
+
+    // Logotipo pessoal do Minha Marca.
+
+    $prefixoLogo = BASE_URL .
+        '/assets/uploads/minha-marca/' .
+        $usuarioId .
+        '/';
+
+    if (
+        !is_string($logoPainel) ||
+        $usuarioId <= 0 ||
+        !preg_match(
+            '~^' .
+                preg_quote($prefixoLogo, '~') .
+                '[a-f0-9]{32}\.(png|jpg|webp)$~',
+            $logoPainel
+        )
+    ) {
+        $logoPainel = '';
+    }
+}
+
+// =============================================
+// 2. FUNÇÕES AUXILIARES
+// =============================================
+
+$escSidebar = static function ($valor) {
+
+    return htmlspecialchars(
+        (string) $valor,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+};
+
+$controllerUrl = BASE_URL .
+    '/app/controllers/';
+
+// =============================================
+// 3. ITENS DO MENU
+// =============================================
+
+$menu = [];
+
+// PORTAL DO ALUNO
+
+if ($role === 'Aluno') {
+
+    $portal = 'PortalAlunoController.php';
+
+    $menu = [
+
+        [
+            'titulo' => 'Início',
+            'icone' => 'house',
+            'rota' => $portal . '?acao=aluno'
+        ],
+
+        [
+            'titulo' => 'Treinos',
+            'icone' => 'dumbbell',
+            'rota' => $portal . '?acao=treinos'
+        ],
+
+        [
+            'titulo' => 'Faturas',
+            'icone' => 'credit-card',
+            'rota' => $portal . '?acao=faturas'
+        ],
+
+        [
+            'titulo' => 'Contratos',
+            'icone' => 'file-text',
+            'rota' => $portal . '?acao=contratos'
+        ],
+
+        [
+            'titulo' => 'Minha Avaliação',
+            'icone' => 'star',
+            'rota' => $portal . '?acao=avaliacao'
+        ]
+    ];
+}
+
+// PAINEL INTERNO
+
+elseif (
+    in_array(
+        $role,
+        ['Admin', 'Recepcao', 'Professor'],
+        true
     )
 ) {
-    $logoPainel = '';
+
+    $menu[] = [
+        'titulo' => 'Dashboard',
+        'icone' => 'layout-dashboard',
+        'rota' => 'DashboardController.php'
+    ];
+
+    // ADMIN
+
+    if ($role === 'Admin') {
+
+        $menu[] = [
+            'titulo' => 'Filiais',
+            'icone' => 'map-pin',
+            'rota' => 'FilialController.php?acao=listar'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Funcionários',
+            'icone' => 'users',
+            'rota' => 'FuncionarioController.php?acao=listar'
+        ];
+    }
+
+    // ADMIN E RECEPÇÃO
+
+    if (in_array(
+        $role,
+        ['Admin', 'Recepcao'],
+        true
+    )) {
+
+        $menu[] = [
+            'titulo' => 'Alunos',
+            'icone' => 'graduation-cap',
+            'rota' => 'AlunoController.php?acao=listar'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Planos',
+            'icone' => 'layers',
+            'rota' => 'PlanoController.php?acao=listar'
+        ];
+    }
+
+    // FINANCEIRO E PERSONALIZAÇÃO
+
+    if ($role === 'Admin') {
+
+        $menu[] = [
+            'titulo' => 'Financeiro',
+            'icone' => 'credit-card',
+            'rota' => 'FinanceiroController.php'
+        ];
+
+        $menu[] = [
+            'titulo' => 'CRM Leads',
+            'icone' => 'target',
+            'rota' => 'CrmController.php'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Fluxo de caixa',
+            'icone' => 'chart-no-axes-column-increasing',
+            'rota' => 'FluxoCaixaController.php'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Minha marca',
+            'icone' => 'tag',
+            'rota' => 'MinhaMarcaController.php'
+        ];
+    }
+
+    // ADMIN E PROFESSOR
+
+    if (in_array(
+        $role,
+        ['Admin', 'Professor'],
+        true
+    )) {
+
+        $menu[] = [
+            'titulo' => 'Biblioteca de exercícios',
+            'icone' => 'dumbbell',
+            'rota' => 'ExercicioController.php'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Ficha de treino',
+            'icone' => 'clipboard-list',
+            'rota' => 'TreinoController.php'
+        ];
+    }
+
+    // CONFIGURAÇÕES ADMINISTRATIVAS
+
+    if ($role === 'Admin') {
+
+        $menu[] = [
+            'titulo' => 'Site / Portfólio',
+            'icone' => 'globe',
+            'rota' => 'PortfolioController.php'
+        ];
+
+        $menu[] = [
+            'titulo' => 'Configurações de e-mail',
+            'icone' => 'mail',
+            'rota' => 'ConfiguracaoEmailController.php'
+        ];
+    }
 }
+
+// =============================================
+// 4. ENDEREÇO DO SITE INSTITUCIONAL
+// =============================================
+
+$siteUrl = BASE_URL . '/index.php';
+
+if ($companyId > 0) {
+
+    $siteUrl .= '?id=' . $companyId;
+}
+
 ?>
 
 <aside class="sidebar" id="appSidebar">
 
-    <!-- TOPO -->
+    <!-- IDENTIDADE -->
+
     <div class="sidebar-header">
 
         <h1 class="sidebar-logo">
+
             <?php if ($logoPainel !== ''): ?>
+
                 <img
-                    src="<?= htmlspecialchars($logoPainel, ENT_QUOTES, 'UTF-8') ?>"
+                    src="<?= $escSidebar($logoPainel) ?>"
                     class="sidebar-logo-imagem"
                     alt=""
                     width="36"
                     height="36"
                     decoding="async">
+
             <?php endif; ?>
+
             <span>
-                <?= htmlspecialchars(
-                    $nomePainel,
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
+                <?= $escSidebar($nomePainel) ?>
             </span>
+
         </h1>
 
         <button
@@ -60,275 +292,69 @@ if (
     </div>
 
     <!-- MENU PRINCIPAL -->
+
     <nav class="sidebar-nav">
+
         <ul>
 
-            <?php if ($role === 'Aluno'): ?>
-
-                <!-- PORTAL DO ALUNO -->
+            <?php foreach ($menu as $item): ?>
 
                 <li>
-                    <a href="<?= BASE_URL ?>/app/controllers/PortalAlunoController.php?acao=aluno"
-                        title="Início">
+
+                    <a
+                        href="<?= $escSidebar(
+                                    $controllerUrl .
+                                        $item['rota']
+                                ) ?>"
+                        title="<?= $escSidebar(
+                                    $item['titulo']
+                                ) ?>">
 
                         <span class="menu-icon">
-                            <i data-lucide="house"></i>
+
+                            <i data-lucide="<?= $escSidebar(
+                                                $item['icone']
+                                            ) ?>"></i>
+
                         </span>
 
-                        <span class="menu-text">Início</span>
-                    </a>
-                </li>
+                        <span class="menu-text">
 
-                <li>
-                    <a href="<?= BASE_URL ?>/app/controllers/PortalAlunoController.php?acao=treinos"
-                        title="Treinos">
+                            <?= $escSidebar(
+                                $item['titulo']
+                            ) ?>
 
-                        <span class="menu-icon">
-                            <i data-lucide="dumbbell"></i>
                         </span>
 
-                        <span class="menu-text">Treinos</span>
                     </a>
+
                 </li>
 
-                <li>
-                    <a href="<?= BASE_URL ?>/app/controllers/PortalAlunoController.php?acao=faturas"
-                        title="Faturas">
-
-                        <span class="menu-icon">
-                            <i data-lucide="credit-card"></i>
-                        </span>
-
-                        <span class="menu-text">Faturas</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="<?= BASE_URL ?>/app/controllers/PortalAlunoController.php?acao=contratos"
-                        title="Contratos">
-
-                        <span class="menu-icon">
-                            <i data-lucide="file-text"></i>
-                        </span>
-
-                        <span class="menu-text">Contratos</span>
-                    </a>
-                </li>
-
-            <?php elseif (in_array(
-                $role,
-                ['Admin', 'Recepcao', 'Professor'],
-                true
-            )): ?>
-
-                <!-- DASHBOARD -->
-                <li>
-                    <a href="<?= BASE_URL ?>/app/controllers/DashboardController.php"
-                        title="Dashboard">
-
-                        <span class="menu-icon">
-                            <i data-lucide="layout-dashboard"></i>
-                        </span>
-
-                        <span class="menu-text">Dashboard</span>
-                    </a>
-                </li>
-
-                <!-- EXCLUSIVO DO ADMIN -->
-                <?php if ($role === 'Admin'): ?>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/FilialController.php?acao=listar"
-                            title="Filiais">
-
-                            <span class="menu-icon">
-                                <i data-lucide="map-pin"></i>
-                            </span>
-
-                            <span class="menu-text">Filiais</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/FuncionarioController.php?acao=listar"
-                            title="Funcionários">
-
-                            <span class="menu-icon">
-                                <i data-lucide="users"></i>
-                            </span>
-
-                            <span class="menu-text">Funcionários</span>
-                        </a>
-                    </li>
-
-                <?php endif; ?>
-
-                <!-- ADMIN + RECEPÇÃO -->
-                <?php if (in_array(
-                    $role,
-                    ['Admin', 'Recepcao'],
-                    true
-                )): ?>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/AlunoController.php?acao=listar"
-                            title="Alunos">
-
-                            <span class="menu-icon">
-                                <i data-lucide="graduation-cap"></i>
-                            </span>
-
-                            <span class="menu-text">Alunos</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/PlanoController.php?acao=listar"
-                            title="Planos">
-
-                            <span class="menu-icon">
-                                <i data-lucide="layers"></i>
-                            </span>
-
-                            <span class="menu-text">Planos</span>
-                        </a>
-                    </li>
-
-                <?php endif; ?>
-
-                <!-- FINANCEIRO: SOMENTE ADMIN -->
-                <?php if ($role === 'Admin'): ?>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/FinanceiroController.php"
-                            title="Financeiro">
-
-                            <span class="menu-icon">
-                                <i data-lucide="credit-card"></i>
-                            </span>
-
-                            <span class="menu-text">Financeiro</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/CrmController.php"
-                            title="CRM Leads">
-
-                            <span class="menu-icon">
-                                <i data-lucide="target"></i>
-                            </span>
-
-                            <span class="menu-text">CRM Leads</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/FluxoCaixaController.php"
-                            title="Fluxo de caixa">
-
-                            <span class="menu-icon">
-                                <i data-lucide="chart-no-axes-column-increasing"></i>
-                            </span>
-
-                            <span class="menu-text">Fluxo de caixa</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/MinhaMarcaController.php"
-                            title="Minha marca">
-
-                            <span class="menu-icon">
-                                <i data-lucide="tag"></i>
-                            </span>
-
-                            <span class="menu-text">Minha marca</span>
-                        </a>
-                    </li>
-
-                <?php endif; ?>
-
-                <!-- ADMIN + PROFESSOR -->
-                <?php if (in_array(
-                    $role,
-                    ['Admin', 'Professor'],
-                    true
-                )): ?>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/ExercicioController.php"
-                            title="Biblioteca de exercícios">
-
-                            <span class="menu-icon">
-                                <i data-lucide="dumbbell"></i>
-                            </span>
-
-                            <span class="menu-text">Biblioteca de exercícios</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/TreinoController.php"
-                            title="Ficha de treino">
-
-                            <span class="menu-icon">
-                                <i data-lucide="clipboard-list"></i>
-                            </span>
-
-                            <span class="menu-text">Ficha de treino</span>
-                        </a>
-                    </li>
-
-                <?php endif; ?>
-
-                <!-- PORTFÓLIO E CONFIGURAÇÕES DE E-MAIL: SOMENTE ADMIN -->
-                <?php if ($role === 'Admin'): ?>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/PortfolioController.php"
-                            title="Site / Portfólio">
-
-                            <span class="menu-icon">
-                                <i data-lucide="globe"></i>
-                            </span>
-
-                            <span class="menu-text">Site / Portfólio</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="<?= BASE_URL ?>/app/controllers/ConfiguracaoEmailController.php"
-                            title="Configurações de e-mail">
-
-                            <span class="menu-icon">
-                                <i data-lucide="mail"></i>
-                            </span>
-
-                            <span class="menu-text">Configurações de e-mail</span>
-                        </a>
-                    </li>
-
-                <?php endif; ?>
-
-            <?php endif; ?>
+            <?php endforeach; ?>
 
         </ul>
+
     </nav>
 
     <!-- RODAPÉ -->
+
     <div class="sidebar-footer">
 
         <a
             class="sidebar-action voltar-site"
-            href="<?= BASE_URL ?>/"
+            href="<?= $escSidebar($siteUrl) ?>"
             title="Voltar ao Site">
 
             <span class="menu-icon">
+
                 <i data-lucide="arrow-left"></i>
+
             </span>
 
-            <span class="menu-text">Voltar ao Site</span>
+            <span class="menu-text">
+                Voltar ao Site
+            </span>
+
         </a>
 
         <a
@@ -337,10 +363,15 @@ if (
             title="Sair">
 
             <span class="menu-icon">
+
                 <i data-lucide="log-out"></i>
+
             </span>
 
-            <span class="menu-text">Sair</span>
+            <span class="menu-text">
+                Sair
+            </span>
+
         </a>
 
     </div>
@@ -348,18 +379,29 @@ if (
 </aside>
 
 <!-- LUCIDE ICONS -->
+
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        lucide.createIcons({
-            attrs: {
-                width: 20,
-                height: 20,
-                'stroke-width': 1.8
+    document.addEventListener(
+        'DOMContentLoaded',
+        function() {
+
+            if (window.lucide) {
+
+                lucide.createIcons({
+
+                    attrs: {
+                        width: 20,
+                        height: 20,
+                        'stroke-width': 1.8
+                    }
+
+                });
             }
-        });
-    });
+
+        }
+    );
 </script>
 
 <script src="<?= BASE_URL ?>/assets/js/sidebar.js"></script>

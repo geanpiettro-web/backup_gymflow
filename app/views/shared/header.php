@@ -1,21 +1,89 @@
 <?php
 // =============================================
 // GYMFLOW - HEADER GLOBAL
+// app/views/shared/header.php
 // =============================================
 
+// =============================================
 // 1. INFORMAÇÕES DO SISTEMA
+// =============================================
 
-$nomePainel = $_SESSION['nome_painel'] ?? 'Gymflow';
-$titulo = $tituloPagina ?? 'Dashboard';
+$role = $_SESSION['usuario_role'] ?? '';
 
 $usuario = $_SESSION['usuario_nome'] ?? 'Usuário';
-$role = $_SESSION['usuario_role'] ?? 'Admin';
 
-// 2. IDENTIDADE VISUAL
+$titulo = $tituloPagina ?? 'Dashboard';
 
-$corPrimaria = $_SESSION['cor_primaria'] ?? '#ffb000';
-$corSecundaria = $_SESSION['cor_secundaria'] ?? '#111827';
-$temaPainel = $_SESSION['tema'] ?? 'dark';
+$identidadeAlunoDisponivel = false;
+
+// =============================================
+// 2. IDENTIDADE INSTITUCIONAL DO ALUNO
+// =============================================
+
+if ($role === 'Aluno') {
+
+    require_once __DIR__ .
+        '/../../models/IdentidadePortalAluno.php';
+
+    $identidadeAluno =
+        identidadePadraoPortalAluno();
+
+    try {
+
+        require_once __DIR__ .
+            '/../../models/Database.php';
+
+        $identidadeAluno =
+            carregarIdentidadePortalAluno($pdo);
+
+        $identidadeAlunoDisponivel = true;
+    } catch (Throwable $e) {
+
+        error_log(
+            '[GymFlow][IdentidadeAluno] ' .
+                $e->getMessage()
+        );
+    }
+
+    // Atualiza somente a identidade visual da sessão.
+
+    foreach (
+        $identidadeAluno as $chave => $valor
+    ) {
+        $_SESSION[$chave] = $valor;
+    }
+
+    // Token exclusivo para troca de tema.
+
+    if (
+        empty($_SESSION['tema_aluno_csrf']) ||
+        !is_string($_SESSION['tema_aluno_csrf'])
+    ) {
+
+        $_SESSION['tema_aluno_csrf'] =
+            bin2hex(random_bytes(32));
+    }
+}
+
+// =============================================
+// 3. IDENTIDADE VISUAL DO PAINEL
+// =============================================
+
+$nomePainel =
+    $_SESSION['nome_painel'] ?? 'Gymflow';
+
+$corPrimaria =
+    $_SESSION['cor_primaria'] ?? '#ffb000';
+
+$corSecundaria =
+    $_SESSION['cor_secundaria'] ?? '#111827';
+
+$temaPainel =
+    $_SESSION['tema'] ?? 'dark';
+
+// =============================================
+// 4. VALIDAR CORES
+// =============================================
 
 function validarCorGymflow($cor, $padrao)
 {
@@ -25,9 +93,10 @@ function validarCorGymflow($cor, $padrao)
 
     $cor = trim($cor);
 
-    return preg_match('/^#[0-9a-fA-F]{6}$/', $cor)
-        ? $cor
-        : $padrao;
+    return preg_match(
+        '/^#[0-9a-fA-F]{6}$/',
+        $cor
+    ) ? $cor : $padrao;
 }
 
 $corPrimaria = validarCorGymflow(
@@ -40,7 +109,9 @@ $corSecundaria = validarCorGymflow(
     '#111827'
 );
 
-// 3. CONTRASTE AUTOMÁTICO
+// =============================================
+// 5. CONTRASTE AUTOMÁTICO
+// =============================================
 
 function corTextoContrasteGymflow($hex)
 {
@@ -51,6 +122,7 @@ function corTextoContrasteGymflow($hex)
     $b = hexdec(substr($hex, 4, 2)) / 255;
 
     $linearizar = static function ($canal) {
+
         return $canal <= 0.04045
             ? $canal / 12.92
             : (($canal + 0.055) / 1.055) ** 2.4;
@@ -61,23 +133,26 @@ function corTextoContrasteGymflow($hex)
         0.7152 * $linearizar($g) +
         0.0722 * $linearizar($b);
 
-    $contrasteComBranco = 1.05 / ($luminancia + 0.05);
-    $contrasteComEscuro = ($luminancia + 0.05) / 0.05;
+    $contrasteComBranco =
+        1.05 / ($luminancia + 0.05);
+
+    $contrasteComEscuro =
+        ($luminancia + 0.05) / 0.05;
 
     return $contrasteComEscuro >= $contrasteComBranco
         ? '#000000'
         : '#ffffff';
 }
 
-$textoSobrePrimaria = corTextoContrasteGymflow(
-    $corPrimaria
-);
+$textoSobrePrimaria =
+    corTextoContrasteGymflow($corPrimaria);
 
-$textoSobreSecundaria = corTextoContrasteGymflow(
-    $corSecundaria
-);
+$textoSobreSecundaria =
+    corTextoContrasteGymflow($corSecundaria);
 
-// 4. APARÊNCIA DO PAINEL
+// =============================================
+// 6. APARÊNCIA DO PAINEL
+// =============================================
 
 $temaPainel = $temaPainel === 'dark'
     ? 'dark'
@@ -88,18 +163,53 @@ if ($temaPainel === 'dark') {
     $corFundoHeader = $corSecundaria;
     $corTextoHeader = $textoSobreSecundaria;
     $corBordaHeader = '#334155';
-
 } else {
 
     $corFundoHeader = '#ffffff';
     $corTextoHeader = '#111827';
     $corBordaHeader = '#e2e8f0';
-
 }
 
-// 5. FUNÇÕES AUXILIARES
+// =============================================
+// 7. CONFIGURAÇÕES DA TROCA DE TEMA
+// =============================================
+
+$proximoTema = $temaPainel === 'dark'
+    ? 'light'
+    : 'dark';
+
+$rotuloTema = $proximoTema === 'dark'
+    ? 'Ativar tema escuro'
+    : 'Ativar tema claro';
+
+$iconeTema = $proximoTema === 'dark'
+    ? 'moon'
+    : 'sun';
+
+$acaoAtual = $_GET['acao'] ?? 'aluno';
+
+$acoesPortal = [
+    'aluno',
+    'treinos',
+    'faturas',
+    'contratos',
+    'avaliacao'
+];
+
+if (!in_array(
+    $acaoAtual,
+    $acoesPortal,
+    true
+)) {
+    $acaoAtual = 'aluno';
+}
+
+// =============================================
+// 8. FUNÇÕES AUXILIARES
+// =============================================
 
 $escapar = static function ($valor) {
+
     return htmlspecialchars(
         (string) $valor,
         ENT_QUOTES,
@@ -107,14 +217,14 @@ $escapar = static function ($valor) {
     );
 };
 
-// 6. VERSIONAMENTO DOS ARQUIVOS CSS
-// Aplicado aos CSS compartilhados e específicos.
+// =============================================
+// 9. VERSIONAMENTO DOS ARQUIVOS CSS
+// =============================================
 
 $versionarCss = static function ($url) {
 
     $prefixo = BASE_URL . '/assets/css/';
 
-    // Mantém URLs que não pertencem à pasta local.
     if (!str_starts_with($url, $prefixo)) {
         return $url;
     }
@@ -132,14 +242,16 @@ $versionarCss = static function ($url) {
         strlen($prefixo)
     );
 
-    // Aceita somente arquivos CSS da pasta.
-    if (!preg_match('/^[a-zA-Z0-9_-]+\.css$/', $arquivo)) {
+    if (!preg_match(
+        '/^[a-zA-Z0-9_-]+\.css$/',
+        $arquivo
+    )) {
         return $url;
     }
 
-    $caminho = dirname(__DIR__, 3)
-        . '/assets/css/'
-        . $arquivo;
+    $caminho = dirname(__DIR__, 3) .
+        '/assets/css/' .
+        $arquivo;
 
     if (!is_file($caminho)) {
         return $url;
@@ -151,7 +263,6 @@ $versionarCss = static function ($url) {
         return $url;
     }
 
-    // Preserva outros parâmetros da URL.
     $parametros = [];
 
     parse_str(
@@ -159,43 +270,46 @@ $versionarCss = static function ($url) {
         $parametros
     );
 
-    // Atualiza a versão sem duplicar parâmetros.
     $parametros['v'] = $versao;
 
-    $urlVersionada = $caminhoUrl
-        . '?'
-        . http_build_query($parametros);
+    $urlVersionada = $caminhoUrl .
+        '?' .
+        http_build_query($parametros);
 
     if (isset($partes['fragment'])) {
-        $urlVersionada .= '#' . $partes['fragment'];
+
+        $urlVersionada .=
+            '#' . $partes['fragment'];
     }
 
     return $urlVersionada;
 };
 
-// Carregamento dos CSS compartilhados.
-
-$carregarCss = static function ($arquivo) use ($versionarCss) {
+$carregarCss = static function (
+    $arquivo
+) use ($versionarCss) {
 
     return $versionarCss(
-        BASE_URL . '/assets/css/' . $arquivo
+        BASE_URL .
+            '/assets/css/' .
+            $arquivo
     );
 };
-
-// Carregamento do CSS específico da página.
 
 $cssEspecifico = $cssEspecifico ?? null;
 
 if (!empty($cssEspecifico)) {
 
-    $cssEspecifico = $versionarCss($cssEspecifico);
-
+    $cssEspecifico =
+        $versionarCss($cssEspecifico);
 }
 
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="<?= $escapar($temaPainel) ?>">
+<html
+    lang="pt-BR"
+    data-theme="<?= $escapar($temaPainel) ?>">
 
 <head>
 
@@ -214,13 +328,17 @@ if (!empty($cssEspecifico)) {
 
     <link
         rel="stylesheet"
-        href="<?= $escapar($carregarCss('global.css')) ?>">
+        href="<?= $escapar(
+                    $carregarCss('global.css')
+                ) ?>">
 
     <!-- LAYOUT -->
 
     <link
         rel="stylesheet"
-        href="<?= $escapar($carregarCss('layout.css')) ?>">
+        href="<?= $escapar(
+                    $carregarCss('layout.css')
+                ) ?>">
 
     <!-- PORTAL DO ALUNO -->
 
@@ -228,11 +346,15 @@ if (!empty($cssEspecifico)) {
 
         <link
             rel="stylesheet"
-            href="<?= $escapar($carregarCss('portal.css')) ?>">
+            href="<?= $escapar(
+                        $carregarCss('portal.css')
+                    ) ?>">
 
         <link
             rel="stylesheet"
-            href="<?= $escapar($carregarCss('treinos.css')) ?>">
+            href="<?= $escapar(
+                        $carregarCss('treinos.css')
+                    ) ?>">
 
     <?php endif; ?>
 
@@ -240,7 +362,9 @@ if (!empty($cssEspecifico)) {
 
     <link
         rel="stylesheet"
-        href="<?= $escapar($carregarCss('cadastros.css')) ?>">
+        href="<?= $escapar(
+                    $carregarCss('cadastros.css')
+                ) ?>">
 
     <!-- CSS ESPECÍFICO -->
 
@@ -248,27 +372,49 @@ if (!empty($cssEspecifico)) {
 
         <link
             rel="stylesheet"
-            href="<?= $escapar($cssEspecifico) ?>">
+            href="<?= $escapar(
+                        $cssEspecifico
+                    ) ?>">
+
+    <?php endif; ?>
+
+    <!-- IDENTIDADE DO PORTAL -->
+
+    <?php if ($role === 'Aluno'): ?>
+
+        <link
+            rel="stylesheet"
+            href="<?= $escapar(
+                        $carregarCss('portal-identidade.css')
+                    ) ?>">
 
     <?php endif; ?>
 
     <!-- IDENTIDADE VISUAL DINÂMICA -->
 
     <style>
-
         :root {
+
             --cor-primaria: <?= $corPrimaria ?>;
+
             --cor-secundaria: <?= $corSecundaria ?>;
 
-            --cor-sobre-primaria: <?= $textoSobrePrimaria ?>;
-            --cor-sobre-secundaria: <?= $textoSobreSecundaria ?>;
+            --cor-sobre-primaria:
+                <?= $textoSobrePrimaria ?>;
+
+            --cor-sobre-secundaria:
+                <?= $textoSobreSecundaria ?>;
 
             --header-fundo: <?= $corFundoHeader ?>;
+
             --header-texto: <?= $corTextoHeader ?>;
+
             --header-borda: <?= $corBordaHeader ?>;
 
             --fin-primary: var(--cor-primaria);
-            --fin-primary-dark: var(--cor-primaria-hover);
+
+            --fin-primary-dark:
+                var(--cor-primaria-hover);
         }
 
         body {
@@ -276,31 +422,32 @@ if (!empty($cssEspecifico)) {
             color: var(--ui-texto);
         }
 
-        body > .header {
+        body>.header {
             background-color: var(--header-fundo);
             color: var(--header-texto);
             border-bottom: 1px solid var(--header-borda);
         }
 
-        body > .header h1,
-        body > .header .header-direita,
-        body > .header .header-direita span,
-        body > .header .mobile-toggle {
+        body>.header h1,
+        body>.header .header-direita,
+        body>.header .header-direita span,
+        body>.header .mobile-toggle {
             color: var(--header-texto);
         }
 
-        body > #appSidebar {
+        body>#appSidebar {
             background-color: var(--cor-secundaria);
             color: var(--cor-sobre-secundaria);
         }
-
     </style>
 
 </head>
 
-<body>
+<body class="<?= $role === 'Aluno'
+                    ? 'perfil-aluno'
+                    : '' ?>">
 
-    <!-- OVERLAY DO MENU MOBILE -->
+    <!-- OVERLAY MOBILE -->
 
     <div
         class="mobile-overlay"
@@ -340,6 +487,86 @@ if (!empty($cssEspecifico)) {
         </div>
 
         <div class="header-direita">
+
+            <!-- TROCA DE TEMA EXCLUSIVA DO ALUNO -->
+
+            <?php if (
+                $role === 'Aluno' &&
+                $identidadeAlunoDisponivel
+            ): ?>
+
+                <form
+                    class="portal-tema-form"
+                    method="POST"
+                    action="<?= BASE_URL ?>/app/controllers/TemaAlunoController.php">
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="<?= $escapar(
+                                    $_SESSION['tema_aluno_csrf']
+                                ) ?>">
+
+                    <input
+                        type="hidden"
+                        name="tema"
+                        value="<?= $escapar(
+                                    $proximoTema
+                                ) ?>">
+
+                    <input
+                        type="hidden"
+                        name="acao_retorno"
+                        value="<?= $escapar(
+                                    $acaoAtual
+                                ) ?>">
+
+                    <?php if (
+                        $acaoAtual === 'faturas' &&
+                        is_string($_GET['aba'] ?? null)
+                    ): ?>
+
+                        <input
+                            type="hidden"
+                            name="aba"
+                            value="<?= $escapar(
+                                        $_GET['aba']
+                                    ) ?>">
+
+                    <?php endif; ?>
+
+                    <?php if (
+                        $acaoAtual === 'treinos' &&
+                        filter_var(
+                            $_GET['ficha'] ?? null,
+                            FILTER_VALIDATE_INT
+                        )
+                    ): ?>
+
+                        <input
+                            type="hidden"
+                            name="ficha"
+                            value="<?= (int) $_GET['ficha'] ?>">
+
+                    <?php endif; ?>
+
+                    <button
+                        type="submit"
+                        class="portal-tema-toggle"
+                        aria-label="<?= $escapar($rotuloTema) ?>"
+                        title="<?= $escapar($rotuloTema) ?>">
+
+                        <i data-lucide="<?= $escapar(
+                                            $iconeTema
+                                        ) ?>"></i>
+
+                    </button>
+
+                </form>
+
+            <?php endif; ?>
+
+            <!-- USUÁRIO -->
 
             <span>
                 <?= $escapar($usuario) ?>

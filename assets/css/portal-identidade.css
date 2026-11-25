@@ -1,0 +1,822 @@
+/* =============================================
+   GYMFLOW - IDENTIDADE INSTITUCIONAL DO ALUNO
+   assets/css/portal-identidade.css
+   ============================================= */
+
+/* 1. VARIÁVEIS DO PORTAL */
+
+body.perfil-aluno {
+    --portal-destaque: var(--cor-primaria);
+    --portal-destaque-texto: var(--cor-sobre-primaria);
+
+    --portal-destaque-suave:
+        color-mix(in srgb,
+            var(--portal-destaque) 12%,
+            var(--ui-fundo-card));
+
+    --portal-destaque-hover:
+        color-mix(in srgb,
+            var(--portal-destaque) 85%,
+            var(--portal-destaque-texto));
+
+    --portal-destaque-legivel:
+        color-mix(in srgb,
+            var(--portal-destaque) 35%,
+            var(--ui-texto));
+
+    --portal-fundo: var(--ui-fundo-pagina);
+    --portal-card: var(--ui-fundo-card);
+    --portal-texto: var(--ui-texto);
+    --portal-texto-suave: var(--ui-texto-suave);
+    --portal-borda: var(--ui-borda);
+    --portal-superficie: var(--cor-superficie-secundaria);
+
+    --portal-sucesso: #166534;
+    --portal-sucesso-fundo: #dcfce7;
+
+    --portal-aviso: #92400e;
+    --portal-aviso-fundo: #fef3c7;
+
+    --portal-perigo: #b91c1c;
+    --portal-perigo-fundo: #fee2e2;
+
+    --portal-info: #1d4ed8;
+    --portal-info-fundo: #dbeafe;
+
+    background-color: var(--portal-fundo);
+    color: var(--portal-texto);
+}
+
+/* CORES SEMÂNTICAS NO TEMA ESCURO */
+
+[data-theme="dark"] body.perfil-aluno {
+    --portal-sucesso: #86efac;
+    --portal-sucesso-fundo: #14532d;
+
+    --portal-aviso: #fde68a;
+    --portal-aviso-fundo: #78350f;
+
+    --portal-perigo: #fca5a5;
+    --portal-perigo-fundo: #7f1d1d;
+
+    --portal-info: #bfdbfe;
+    --portal-info-fundo: #1e3a8a;
+}
+
+/* 2. TROCA DE TEMA */
+
+.perfil-aluno .portal-tema-form {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+    width: auto;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.perfil-aluno .portal-tema-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+    color: var(--header-texto);
+
+    border: 1px solid var(--header-borda);
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.perfil-aluno .portal-tema-toggle:hover {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .portal-tema-toggle svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+}
+
+.perfil-aluno .portal-tema-toggle:focus-visible {
+    outline: 2px solid var(--portal-destaque);
+    outline-offset: 3px;
+}
+
+/* 3. SIDEBAR */
+
+.perfil-aluno .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.perfil-aluno .sidebar-logo-imagem {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 7px;
+}
+
+.perfil-aluno .sidebar-logo span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 4. CABEÇALHOS DAS PÁGINAS */
+
+.perfil-aluno .portal-header h1,
+.perfil-aluno .section-heading h2,
+.perfil-aluno .contratos-header h1 {
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .portal-header p,
+.perfil-aluno .portal-eyebrow,
+.perfil-aluno .card-label,
+.perfil-aluno .card-description {
+    color: var(--portal-texto-suave);
+}
+
+/* 5. PÁGINA INICIAL */
+
+.perfil-aluno .portal-card,
+.perfil-aluno .quick-action {
+    background-color: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .quick-action:hover {
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .card-icon {
+    background-color: var(--portal-destaque-suave);
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .card-content p {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .portal-btn {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.perfil-aluno .portal-btn:hover {
+    background: var(--portal-destaque-hover);
+    color: var(--portal-destaque-texto);
+}
+
+.perfil-aluno .card-link {
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .card-link:hover {
+    color: var(--portal-texto);
+}
+
+/* STATUS DA PÁGINA INICIAL */
+
+.perfil-aluno .portal-grid .status-ativo {
+    background: var(--portal-sucesso-fundo);
+    color: var(--portal-sucesso);
+}
+
+.perfil-aluno .portal-grid .status-pendente {
+    background: var(--portal-aviso-fundo);
+    color: var(--portal-aviso);
+}
+
+.perfil-aluno .texto-sucesso {
+    color: var(--portal-sucesso) !important;
+}
+
+.perfil-aluno .texto-alerta {
+    color: var(--portal-aviso) !important;
+}
+
+/* =============================================
+   6. TREINOS
+   ============================================= */
+
+.perfil-aluno .treinos-page {
+    --treinos-texto: var(--portal-texto);
+    --treinos-suave: var(--portal-texto-suave);
+    --treinos-borda: var(--portal-borda);
+    --treinos-card: var(--portal-card);
+    --treinos-fundo: var(--portal-fundo);
+}
+
+/* Títulos */
+
+.perfil-aluno .treinos-page .portal-eyebrow,
+.perfil-aluno .treinos-page .section-label {
+    color: var(--portal-destaque-legivel);
+}
+
+/* Abas das fichas */
+
+.perfil-aluno .treinos-page .ficha-tab {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .treinos-page .ficha-tab:hover {
+    border-color: var(--portal-destaque);
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .treinos-page .ficha-tab.ativo {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-texto);
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .treinos-page .ficha-tab-versao,
+.perfil-aluno .treinos-page .ficha-tab.ativo .ficha-tab-versao {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .treinos-page .ficha-meta span::after {
+    color: var(--portal-texto-suave);
+}
+
+/* Exercícios */
+
+.perfil-aluno .treinos-page .exercicio-card {
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .treinos-page .exercicio-card:hover {
+    background: var(--portal-fundo);
+}
+
+.perfil-aluno .treinos-page .exercicio-numero {
+    color: var(--portal-texto-suave);
+}
+
+/* Checkbox */
+
+.perfil-aluno .treinos-page .checkmark {
+    background: var(--portal-card);
+    border-color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .treinos-page .exercicio-check input:checked+.checkmark {
+    background: var(--portal-destaque);
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .treinos-page .exercicio-check input:checked+.checkmark::after {
+    color: var(--portal-destaque-texto);
+}
+
+/* Dados dos exercícios */
+
+.perfil-aluno .treinos-page .dado {
+    background: var(--portal-fundo);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .treinos-page .dado span {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .treinos-page .dado strong {
+    color: var(--portal-texto);
+}
+
+/* Campo de carga */
+
+.perfil-aluno .treinos-page .carga-container input {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .treinos-page .carga-container input:focus {
+    border-color: var(--portal-destaque);
+
+    box-shadow:
+        0 0 0 3px var(--portal-destaque-suave);
+}
+
+/* Botão de pausa */
+
+.perfil-aluno .treinos-page .btn-pausa {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .treinos-page .btn-pausa:hover {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-texto);
+    border-color: var(--portal-destaque);
+}
+
+/* Exportação de PDF */
+
+.perfil-aluno .treinos-page .ficha-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.perfil-aluno .treinos-page .btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 15px;
+
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.perfil-aluno .treinos-page .btn-pdf:hover {
+    background: var(--portal-destaque-hover);
+    color: var(--portal-destaque-texto);
+}
+
+/* Estados vazios */
+
+.perfil-aluno .treinos-page .empty-icon {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .treinos-page .treinos-empty>span,
+.perfil-aluno .treinos-page .exercicios-empty p {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .treinos-page .exercicios-empty h3 {
+    color: var(--portal-texto);
+}
+
+/* =============================================
+   7. FATURAS
+   ============================================= */
+
+.perfil-aluno .faturas-page {
+    --faturas-texto: var(--portal-texto);
+    --faturas-texto-suave: var(--portal-texto-suave);
+    --faturas-borda: var(--portal-borda);
+    --faturas-card: var(--portal-card);
+}
+
+.perfil-aluno .faturas-page .faturas-header .portal-eyebrow {
+    color: var(--portal-destaque-legivel);
+}
+
+/* Cards de resumo */
+
+.perfil-aluno .faturas-page .resumo-card:hover {
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .faturas-page .resumo-icone-aberto {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .faturas-page .resumo-icone-atraso {
+    background: var(--portal-perigo-fundo);
+    color: var(--portal-perigo);
+}
+
+.perfil-aluno .faturas-page .resumo-icone-pago {
+    background: var(--portal-info-fundo);
+    color: var(--portal-info);
+}
+
+/* Abas */
+
+.perfil-aluno .faturas-page .faturas-tabs a.ativo {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+}
+
+.perfil-aluno .faturas-page .faturas-tabs a.ativo:hover {
+    background: var(--portal-destaque-hover);
+    color: var(--portal-destaque-texto);
+}
+
+/* Situação financeira */
+
+.perfil-aluno .faturas-page .status-pago {
+    background: var(--portal-info-fundo);
+    color: var(--portal-info);
+}
+
+.perfil-aluno .faturas-page .status-aberto {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .faturas-page .status-atrasado {
+    background: var(--portal-perigo-fundo);
+    color: var(--portal-perigo);
+}
+
+.perfil-aluno .faturas-page .fatura-paga {
+    border-left-color: var(--portal-info);
+}
+
+.perfil-aluno .faturas-page .fatura-aberta {
+    border-left-color: var(--portal-destaque);
+}
+
+.perfil-aluno .faturas-page .fatura-atrasada {
+    border-left-color: var(--portal-perigo);
+}
+
+/* Informações */
+
+.perfil-aluno .faturas-page .fatura-info {
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .faturas-page .fatura-data,
+.perfil-aluno .faturas-page .info-item span,
+.perfil-aluno .faturas-page .aviso-pagamento {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .faturas-page .info-item strong {
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .faturas-page .texto-atrasado {
+    color: var(--portal-perigo) !important;
+}
+
+/* Botão de recibo */
+
+.perfil-aluno .faturas-page .btn-recibo {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-texto);
+    border-color: var(--portal-destaque);
+}
+
+.perfil-aluno .faturas-page .btn-recibo:hover {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+    border-color: var(--portal-destaque);
+}
+
+/* Estado vazio */
+
+.perfil-aluno .faturas-page .vazio-icone {
+    background: var(--portal-superficie);
+    color: var(--portal-texto-suave);
+}
+
+/* =============================================
+   8. CONTRATOS
+   ============================================= */
+
+.perfil-aluno .contratos-page {
+    width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
+    padding: 32px 36px 50px;
+
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .contratos-page .contratos-header {
+    margin-bottom: 30px;
+}
+
+.perfil-aluno .contratos-page .contratos-header h1 {
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .contratos-page .portal-eyebrow,
+.perfil-aluno .contratos-page .contratos-header p {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .contratos-page .contratos-grid {
+    grid-template-columns:
+        repeat(auto-fill,
+            minmax(min(100%, 320px), 1fr));
+}
+
+/* Cards */
+
+.perfil-aluno .contratos-page .contrato-card {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border: 1px solid var(--portal-borda);
+    box-shadow: var(--ui-sombra-card);
+}
+
+.perfil-aluno .contratos-page .contrato-card:hover {
+    border-color: var(--portal-destaque);
+    box-shadow: var(--ui-sombra-hover);
+}
+
+/* Status */
+
+.perfil-aluno .contratos-page .status-ativo {
+    background: var(--portal-sucesso-fundo);
+    color: var(--portal-sucesso);
+}
+
+.perfil-aluno .contratos-page .status-inativo {
+    background: var(--portal-superficie);
+    color: var(--portal-texto-suave);
+}
+
+/* Informações */
+
+.perfil-aluno .contratos-page .contrato-title {
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .contratos-page .contrato-category {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .contratos-page .contrato-details {
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .contratos-page .detail-label {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .contratos-page .detail-value {
+    color: var(--portal-texto);
+}
+
+.perfil-aluno .contratos-page .contrato-price {
+    color: var(--portal-destaque-legivel);
+}
+
+/* Compatibilidade com estilos inline existentes */
+
+.perfil-aluno .contratos-page .contrato-price span {
+    color: var(--portal-texto-suave) !important;
+}
+
+.perfil-aluno .contratos-page .contrato-desconto,
+.perfil-aluno .contratos-page .detail-value[style] {
+    color: var(--portal-sucesso) !important;
+}
+
+/* Botão de contrato */
+
+.perfil-aluno .contratos-page .btn-contrato {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+    border-color: var(--portal-destaque);
+    text-decoration: none;
+}
+
+.perfil-aluno .contratos-page .btn-contrato:hover {
+    background: var(--portal-destaque-hover);
+    color: var(--portal-destaque-texto);
+    border-color: var(--portal-destaque);
+}
+
+/* Estados vazios */
+
+.perfil-aluno .contratos-page .empty-state,
+.perfil-aluno .contratos-page .contratos-empty {
+    background: var(--portal-card);
+    color: var(--portal-texto-suave);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .contratos-page .empty-state i {
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .contratos-page .contratos-empty-icone {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+}
+
+/* =============================================
+   9. AVALIAÇÃO
+   ============================================= */
+
+.perfil-aluno .avaliacao-aluno-page {
+    --avaliacao-cor: var(--portal-destaque);
+    --avaliacao-texto: var(--portal-texto);
+    --avaliacao-suave: var(--portal-texto-suave);
+    --avaliacao-borda: var(--portal-borda);
+    --avaliacao-fundo: var(--portal-fundo);
+}
+
+/* Preserva a correção do botão de voltar */
+
+.perfil-aluno .avaliacao-aluno-page .avaliacao-cabecalho {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.perfil-aluno .avaliacao-aluno-page .avaliacao-voltar {
+    position: relative;
+    z-index: 2;
+
+    flex-shrink: 0;
+    pointer-events: auto;
+    cursor: pointer;
+
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .avaliacao-aluno-page .avaliacao-voltar:hover {
+    background: var(--portal-destaque);
+    color: var(--portal-destaque-texto);
+    border-color: var(--portal-destaque);
+}
+
+/* Status */
+
+.perfil-aluno .avaliacao-status-publicada {
+    background: var(--portal-sucesso-fundo);
+    color: var(--portal-sucesso);
+}
+
+.perfil-aluno .avaliacao-status-pendente {
+    background: var(--portal-aviso-fundo);
+    color: var(--portal-aviso);
+}
+
+/* Identificação da unidade */
+
+.perfil-aluno .avaliacao-unidade {
+    background: var(--portal-fundo);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .avaliacao-unidade-icone {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+}
+
+/* Estrelas */
+
+.perfil-aluno .avaliacao-estrela {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .avaliacao-estrela.selecionada,
+.perfil-aluno .avaliacao-estrela:hover {
+    color: var(--portal-destaque-legivel);
+}
+
+.perfil-aluno .avaliacao-estrela.selecionada {
+    text-shadow: 0 0 1px currentColor;
+}
+
+/* Comentário */
+
+.perfil-aluno .avaliacao-formulario textarea {
+    background: var(--portal-card);
+    color: var(--portal-texto);
+    border-color: var(--portal-borda);
+}
+
+.perfil-aluno .avaliacao-formulario textarea::placeholder {
+    color: var(--portal-texto-suave);
+}
+
+.perfil-aluno .avaliacao-formulario textarea:focus {
+    border-color: var(--portal-destaque);
+}
+
+/* Aviso de moderação */
+
+.perfil-aluno .avaliacao-aviso {
+    background: var(--portal-info-fundo);
+    border-color: var(--portal-info);
+}
+
+.perfil-aluno .avaliacao-aviso-icone {
+    background: var(--portal-info);
+    color: var(--portal-info-fundo);
+}
+
+.perfil-aluno .avaliacao-aviso strong,
+.perfil-aluno .avaliacao-aviso p {
+    color: var(--portal-info);
+}
+
+.perfil-aluno .avaliacao-info-icone {
+    background: var(--portal-destaque-suave);
+    color: var(--portal-destaque-legivel);
+}
+
+/* Mensagens de feedback existentes */
+
+.perfil-aluno .avaliacao-aluno-page>[role="status"] {
+    background: var(--portal-sucesso-fundo) !important;
+    color: var(--portal-sucesso) !important;
+    border-color: var(--portal-sucesso) !important;
+}
+
+.perfil-aluno .avaliacao-aluno-page>[role="alert"] {
+    background: var(--portal-perigo-fundo) !important;
+    color: var(--portal-perigo) !important;
+    border-color: var(--portal-perigo) !important;
+}
+
+/* =============================================
+   10. ACESSIBILIDADE
+   ============================================= */
+
+.perfil-aluno .portal-btn:focus-visible,
+.perfil-aluno .btn-contrato:focus-visible,
+.perfil-aluno .btn-recibo:focus-visible,
+.perfil-aluno .btn-pdf:focus-visible,
+.perfil-aluno .avaliacao-voltar:focus-visible {
+    outline: 2px solid var(--portal-destaque);
+    outline-offset: 3px;
+}
+
+/* =============================================
+   11. RESPONSIVIDADE
+   ============================================= */
+
+@media (max-width: 768px) {
+
+    .perfil-aluno .portal-tema-toggle {
+        width: 34px;
+        height: 34px;
+    }
+
+    .perfil-aluno .header-direita {
+        gap: 10px;
+    }
+
+    .perfil-aluno .contratos-page {
+        padding: 25px 20px 40px;
+    }
+
+    .perfil-aluno .contratos-page .contratos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .perfil-aluno .treinos-page .ficha-header {
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .perfil-aluno .portal-tema-toggle {
+        transition: none;
+    }
+}

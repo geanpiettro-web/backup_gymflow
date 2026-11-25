@@ -2,7 +2,7 @@
 <?php
 require_once __DIR__ . '/../../config/sessao.php';
 
-verificarLogado();
+verificarRole(['Admin']);
 
 $acao = $_GET['acao'] ?? 'index';
 $user_id = (int) ($_SESSION['usuario_id'] ?? 0);
