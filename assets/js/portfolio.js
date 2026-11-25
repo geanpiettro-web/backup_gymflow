@@ -417,3 +417,314 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+/* =========================================
+   GYMFLOW - INTERATIVIDADE DO PORTFÓLIO
+========================================= */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* =====================================
+       BARRA DE PROGRESSO
+    ===================================== */
+
+    const barraProgresso = document.createElement('div');
+    barraProgresso.className = 'gymflow-scroll-progress';
+    barraProgresso.setAttribute('aria-hidden', 'true');
+
+    document.body.appendChild(barraProgresso);
+
+
+    /* =====================================
+       BOTÃO VOLTAR AO TOPO
+    ===================================== */
+
+    const botaoTopo = document.createElement('button');
+
+    botaoTopo.type = 'button';
+    botaoTopo.className = 'gymflow-voltar-topo';
+    botaoTopo.innerHTML = '&#8593;';
+    botaoTopo.setAttribute('aria-label', 'Voltar ao topo');
+
+    document.body.appendChild(botaoTopo);
+
+    botaoTopo.addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+
+    /* =====================================
+       ATUALIZAR AO ROLAR
+    ===================================== */
+
+    function atualizarRolagem() {
+
+        const alturaDocumento =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        const progresso = alturaDocumento > 0
+            ? (window.scrollY / alturaDocumento) * 100
+            : 0;
+
+        barraProgresso.style.width =
+            Math.min(progresso, 100) + '%';
+
+        if (window.scrollY > 400) {
+            botaoTopo.classList.add('visivel');
+        } else {
+            botaoTopo.classList.remove('visivel');
+        }
+    }
+
+    window.addEventListener(
+        'scroll',
+        atualizarRolagem,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        'resize',
+        atualizarRolagem
+    );
+
+    atualizarRolagem();
+
+
+    /* =====================================
+       ANIMAÇÃO DE ENTRADA DAS SEÇÕES
+    ===================================== */
+
+    const elementosAnimados = document.querySelectorAll(
+        [
+            '.modalidades-cabecalho',
+            '.modalidade-card',
+            '.planos-cabecalho',
+            '.plano-card',
+            '.unidades-cabecalho',
+            '.unidade-card',
+            '.sobre-cabecalho',
+            '.sobre-card',
+            '.contato-cabecalho',
+            '.contato-conteudo',
+            '.feedback-topo',
+            '.feedback-recentes',
+            '.portfolio-footer'
+        ].join(',')
+    );
+
+    const movimentoReduzido = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (movimentoReduzido || !('IntersectionObserver' in window)) {
+        return;
+    }
+
+    const observador = new IntersectionObserver(
+        function (entradas, observer) {
+
+            entradas.forEach(function (entrada) {
+
+              if (entrada.isIntersecting) {
+             entrada.target.classList.add('reveal-visivel');
+              } else {
+              entrada.target.classList.remove('reveal-visivel');
+}
+            });
+
+        },       
+        {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px'
+        }
+    );
+
+    elementosAnimados.forEach(function (elemento) {
+    elemento.classList.add('portfolio-reveal');
+    observador.observe(elemento);
+});
+
+/* Cards aparecem em sequência */
+const gruposDeCards = [
+    '.modalidade-card',
+    '.plano-card',
+    '.unidade-card',
+    '.sobre-card'
+];
+
+gruposDeCards.forEach(function (seletor) {
+    document.querySelectorAll(seletor).forEach(function (card, indice) {
+        card.style.transitionDelay = (indice * 180) + 'ms';
+    });
+});
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const carrossel = document.querySelector(
+        '[data-feedback-carousel]'
+    );
+
+    if (!carrossel) return;
+
+    const viewport = carrossel.querySelector(
+        '.feedback-carousel-viewport'
+    );
+
+    const cards = Array.from(
+        carrossel.querySelectorAll('.feedback-card')
+    );
+
+    const anterior = carrossel.querySelector(
+        '.feedback-carousel-anterior'
+    );
+
+    const proxima = carrossel.querySelector(
+        '.feedback-carousel-proxima'
+    );
+
+    const indicadores = document.querySelector(
+        '.feedback-carousel-indicadores'
+    );
+
+    if (!viewport || !cards.length || !indicadores) return;
+
+    let paginaAtual = 0;
+    let quantidadePaginas = 1;
+
+    function calcularPaginas() {
+
+        const larguraCard = cards[0].getBoundingClientRect().width;
+        const gap = parseFloat(
+            getComputedStyle(
+                carrossel.querySelector('.feedback-carousel-track')
+            ).gap
+        ) || 0;
+
+        let visiveis = 3;
+
+        if (window.innerWidth <= 600) {
+            visiveis = 1;
+        } else if (window.innerWidth <= 900) {
+            visiveis = 2;
+        }
+
+        quantidadePaginas = Math.max(
+            1,
+            Math.ceil(cards.length / visiveis)
+        );
+
+        indicadores.innerHTML = '';
+
+        for (let i = 0; i < quantidadePaginas; i++) {
+
+            const indicador = document.createElement('button');
+
+            indicador.type = 'button';
+            indicador.className = 'feedback-carousel-indicador';
+
+            indicador.setAttribute(
+                'aria-label',
+                'Mostrar página ' + (i + 1)
+            );
+
+            indicador.addEventListener('click', function () {
+                irParaPagina(i);
+            });
+
+            indicadores.appendChild(indicador);
+        }
+
+        atualizarIndicadores();
+
+    }
+
+    function irParaPagina(pagina) {
+
+        paginaAtual = Math.max(
+            0,
+            Math.min(pagina, quantidadePaginas - 1)
+        );
+
+        const maxScroll =
+            viewport.scrollWidth - viewport.clientWidth;
+
+        const destino = quantidadePaginas > 1
+            ? maxScroll * (
+                paginaAtual / (quantidadePaginas - 1)
+            )
+            : 0;
+
+        viewport.scrollTo({
+            left: destino,
+            behavior: 'smooth'
+        });
+
+        atualizarIndicadores();
+
+    }
+
+    function atualizarIndicadores() {
+
+        const botoes = indicadores.querySelectorAll(
+            '.feedback-carousel-indicador'
+        );
+
+        botoes.forEach(function (botao, indice) {
+
+            botao.classList.toggle(
+                'ativo',
+                indice === paginaAtual
+            );
+
+            botao.setAttribute(
+                'aria-current',
+                indice === paginaAtual ? 'true' : 'false'
+            );
+
+        });
+
+        anterior.disabled = paginaAtual === 0;
+
+        proxima.disabled =
+            paginaAtual >= quantidadePaginas - 1;
+
+    }
+
+    anterior.addEventListener('click', function () {
+        irParaPagina(paginaAtual - 1);
+    });
+
+    proxima.addEventListener('click', function () {
+        irParaPagina(paginaAtual + 1);
+    });
+
+    viewport.addEventListener('scroll', function () {
+
+        const maxScroll =
+            viewport.scrollWidth - viewport.clientWidth;
+
+        if (maxScroll <= 0) {
+            paginaAtual = 0;
+        } else {
+            paginaAtual = Math.round(
+                (viewport.scrollLeft / maxScroll) *
+                (quantidadePaginas - 1)
+            );
+        }
+
+        atualizarIndicadores();
+
+    }, { passive: true });
+
+    window.addEventListener('resize', calcularPaginas);
+
+    calcularPaginas();
+
+});
+

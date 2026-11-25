@@ -1,3 +1,4 @@
+
 /* =====================================================
    GYMFLOW — RECUPERAÇÃO DE ACESSO
 
@@ -40,6 +41,7 @@
     font-size: 14px;
 
     box-shadow: none;
+    box-sizing: border-box;
 }
 
 .login-page.auth-recovery-page .login-form input.auth-input::placeholder {
@@ -54,6 +56,59 @@
 
     box-shadow:
         0 0 0 3px var(--login-primaria-suave);
+}
+
+/* BOTÃO MOSTRAR / OCULTAR SENHA */
+
+.login-page.auth-recovery-page .input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.login-page.auth-recovery-page .input-wrapper input.auth-input {
+    padding-right: 50px;
+}
+
+.login-page.auth-recovery-page .input-wrapper .senha-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    color: var(--portfolio-primary);
+    cursor: pointer;
+
+    opacity: 0.75;
+    z-index: 2;
+
+    transition: opacity 0.25s ease;
+}
+
+.login-page.auth-recovery-page .senha-toggle:hover {
+    opacity: 1;
+}
+
+.login-page.auth-recovery-page .senha-toggle svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.login-page.auth-recovery-page .senha-toggle:focus-visible {
+    outline: 2px solid var(--portfolio-primary);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 /* ORIENTAÇÕES DE SENHA */
@@ -131,8 +186,14 @@
     }
 }
 
+/* MOVIMENTO REDUZIDO */
+
 @media (prefers-reduced-motion: reduce) {
     .login-page.auth-recovery-page .auth-success-action .login-submit-button {
+        transition: none;
+    }
+
+    .login-page.auth-recovery-page .senha-toggle {
         transition: none;
     }
 }

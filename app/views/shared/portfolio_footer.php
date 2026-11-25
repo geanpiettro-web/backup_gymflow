@@ -1,3 +1,4 @@
+
 <?php
 // app/views/shared/portfolio_footer.php
 
@@ -19,20 +20,34 @@ $urlSiteBase = !empty($portfolioUrl)
     <div class="footer-linha-topo"></div>
 
     <div class="footer-conteudo">
+
+        <!-- Logo e nome da academia -->
         <div class="footer-marca">
+
             <?php if ($logoMarca !== ''): ?>
-                <a href="<?= htmlspecialchars($urlSiteBase) ?>#inicio" class="footer-logo-link" aria-label="Voltar ao início">
+                <a
+                    href="<?= htmlspecialchars($urlSiteBase) ?>#inicio"
+                    class="footer-logo-link"
+                    aria-label="Voltar ao início"
+                >
                     <img
                         src="<?= htmlspecialchars($logoMarca) ?>"
-                        alt=""
+                        alt="Logo da academia"
                         class="footer-logo"
                         onerror="this.style.display='none';"
                     >
                 </a>
             <?php endif; ?>
+
+            <h2 class="footer-nome-marca">
+                <?= htmlspecialchars($nomeMarca) ?>
+            </h2>
+
         </div>
 
+        <!-- Informações do rodapé -->
         <div class="footer-grid">
+
             <div class="footer-coluna">
                 <h3>Navegue</h3>
 
@@ -111,16 +126,19 @@ $urlSiteBase = !empty($portfolioUrl)
                     <?php endif; ?>
                 </div>
             </div>
+
         </div>
 
+        <!-- Parte inferior do rodapé -->
         <div class="footer-base">
             <p>
                 © <?= date('Y') ?> <?= htmlspecialchars($nomeMarca) ?>.
                 Todos os direitos reservados.
             </p>
 
-            <a href="#inicio">Voltar ao topo ↑</a>
+          
         </div>
+
     </div>
 
     <?php if ($whatsappRodape !== ''): ?>

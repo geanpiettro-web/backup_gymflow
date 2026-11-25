@@ -1,3 +1,4 @@
+
 <?php
 // app/views/login/redefinir_senha.php
 
@@ -54,7 +55,9 @@ $vRecuperacao = is_file($cssRecuperacao)
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Redefinir senha | <?= $esc($identidade['nome']) ?></title>
+    <title>
+        Redefinir senha | <?= $esc($identidade['nome']) ?>
+    </title>
 
     <link
         rel="stylesheet"
@@ -74,10 +77,11 @@ $vRecuperacao = is_file($cssRecuperacao)
     <main
         class="login-page auth-recovery-page"
         style="
-        --portfolio-primary: <?= $esc($identidade['primaria']) ?>;
-        --portfolio-secondary: <?= $esc($identidade['secundaria']) ?>;
-        --portfolio-on-primary: <?= $esc($identidade['texto_primaria']) ?>;
-    ">
+            --portfolio-primary: <?= $esc($identidade['primaria']) ?>;
+            --portfolio-secondary: <?= $esc($identidade['secundaria']) ?>;
+            --portfolio-on-primary: <?= $esc($identidade['texto_primaria']) ?>;
+        ">
+
         <div class="login-container">
 
             <!-- IDENTIDADE VISUAL -->
@@ -92,6 +96,7 @@ $vRecuperacao = is_file($cssRecuperacao)
                     <a
                         href="<?= $esc($loginUrl) ?>"
                         class="login-back-link">
+
                         <span class="back-arrow">←</span>
                         Voltar para o login
                     </a>
@@ -112,6 +117,7 @@ $vRecuperacao = is_file($cssRecuperacao)
 
                         <div class="login-feature">
                             <div class="feature-icon">✓</div>
+
                             <div>
                                 <strong>Proteção</strong>
                                 <span>
@@ -122,6 +128,7 @@ $vRecuperacao = is_file($cssRecuperacao)
 
                         <div class="login-feature">
                             <div class="feature-icon">◇</div>
+
                             <div>
                                 <strong>Acesso</strong>
                                 <span>
@@ -139,13 +146,15 @@ $vRecuperacao = is_file($cssRecuperacao)
 
                 <div
                     class="login-background-glow"
-                    aria-hidden="true"></div>
+                    aria-hidden="true">
+                </div>
 
                 <div class="login-form-container">
 
                     <div
                         class="login-card-glow"
-                        aria-hidden="true"></div>
+                        aria-hidden="true">
+                    </div>
 
                     <div class="form-brand">
                         <?= $esc($identidade['nome']) ?>
@@ -169,38 +178,47 @@ $vRecuperacao = is_file($cssRecuperacao)
                         <div
                             class="auth-message auth-message-success"
                             role="status">
+
                             Sua senha foi redefinida com sucesso!
                             Você já pode entrar na sua conta.
                         </div>
 
                         <div class="auth-success-action">
+
                             <a
                                 href="<?= $esc($loginUrl) ?>"
                                 class="login-submit-button">
+
                                 <span>Ir para o login</span>
                                 <span class="button-arrow">→</span>
                             </a>
+
                         </div>
 
                     <?php else: ?>
 
                         <?php if ($erro !== ''): ?>
+
                             <div
                                 class="auth-message auth-message-error"
                                 role="alert">
+
                                 <?= $esc($erro) ?>
                             </div>
+
                         <?php endif; ?>
 
                         <form
                             method="POST"
                             action="<?= $esc($actionUrl) ?>"
                             class="login-form">
+
                             <div class="form-group">
 
                                 <label
                                     for="nova_senha"
                                     class="form-label">
+
                                     Nova senha
                                 </label>
 
@@ -216,6 +234,45 @@ $vRecuperacao = is_file($cssRecuperacao)
                                         minlength="6"
                                         required>
 
+                                    <button
+                                        type="button"
+                                        class="senha-toggle"
+                                        id="toggleSenha"
+                                        aria-label="Mostrar senha"
+                                        aria-pressed="false">
+
+                                        <svg
+                                            class="icone-olho"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="12"
+                                            height="12"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true">
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="8"/>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="4"/>
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="1.5"
+                                                fill="currentColor"/>
+                                        </svg>
+
+                                    </button>
+
                                 </div>
 
                                 <p class="auth-hint">
@@ -227,6 +284,7 @@ $vRecuperacao = is_file($cssRecuperacao)
                             <button
                                 type="submit"
                                 class="login-submit-button">
+
                                 <span>Salvar nova senha</span>
                                 <span class="button-arrow">→</span>
                             </button>
@@ -236,9 +294,11 @@ $vRecuperacao = is_file($cssRecuperacao)
                     <?php endif; ?>
 
                     <div class="login-footer">
+
                         <a href="<?= $esc($loginUrl) ?>">
                             Voltar para o login
                         </a>
+
                     </div>
 
                 </div>
@@ -247,6 +307,48 @@ $vRecuperacao = is_file($cssRecuperacao)
         </div>
     </main>
 
-</body>
+    <script>
+        (function () {
+            function iniciarBotaoSenha() {
+                const campoSenha = document.getElementById('nova_senha');
+                const botaoOlho = document.getElementById('toggleSenha');
 
+                if (!campoSenha || !botaoOlho) {
+                    return;
+                }
+
+                botaoOlho.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const senhaVisivel = campoSenha.type === 'text';
+
+                    campoSenha.type = senhaVisivel
+                        ? 'password'
+                        : 'text';
+
+                    botaoOlho.setAttribute(
+                        'aria-label',
+                        senhaVisivel ? 'Mostrar senha' : 'Ocultar senha'
+                    );
+
+                    botaoOlho.setAttribute(
+                        'aria-pressed',
+                        senhaVisivel ? 'false' : 'true'
+                    );
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener(
+                    'DOMContentLoaded',
+                    iniciarBotaoSenha
+                );
+            } else {
+                iniciarBotaoSenha();
+            }
+        })();
+    </script>
+
+</body>
 </html>

@@ -1769,7 +1769,22 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
 
             <?php else: ?>
 
-                <div class="feedback-lista">
+                <div class="feedback-carousel" data-feedback-carousel>
+
+    <button
+        type="button"
+        class="feedback-carousel-seta feedback-carousel-anterior"
+        aria-label="Feedbacks anteriores">
+
+        &#10094;
+
+    </button>
+
+    <div
+        class="feedback-carousel-viewport"
+        aria-label="Avaliações dos alunos">
+
+        <div class="feedback-lista feedback-carousel-track">
 
                     <?php foreach ($feedbacks as $feedback): ?>
 
@@ -1892,6 +1907,23 @@ include __DIR__ . '/app/views/shared/portfolio_header.php';
                     <?php endforeach; ?>
 
                 </div>
+                    </div>
+
+    <button
+        type="button"
+        class="feedback-carousel-seta feedback-carousel-proxima"
+        aria-label="Próximos feedbacks">
+
+        &#10095;
+
+    </button>
+
+</div>
+
+<div
+    class="feedback-carousel-indicadores"
+    aria-label="Navegação dos feedbacks">
+</div>
 
             <?php endif; ?>
 

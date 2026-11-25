@@ -334,9 +334,9 @@ CREATE TABLE portfolio_config (
     feedback_subtitle TEXT,
     feedback_image TEXT,
     accepts_wellhub BOOLEAN NOT NULL DEFAULT FALSE,
-    wellhub_icon VARCHAR(50) DEFAULT NULL,
+    wellhub_icon VARCHAR(255) DEFAULT NULL,
     accepts_totalpass BOOLEAN NOT NULL DEFAULT FALSE,
-    totalpass_icon VARCHAR(50) DEFAULT NULL,
+    totalpass_icon VARCHAR(255) DEFAULT NULL,
     CONSTRAINT uq_portfolio_company UNIQUE (company_id),
     FOREIGN KEY (company_id) REFERENCES companies (id) ON DELETE CASCADE
 );
